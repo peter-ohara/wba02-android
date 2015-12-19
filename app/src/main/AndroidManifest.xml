@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pascoapp.wba02_android">
 
-    <!--Parse Data permissions-->
+    <!-- Parse Data permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -19,6 +19,7 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -28,6 +29,25 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ChooseCourseActivity" />
+        <activity
+            android:name=".ChooseTestActivity"
+            android:label="@string/title_activity_choose_test"
+            android:parentActivityName=".ChooseCourseActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.ChooseCourseActivity" />
+        </activity>
+        <activity
+            android:name=".TakeTestActivity"
+            android:label="@string/title_activity_take_test"
+            android:parentActivityName=".ChooseTestActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.ChooseTestActivity" />
         </activity>
     </application>
 

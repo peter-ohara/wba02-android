@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">wba02-android</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_choose_test">ChooseTestActivity</string>
+    <string name="title_activity_take_test">TakeTestActivity</string>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.pascoapp.wba02_android.School.School;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +32,36 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, TakeTestActivity.class);
+                intent.putExtra(TakeTestActivity.EXTRA_TEST_ID, "LWpRa0HYn0");
+                startActivity(intent);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        final TextView testText = (TextView) findViewById(R.id.test_text);
+
+        ParseQuery<School> query = School.getQuery();
+        testText.setText("Making query");
+        query.findInBackground(new FindCallback<School>() {
+            @Override
+            public void done(List<School> objects, ParseException e) {
+                testText.setText("Done making query");
+                if (e == null) {
+                    System.out.println(objects.size() + ": Schools");
+
+                    String text = "{";
+                    for (School school : objects) {
+                        text += school;
+                        text += ", ";
+                    }
+                    text += "}";
+                    testText.setText(text);
+                } else {
+                    Toast.makeText(MainActivity.this, e.getCode() + " : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
