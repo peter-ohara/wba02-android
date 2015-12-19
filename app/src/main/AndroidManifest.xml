@@ -41,7 +41,7 @@
                 android:value="com.pascoapp.wba02_android.ChooseCourseActivity" />
         </activity>
         <activity
-            android:name=".TakeTestActivity"
+            android:name=".TakeTest.TakeTestActivity"
             android:label="@string/title_activity_take_test"
             android:parentActivityName=".ChooseTestActivity"
             android:theme="@style/AppTheme.NoActionBar">

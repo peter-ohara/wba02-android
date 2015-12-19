@@ -1,7 +1,5 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.TakeTest;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,26 +14,18 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.Question.Question;
-
+import com.pascoapp.wba02_android.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link QuestionFragment.OnFragmentInteractionListener} interface
+ * {@link McqFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link QuestionFragment#newInstance} factory method to
+ * Use the {@link McqFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
-public class QuestionFragment extends Fragment {
+public class McqFragment extends QuestionFragment {
 
-    // the fragment initialization parameters
-    private static final String ARG_QUESTION_ID = "questionId";
-
-    private String mQuestionId;
-
-    private OnFragmentInteractionListener mListener;
-    private Question mQuestion;
     private TextView mQuestionField;
     private RadioGroup mRadioGroup;
 
@@ -44,16 +34,16 @@ public class QuestionFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param questionId id for fetching the question.
-     * @return A new instance of fragment QuestionFragment.
+     * @return A new instance of fragment McqFragment.
      */
-    public static QuestionFragment newInstance(String questionId) {
-        QuestionFragment fragment = new QuestionFragment();
+    public static McqFragment newInstance(String questionId) {
+        McqFragment fragment = new McqFragment();
         Bundle args = new Bundle();
         args.putString(ARG_QUESTION_ID, questionId);
         fragment.setArguments(args);
         return fragment;
     }
-    public QuestionFragment() {
+    public McqFragment() {
         // Required empty public constructor
     }
 
@@ -61,7 +51,9 @@ public class QuestionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mQuestionId = getArguments().getString(ARG_QUESTION_ID);
+            setQuestionId(
+                    getArguments().getString(ARG_QUESTION_ID)
+            );
         }
     }
 
@@ -69,10 +61,10 @@ public class QuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_question, container, false);
+        View view = inflater.inflate(R.layout.fragment_mcq, container, false);
 
         mQuestionField = (TextView) view.findViewById(R.id.question);
-        mRadioGroup = (RadioGroup) view.findViewById(R.id.radiogroup);
+        mRadioGroup = (RadioGroup) view.findViewById(R.id.choices);
 
 
         Button previousButton = (Button) view.findViewById(R.id.previous_button);
@@ -92,16 +84,16 @@ public class QuestionFragment extends Fragment {
         });
 
         ParseQuery<Question> query = Question.getQuery();
-        query.getInBackground(mQuestionId, new GetCallback<Question>() {
+        query.getInBackground(getQuestionId(), new GetCallback<Question>() {
             @Override
             public void done(Question question, ParseException e) {
-                mQuestion = question;
-                mQuestionField.setText(mQuestion.getQuestion());
+                setQuestion(question);
+                mQuestionField.setText(question.getQuestion());
 
-                for (int i = 0; i < mQuestion.getChoices().size(); i++) {
+                for (int i = 0; i < question.getChoices().size(); i++) {
                     RadioButton radioButton = new RadioButton(getContext());
                     //radioButton.setId();
-                    radioButton.setText(mQuestion.getChoices().get(i));
+                    radioButton.setText(question.getChoices().get(i));
                     mRadioGroup.addView(radioButton);
                 }
             }
@@ -111,48 +103,27 @@ public class QuestionFragment extends Fragment {
     }
 
     public void onPreviousButtonPressed() {
-        if (mListener != null) {
-            mListener.onPrevious();
+        if (listener != null) {
+            listener.onPrevious();
         }
     }
 
     public void onNextButtonPressed() {
-        if (mListener != null) {
-            mListener.onNext();
+        if (listener != null) {
+            listener.onNext();
         }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    public String toString() {
+        Question question = getQuestion();
+        if (question != null) {
+            return "Type: " + question.getType()
+                    + "Question: " + question.getQuestion()
+                    + "choices" + question.getChoices()
+                    + "Answer: " + question.getAnswer();
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            return super.toString();
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-
-        void onPrevious();
-
-        void onNext();
     }
 }

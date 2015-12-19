@@ -16,6 +16,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.School.School;
+import com.pascoapp.wba02_android.TakeTest.TakeTestActivity;
 
 import java.util.List;
 

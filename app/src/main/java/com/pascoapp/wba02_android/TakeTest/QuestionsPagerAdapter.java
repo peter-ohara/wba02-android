@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.TakeTest;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +9,7 @@ import com.pascoapp.wba02_android.Question.Question;
 import java.util.List;
 
 /**
- * Created by peter on 12/19/15.
+ * Allows the user to flip left and right through the questions of a test
  */
 class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -24,8 +24,7 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Question currentQuestion = mQuestions.get(position);
-        String questionId = currentQuestion.getObjectId();
-        return QuestionFragment.newInstance(questionId);
+        return QuestionFragmentFactory.getQuestionFragment(currentQuestion);
     }
 
 

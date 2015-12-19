@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.TakeTest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.Question.Question;
+import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.Test.Test;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.List;
 public class TakeTestActivity extends AppCompatActivity implements QuestionFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_TEST_ID =
-            "com.pascoapp.wba02_android.TakeTestActivity.testId";
+            "com.pascoapp.wba02_android.TakeTest.TakeTestActivity.testId";
 
     private ViewPager mPager;
 
@@ -31,7 +32,6 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
     private ArrayList<Question> mQuestions;
     private ProgressBar loadingIndicator;
     private View coordinatorLayoutView;
-    private String testId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
     public void onPrevious() {
         if (mPager.getCurrentItem() == 0) {
             // User is looking at the first question, so do nothing
+            // TODO: Do something to make user know he's at the first item.
         } else {
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
@@ -116,7 +117,7 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
     public void onNext() {
         if (mPager.getCurrentItem() == mQuestions.size()) {
             // User is looking at the last question, ask whether he wants to score the test
-            // TODO: Call code for scoring test
+            // TODO: Call code for scoring test.
         } else {
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);

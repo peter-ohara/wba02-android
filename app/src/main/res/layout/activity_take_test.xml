@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.pascoapp.wba02_android.TakeTestActivity"
+    tools:context=".TakeTest.TakeTestActivity"
     android:id="@+id/snackbarPosition">
 
     <android.support.design.widget.AppBarLayout
