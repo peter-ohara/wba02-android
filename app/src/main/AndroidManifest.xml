@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -30,24 +35,97 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChooseCourseActivity" />
         <activity
-            android:name=".ChooseTestActivity"
+            android:name=".main.ChooseTestActivity"
             android:label="@string/title_activity_choose_test"
-            android:parentActivityName=".ChooseCourseActivity"
+            android:parentActivityName=".main.ChooseCourseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.ChooseCourseActivity" />
+                android:value=".main.ChooseCourseActivity" />
         </activity>
         <activity
-            android:name=".TakeTest.TakeTestActivity"
+            android:name=".takeTest.TakeTestActivity"
             android:label="@string/title_activity_take_test"
-            android:parentActivityName=".ChooseTestActivity"
+            android:parentActivityName=".main.ChooseTestActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.ChooseTestActivity" />
+                android:value=".main.ChooseTestActivity" />
+        </activity>
+        <activity
+            android:name=".main.ChooseCourseActivity"
+            android:label="@string/title_activity_choose_course"
+            android:parentActivityName=".main.ChooseTestActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.ChooseTestActivity" />
+        </activity>
+
+        <!-- Start here -->
+        <activity
+            android:name=".CheckCurrentUser"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".registration.RegistrationActivity"
+            android:label="@string/title_activity_registration"
+            android:parentActivityName=".CheckCurrentUser"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CheckCurrentUser" />
+        </activity>
+        <activity
+            android:name=".setup.WelcomeActivity"
+            android:label="@string/title_activity_welcome"
+            android:parentActivityName=".registration.SignUpActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.registration.SignUpActivity" />
+        </activity>
+        <activity
+            android:name=".setup.AuthenticateUserActivity"
+            android:label="@string/title_activity_authenticate_user"
+            android:parentActivityName=".CheckCurrentUser"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CheckCurrentUser" />
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".main.ChooseTestActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.ChooseTestActivity" />
+        </activity>
+        <activity
+            android:name=".registration.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".registration.RegistrationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.registration.RegistrationActivity" />
+        </activity>
+        <activity
+            android:name=".registration.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:parentActivityName=".registration.RegistrationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.registration.RegistrationActivity" />
+        </activity>
+        <activity
+            android:name=".setup.SetupWizardActivity"
+            android:label="@string/title_activity_setup_wizard"
+            android:parentActivityName=".setup.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".setup.WelcomeActivity" />
         </activity>
     </application>
 

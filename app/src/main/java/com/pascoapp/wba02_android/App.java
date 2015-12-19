@@ -4,16 +4,20 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.pascoapp.wba02_android.Course.Course;
-import com.pascoapp.wba02_android.Programme.Programme;
-import com.pascoapp.wba02_android.Question.Question;
-import com.pascoapp.wba02_android.School.School;
-import com.pascoapp.wba02_android.Test.Test;
+import com.pascoapp.wba02_android.parseSubClasses.Course;
+import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
+import com.pascoapp.wba02_android.parseSubClasses.Programme;
+import com.pascoapp.wba02_android.parseSubClasses.Question;
+import com.pascoapp.wba02_android.parseSubClasses.School;
+import com.pascoapp.wba02_android.parseSubClasses.Test;
 
 /**
  * Application class for the Pasco App
  */
 public class App extends Application {
+
+    public static final String CURRENT_COURSE_ID = "com.pascoapp.wba02_android.App.courseId";
+
     @Override
     public void onCreate() {
 
@@ -22,6 +26,7 @@ public class App extends Application {
         Parse.enableLocalDatastore(this);
 
         // Register sub-classes
+        ParseObject.registerSubclass(Lecturer.class);
         ParseObject.registerSubclass(School.class);
         ParseObject.registerSubclass(Programme.class);
         ParseObject.registerSubclass(Course.class);

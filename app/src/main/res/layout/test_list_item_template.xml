@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2014 Midsem"
+        android:id="@+id/test_item_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:textColor="#444444"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="P.Y.Okyere"
+        android:id="@+id/test_item_lecturer"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#ff4e4e4e"
+        android:textSize="14sp"
+        android:layout_below="@+id/test_item_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2hrs"
+        android:id="@+id/test_item_duration"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="11sp"
+        android:layout_alignBottom="@+id/test_item_lecturer"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
