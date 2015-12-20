@@ -26,16 +26,6 @@
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".main.ChooseTestActivity"
             android:label="@string/title_activity_choose_test"
             android:parentActivityName=".main.ChooseCourseActivity"
@@ -66,7 +56,14 @@
         <!-- Start here -->
         <activity
             android:name=".CheckCurrentUser"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".registration.RegistrationActivity"
             android:label="@string/title_activity_registration"

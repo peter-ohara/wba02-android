@@ -8,10 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.R;
 
-public class SetupWizardActivity extends FragmentActivity implements
+public class SetupWizardActivity extends AppCompatActivity implements
         ChooseLevelFragment.OnFragmentInteractionListener,
         ChooseProgrammeFragment.OnFragmentInteractionListener,
         ChooseSchoolFragment.OnFragmentInteractionListener,
@@ -22,7 +24,7 @@ public class SetupWizardActivity extends FragmentActivity implements
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 6;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -38,7 +40,12 @@ public class SetupWizardActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_voucher);
+        setContentView(R.layout.activity_setup_wizard);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.viewpager);
