@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.main.ChooseTestActivity;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 public class AuthenticateUserActivity extends AppCompatActivity {
 
@@ -19,21 +20,41 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        boolean userAuthenticated = false;
-        // TODO: Authentication Logic.
+        Student student = Student.getCurrentUser();
 
-        if (userAuthenticated) {
-            // TODO: Get Programme from Authentication logic
-            String programmeId = "3xC8GeiRik";  // Computer Science for now;
-            Intent intent = new Intent(AuthenticateUserActivity.this, ChooseTestActivity.class);
-            intent.putExtra(ChooseTestActivity.EXTRA_PROGRAMME_ID, programmeId);
-            startActivity(intent);
+        if (student.getSchool() == null) {
+            goToSetupWizard(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
+        } else if (student.getProgramme() == null) {
+            goToSetupWizard(SetupWizardActivity.CHOOSE_PROGRAMME_PAGE);
+        } else if (student.getLevel() == null) {
+            goToSetupWizard(SetupWizardActivity.CHOOSE_LEVEL_PAGE);
+        } else if (student.getSemester() == null) {
+            goToSetupWizard(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
+        } else if (false) {
+            // student.getVoucher() == null // TODO: Implement the code on left correctly in Student
+            goToWelcomeActivity();
         } else {
-            Intent intent = new Intent(AuthenticateUserActivity.this, WelcomeActivity.class);
-            startActivity(intent);
+            goToChooseTestActivity();
         }
+    }
 
+    private void goToChooseTestActivity() {
+        // TODO: Get Programme from Authentication logic
+        String programmeId = "3xC8GeiRik";  // Computer Science for now;
+        Intent intent = new Intent(AuthenticateUserActivity.this, ChooseTestActivity.class);
+        intent.putExtra(ChooseTestActivity.EXTRA_PROGRAMME_ID, programmeId);
+        startActivity(intent);
+    }
 
+    private void goToWelcomeActivity() {
+        Intent intent = new Intent(AuthenticateUserActivity.this, WelcomeActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToSetupWizard(int page) {
+        Intent intent = new Intent(AuthenticateUserActivity.this, SetupWizardActivity.class);
+        intent.putExtra(SetupWizardActivity.EXTRA_PAGE, page);
+        startActivity(intent);
     }
 
 }

@@ -1,9 +1,9 @@
 package com.pascoapp.wba02_android.setup;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 public class SetupWizardActivity extends AppCompatActivity implements
         ChooseLevelFragment.OnFragmentInteractionListener,
@@ -25,6 +26,16 @@ public class SetupWizardActivity extends AppCompatActivity implements
      * The number of pages (wizard steps) to show in this demo.
      */
     private static final int NUM_PAGES = 6;
+
+    public static final String EXTRA_PAGE =
+            "com.pascoapp.wba02_android.setup.SetupWizardActivity.setup_page";
+
+    public static final int ENTER_VOUCHER_PAGE = 0;
+    public static final int CHOOSE_SCHOOL_PAGE = 1;
+    public static final int CHOOSE_PROGRAMME_PAGE = 2;
+    public static final int CHOOSE_LEVEL_PAGE = 3;
+    public static final int CHOOSE_SEMESTER_PAGE = 4;
+    public static final int REVIEW_CHOICES_PAGE = 5;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -66,6 +77,18 @@ public class SetupWizardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onSubmitInteraction(Student student) {
+        // TODO: Consider passing student id to AuthenticateUserActivity
+        Intent intent = new Intent(SetupWizardActivity.this, AuthenticateUserActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+        // TODO: Next and Previous functionality
+    }
+
+    @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
@@ -82,17 +105,17 @@ public class SetupWizardActivity extends AppCompatActivity implements
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case ENTER_VOUCHER_PAGE:
                     return EnterVoucherFragment.newInstance("abc", "abc");
-                case 1:
+                case CHOOSE_SCHOOL_PAGE:
                     return ChooseSchoolFragment.newInstance("abc", "abc");
-                case 2:
+                case CHOOSE_PROGRAMME_PAGE:
                     return ChooseProgrammeFragment.newInstance("abc", "abc");
-                case 3:
+                case CHOOSE_LEVEL_PAGE:
                     return ChooseLevelFragment.newInstance("abc", "abc");
-                case 4:
+                case CHOOSE_SEMESTER_PAGE:
                     return ChooseSemesterFragment.newInstance("abc", "abc");
-                case 5:
+                case REVIEW_CHOICES_PAGE:
                     return ReviewChoicesFragment.newInstance("abc", "abc");
                 default:
                     return null;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +66,13 @@ public class ChooseSemesterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_semester, container, false);
+        View view = inflater.inflate(R.layout.fragment_choose_semester, container, false);
+
+        // TODO: Do Stuff
+        Student student = Student.getCurrentUser();
+        student.setSemester(1);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

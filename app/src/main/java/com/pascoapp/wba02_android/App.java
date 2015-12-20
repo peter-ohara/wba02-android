@@ -9,6 +9,7 @@ import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
 import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
 import com.pascoapp.wba02_android.parseSubClasses.School;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 import com.pascoapp.wba02_android.parseSubClasses.Test;
 
 /**
@@ -27,6 +28,7 @@ public class App extends Application {
 
         // Register sub-classes
         ParseObject.registerSubclass(Lecturer.class);
+        ParseObject.registerSubclass(Student.class);
         ParseObject.registerSubclass(School.class);
         ParseObject.registerSubclass(Programme.class);
         ParseObject.registerSubclass(Course.class);

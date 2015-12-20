@@ -1,14 +1,16 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +20,7 @@ import com.pascoapp.wba02_android.R;
  * Use the {@link ReviewChoicesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReviewChoicesFragment extends Fragment {
+public class ReviewChoicesFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +31,7 @@ public class ReviewChoicesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private Student mStudent;
 
     public ReviewChoicesFragment() {
         // Required empty public constructor
@@ -65,13 +68,36 @@ public class ReviewChoicesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review_choices, container, false);
+        View view = inflater.inflate(R.layout.fragment_review_choices, container, false);
+
+        TextView voucherField = (TextView) view.findViewById(R.id.voucher);
+        TextView schoolField = (TextView) view.findViewById(R.id.school);
+        TextView programmeField = (TextView) view.findViewById(R.id.programme);
+        TextView levelField = (TextView) view.findViewById(R.id.level);
+        TextView semesterField = (TextView) view.findViewById(R.id.semester);
+        Button submitButton = (Button) view.findViewById(R.id.submit_button);
+
+        submitButton.setOnClickListener(this);
+
+        mStudent = Student.getCurrentUser();
+
+        System.out.println(mStudent.getVoucher());
+        System.out.println(mStudent.getLevel());
+        System.out.println(mStudent.getSemester());
+
+
+        voucherField.setText(String.valueOf(mStudent.getVoucher()));
+//        schoolField.setText(mStudent.getSchool());
+//        programmeField.setText(mStudent.getProgramme());
+        levelField.setText("Year " + String.valueOf(mStudent.getLevel()));
+        semesterField.setText("Semester " + String.valueOf(mStudent.getSemester()));
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onSubmitButtonPressed(Student student) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onSubmitInteraction(student);
         }
     }
 
@@ -92,6 +118,11 @@ public class ReviewChoicesFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        onSubmitButtonPressed(mStudent);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -103,7 +134,6 @@ public class ReviewChoicesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onSubmitInteraction(Student student);
     }
 }

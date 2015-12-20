@@ -1,14 +1,16 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +20,7 @@ import com.pascoapp.wba02_android.R;
  * Use the {@link EnterVoucherFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EnterVoucherFragment extends Fragment {
+public class EnterVoucherFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +31,8 @@ public class EnterVoucherFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private EditText voucherField;
+
 
     public EnterVoucherFragment() {
         // Required empty public constructor
@@ -65,13 +69,20 @@ public class EnterVoucherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_enter_voucher, container, false);
+        View view = inflater.inflate(R.layout.fragment_enter_voucher, container, false);
+
+        voucherField = (EditText) view.findViewById(R.id.voucher);
+        Button nextButton = (Button) view.findViewById(R.id.next_button);
+
+        nextButton.setOnClickListener(this);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction();
         }
     }
 
@@ -92,6 +103,19 @@ public class EnterVoucherFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        // TODO: Do Stuff
+        // Create Entry in Usage table for this student and this voucher
+        // And validate if voucher is legit
+        Student student = Student.getCurrentUser();
+
+        String voucherNumber = voucherField.getText().toString();
+        student.setVoucher(voucherNumber);
+
+        onButtonPressed();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -104,6 +128,6 @@ public class EnterVoucherFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction();
     }
 }

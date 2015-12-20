@@ -8,7 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseObject;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.School;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
+import com.pascoapp.wba02_android.parseSubClasses.Test;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +69,17 @@ public class ChooseSchoolFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_school, container, false);
+        View view = inflater.inflate(R.layout.fragment_choose_school, container, false);
+
+        // TODO: Do Stuff
+        Student student = Student.getCurrentUser();
+
+        String schoolId = "3xC8GeiRik";
+        School school = ParseObject.createWithoutData(School.class, schoolId);
+
+        student.setSchool(school);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
