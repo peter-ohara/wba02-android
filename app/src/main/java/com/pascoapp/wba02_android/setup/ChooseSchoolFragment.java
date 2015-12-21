@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.dummy.DummyContent;
 import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
@@ -101,21 +101,8 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                selectSchool(i);
-            }
-        });
-
-
         //pull list of schools and fill list
         fillSchoolList();
-
-
-
-
-
         /**for testing
         Student student = Student.getCurrentUser();
         String schoolId = "3xC8GeiRik";
@@ -154,9 +141,6 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
             //testing
             Toast.makeText(getActivity(), "By some miracle, selected school was null", Toast.LENGTH_LONG).show();
         }
-
-
-
     }
 
     @Override
@@ -178,10 +162,11 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        selectSchool(position);
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -210,7 +195,7 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        void onFragmentInteraction(Uri uri);
     }
 
 }

@@ -1,26 +1,40 @@
 package com.pascoapp.wba02_android.setup;
 
-import android.content.Context;
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.parse.ParseUser;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Level;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChooseLevelFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ChooseLevelFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
+ * <p/>
+ * Large screen devices (such as tablets) are supported by replacing the ListView
+ * with a GridView.
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * interface.
  */
-public class ChooseLevelFragment extends Fragment {
+public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemClickListener {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,19 +46,21 @@ public class ChooseLevelFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ChooseLevelFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * The fragment's ListView/GridView.
+     */
+    private AbsListView mListView;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChooseLevelFragment.
+     * The Adapter which will be used to populate the ListView/GridView with
+     * Views.
      */
-    // TODO: Rename and change types and number of parameters
+    private ListAdapter mAdapter;
+
+    ArrayList<Level> levelList = new ArrayList<Level>();
+    ArrayList<String> levelListNames = new ArrayList<String>();
+
+    // TODO: Rename and change types of parameters
     public static ChooseLevelFragment newInstance(String param1, String param2) {
         ChooseLevelFragment fragment = new ChooseLevelFragment();
         Bundle args = new Bundle();
@@ -54,42 +70,82 @@ public class ChooseLevelFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public ChooseLevelFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // TODO: Change Adapter to display your content
+        mAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, levelListNames);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_choose_level, container, false);
+        View view = inflater.inflate(R.layout.fragment_chooselevel, container, false);
 
-        // TODO: Do Stuff
-        Student student = Student.getCurrentUser();
-        student.setLevel(4);
+        // Set the adapter
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+        // Set OnItemClickListener so we can be notified on item clicks
+        mListView.setOnItemClickListener(this);
+        //pull list of schools and fill list
+        fillLevelList();
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void fillLevelList(){
+        ParseQuery<Level> levelQuery = Level.getQuery();
+        levelQuery.findInBackground(new FindCallback<Level>() {
+            @Override
+            public void done(List<Level> objects, ParseException e) {
+                if(e == null){
+                    for(Level level : objects){
+                        levelList.add(level);
+                        levelListNames.add(level.getName());
+                    }
+                    //populate list view with levels with an adapter notify
+                    mAdapter.notify();
+                }
+            }
+        });
+    }
+
+    private void selectLevel(int position){
+        Student student = Student.getCurrentUser();
+        Level selectedLevel = levelList.get(position);
+
+        if(selectedLevel != null){
+            student.setLevel(selectedLevel.getLevel());
+            //open next fragment by notifying parent activity
+        }
+        else{
+            //testing
+            Toast.makeText(getActivity(), "By some miracle, selected level was null", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
@@ -98,6 +154,29 @@ public class ChooseLevelFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (null != mListener) {
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        }
+        selectLevel(position);
+    }
+
+    /**
+     * The default content for this Fragment has a TextView that is shown when
+     * the list is empty. If you would like to change the text, call this method
+     * to supply the text it should use.
+     */
+    public void setEmptyText(CharSequence emptyText) {
+        View emptyView = mListView.getEmptyView();
+
+        if (emptyView instanceof TextView) {
+            ((TextView) emptyView).setText(emptyText);
+        }
     }
 
     /**
@@ -114,4 +193,5 @@ public class ChooseLevelFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

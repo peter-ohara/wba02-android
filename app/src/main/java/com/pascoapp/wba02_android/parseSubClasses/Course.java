@@ -9,7 +9,6 @@ import com.parse.ParseQuery;
  */
 @ParseClassName("Course")
 public class Course extends ParseObject {
-
     public Course() {
     }
 
@@ -39,4 +38,5 @@ public class Course extends ParseObject {
         query.include("programme");
         return query;
     }
+
 }
