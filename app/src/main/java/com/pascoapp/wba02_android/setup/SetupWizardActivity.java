@@ -17,7 +17,7 @@ import com.pascoapp.wba02_android.parseSubClasses.Student;
 public class SetupWizardActivity extends AppCompatActivity implements
         ChooseLevelFragment.OnFragmentInteractionListener,
         ChooseProgrammeFragment.OnFragmentInteractionListener,
-        ChooseSchoolFragment.OnFragmentInteractionListener,
+        ChooseSchoolFragment_old.OnFragmentInteractionListener,
         ChooseSemesterFragment.OnFragmentInteractionListener,
         EnterVoucherFragment.OnFragmentInteractionListener,
         ReviewChoicesFragment.OnFragmentInteractionListener {
@@ -108,7 +108,7 @@ public class SetupWizardActivity extends AppCompatActivity implements
                 case ENTER_VOUCHER_PAGE:
                     return EnterVoucherFragment.newInstance("abc", "abc");
                 case CHOOSE_SCHOOL_PAGE:
-                    return ChooseSchoolFragment.newInstance("abc", "abc");
+                    return ChooseSchoolFragment_old.newInstance("abc", "abc");
                 case CHOOSE_PROGRAMME_PAGE:
                     return ChooseProgrammeFragment.newInstance("abc", "abc");
                 case CHOOSE_LEVEL_PAGE:

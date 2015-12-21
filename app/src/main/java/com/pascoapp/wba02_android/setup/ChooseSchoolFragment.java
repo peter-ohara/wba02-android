@@ -1,28 +1,40 @@
 package com.pascoapp.wba02_android.setup;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.parse.ParseObject;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.dummy.DummyContent;
 import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
-import com.pascoapp.wba02_android.parseSubClasses.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChooseSchoolFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ChooseSchoolFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
+ * <p/>
+ * Large screen devices (such as tablets) are supported by replacing the ListView
+ * with a GridView.
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * interface.
  */
-public class ChooseSchoolFragment extends Fragment {
+public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItemClickListener {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,19 +46,21 @@ public class ChooseSchoolFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ChooseSchoolFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * The fragment's ListView/GridView.
+     */
+    private AbsListView mListView;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChooseSchoolFragment.
+     * The Adapter which will be used to populate the ListView/GridView with
+     * Views.
      */
-    // TODO: Rename and change types and number of parameters
+    private ListAdapter mAdapter;
+
+    ArrayList<School> schoolList = new ArrayList<School>();
+    ArrayList<String> schoolListNames = new ArrayList<String>();
+
+    // TODO: Rename and change types of parameters
     public static ChooseSchoolFragment newInstance(String param1, String param2) {
         ChooseSchoolFragment fragment = new ChooseSchoolFragment();
         Bundle args = new Bundle();
@@ -56,46 +70,102 @@ public class ChooseSchoolFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public ChooseSchoolFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // TODO: Change Adapter to display your content
+        mAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, schoolListNames);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_choose_school, container, false);
+        View view = inflater.inflate(R.layout.fragment_chooseschoollist, container, false);
 
-        // TODO: Do Stuff
+        // Set the adapter
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        // Set OnItemClickListener so we can be notified on item clicks
+        mListView.setOnItemClickListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectSchool(i);
+            }
+        });
+
+
+        //pull list of schools and fill list
+        fillSchoolList();
+
+
+
+
+
+        /**for testing
         Student student = Student.getCurrentUser();
-
         String schoolId = "3xC8GeiRik";
         School school = ParseObject.createWithoutData(School.class, schoolId);
-
-        student.setSchool(school);
+        student.setSchool(school);*/
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void fillSchoolList(){
+        ParseQuery<School> schoolQuery = School.getQuery();
+        schoolQuery.findInBackground(new FindCallback<School>() {
+            @Override
+            public void done(List<School> objects, ParseException e) {
+                if(e == null){
+                    for(School school : objects){
+                        schoolList.add(school);
+                        schoolListNames.add(school.getName());
+                    }
+                    //populate list view with schools with an adapter notify
+                    mAdapter.notify();
+                }
+            }
+        });
+    }
+
+    private void selectSchool(int position){
+        Student student = Student.getCurrentUser();
+        School selectedSchool = schoolList.get(position);
+
+        if(selectedSchool != null){
+            student.setSchool(selectedSchool);
+            //open next fragment by notifying parent activity
         }
+        else{
+            //testing
+            Toast.makeText(getActivity(), "By some miracle, selected school was null", Toast.LENGTH_LONG).show();
+        }
+
+
+
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
@@ -104,6 +174,28 @@ public class ChooseSchoolFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (null != mListener) {
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        }
+    }
+
+    /**
+     * The default content for this Fragment has a TextView that is shown when
+     * the list is empty. If you would like to change the text, call this method
+     * to supply the text it should use.
+     */
+    public void setEmptyText(CharSequence emptyText) {
+        View emptyView = mListView.getEmptyView();
+
+        if (emptyView instanceof TextView) {
+            ((TextView) emptyView).setText(emptyText);
+        }
     }
 
     /**
@@ -118,6 +210,7 @@ public class ChooseSchoolFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(String id);
     }
+
 }
