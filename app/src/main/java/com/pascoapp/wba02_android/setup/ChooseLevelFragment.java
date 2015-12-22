@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,14 +110,15 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
     }
 
     private void fillLevelList(){
-        ParseQuery<Level> levelQuery = Level.getQuery();
+        ParseQuery<Level> levelQuery = new ParseQuery<Level>("Level");
         levelQuery.findInBackground(new FindCallback<Level>() {
             @Override
-            public void done(List<Level> objects, ParseException e) {
+            public void done(List<Level> levels, ParseException e) {
                 if(e == null){
-                    for(Level level : objects){
-                        levelList.add(level);
-                        levelListNames.add(level.getName());
+                    //Log.i("!!!!!!!!!!!!!!LEVELS!!!!!!!!", "" + levels.size());
+                    for(Level leve : levels){
+                        levelList.add(leve);
+                        levelListNames.add(leve.getName());
                     }
                     //populate list view with levels with an adapter notify
                     synchronized(mAdapter){

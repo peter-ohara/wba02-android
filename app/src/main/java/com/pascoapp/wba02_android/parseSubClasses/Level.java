@@ -17,13 +17,17 @@ public class Level extends ParseObject {
         return getString("name");
     }
 
+    public String getParent() {
+        return getString("Parent");
+    }
+
     public int getLevelIndex() {
         return getInt("index");
     }
 
     public static ParseQuery<Level> getQuery() {
         ParseQuery<Level> query = ParseQuery.getQuery(Level.class);
-        //query.include("parent");
+        query.include("Parent");
         return query;
     }
 }
