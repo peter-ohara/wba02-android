@@ -122,7 +122,9 @@ public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnI
                         programmeListNames.add(programme.getName());
                     }
                     //populate list view with programmes with an adapter notify
-                    mAdapter.notify();
+                    synchronized(mAdapter){
+                        mAdapter.notify();
+                    }
                 }
             }
         });

@@ -58,7 +58,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
     private ListAdapter mAdapter;
 
     ArrayList<Level> levelList = new ArrayList<Level>();
-    ArrayList<String> levelListNames = new ArrayList<String>();
+    ArrayList<String> levelListNames = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     public static ChooseLevelFragment newInstance(String param1, String param2) {
@@ -119,7 +119,12 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
                         levelListNames.add(level.getName());
                     }
                     //populate list view with levels with an adapter notify
-                    mAdapter.notify();
+                    synchronized(mAdapter){
+                        mAdapter.notify();
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -130,7 +135,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         Level selectedLevel = levelList.get(position);
 
         if(selectedLevel != null){
-            student.setLevel(selectedLevel.getLevel());
+            student.setLevel(selectedLevel.getLevelIndex());
             //open next fragment by notifying parent activity
         }
         else{

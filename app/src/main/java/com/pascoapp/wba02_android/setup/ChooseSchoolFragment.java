@@ -123,7 +123,10 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
                         schoolListNames.add(school.getName());
                     }
                     //populate list view with schools with an adapter notify
-                    mAdapter.notify();
+                    synchronized(mAdapter){
+                        mAdapter.notify();
+                    }
+
                 }
             }
         });
