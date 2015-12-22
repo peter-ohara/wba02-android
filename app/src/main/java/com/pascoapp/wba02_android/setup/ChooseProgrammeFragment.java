@@ -100,8 +100,7 @@ public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnI
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-        //pull list of programmes and fill list
-        fillProgrammeList();
+        //fillProgrammeList();
 
         /**Student student = Student.getCurrentUser();
         String programmeId = "4G7KJXH4mY";  // Electrical Engineering programme id
@@ -111,7 +110,7 @@ public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnI
         return view;
     }
 
-    private void fillProgrammeList(){
+    public void fillProgrammeList(){
         ParseQuery<Programme> programmeQuery = Programme.getQuery();
         programmeQuery.findInBackground(new FindCallback<Programme>() {
             @Override

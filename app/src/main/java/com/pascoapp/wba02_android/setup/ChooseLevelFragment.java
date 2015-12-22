@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,21 +103,21 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
         //pull list of schools and fill list
-        fillLevelList();
+        //fillLevelList();
 
         return view;
     }
 
-    private void fillLevelList(){
+    public void fillLevelList(){
         ParseQuery<Level> levelQuery = new ParseQuery<Level>("Level");
         levelQuery.findInBackground(new FindCallback<Level>() {
             @Override
             public void done(List<Level> levels, ParseException e) {
                 if(e == null){
                     //Log.i("!!!!!!!!!!!!!!LEVELS!!!!!!!!", "" + levels.size());
-                    for(Level leve : levels){
-                        levelList.add(leve);
-                        levelListNames.add(leve.getName());
+                    for(Level level : levels){
+                        levelList.add(level);
+                        levelListNames.add(level.getName());
                     }
                     //populate list view with levels with an adapter notify
                     synchronized(mAdapter){
