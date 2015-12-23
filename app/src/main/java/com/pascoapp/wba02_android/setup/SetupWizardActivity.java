@@ -12,10 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
-
-import java.util.ArrayList;
 
 public class SetupWizardActivity extends AppCompatActivity implements
         ChooseLevelFragment.OnFragmentInteractionListener,
@@ -44,17 +41,12 @@ public class SetupWizardActivity extends AppCompatActivity implements
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
-    private ViewPager mPager;
+    public static ViewPager mPager;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-
-
-    //parse adapter lists
-    public static ArrayList<School> schoolList = new ArrayList<School>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +98,12 @@ public class SetupWizardActivity extends AppCompatActivity implements
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter{
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
+
 
         @Override
         public Fragment getItem(int position) {
@@ -135,5 +129,6 @@ public class SetupWizardActivity extends AppCompatActivity implements
         public int getCount() {
             return NUM_PAGES;
         }
+
     }
 }

@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -33,31 +32,21 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ChooseProgrammeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-    ArrayList<Programme> programmeList = new ArrayList<Programme>();
+    ArrayList<Programme> mProgrammes = new ArrayList<Programme>();
     ArrayList<String> programmeListNames = new ArrayList<String>();
+    private ProgressBar loadingIndicator;
+    private LinearLayoutManager mLayoutManager;
+    private ChooseProgrammeAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     // TODO: Rename and change types of parameters
     public static ChooseProgrammeFragment newInstance(String param1, String param2) {
@@ -69,76 +58,84 @@ public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnI
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ChooseProgrammeFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, programmeListNames);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chooseprogramme, container, false);
+        View view = inflater.inflate(R.layout.content_choose_programme, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-        //fillProgrammeList();
+        loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
+//      set the recycler view
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.programmes_list);
+        mRecyclerView.setHasFixedSize(true);
+//       Use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Create an object for the adapter
+        mProgrammes = new ArrayList<>();
+        mAdapter = new ChooseProgrammeAdapter(mProgrammes);
+        mAdapter.setOnItemClickListener(new ChooseProgrammeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Programme programme) {
+                selectProgramme(programme);
+            }
+        });
+        // Set the adapter object to the RecyclerView
+        mRecyclerView.setAdapter(mAdapter);
 
-        /**Student student = Student.getCurrentUser();
-        String programmeId = "4G7KJXH4mY";  // Electrical Engineering programme id
-        Programme programme = ParseObject.createWithoutData(Programme.class, programmeId);
-        student.setProgramme(programme);**/
+        //String programmeId = getProgrammeId();
+        //refreshList(programmeId);
+        fillProgrammeList();
 
         return view;
     }
 
-    public void fillProgrammeList(){
+    public void fillProgrammeList() {
+        Log.i("PARSE PULL", "!!!!!!!!FILLING PROGRAMME LIST!!!!!!!!!!");
+        mProgrammes.clear();
+        programmeListNames.clear();
         ParseQuery<Programme> programmeQuery = Programme.getQuery();
+        //filter for selected school
+        if(Student.getCurrentUser().getSchool() != null)
+            programmeQuery.whereEqualTo("school", (Student.getCurrentUser().getSchool()));
+
         programmeQuery.findInBackground(new FindCallback<Programme>() {
             @Override
             public void done(List<Programme> objects, ParseException e) {
-                if(e == null){
-                    for(Programme programme : objects){
-                        programmeList.add(programme);
+                if (e == null) {
+                    for (Programme programme : objects) {
+                        mProgrammes.add(programme);
                         programmeListNames.add(programme.getName());
                     }
+
                     //populate list view with programmes with an adapter notify
-                    synchronized(mAdapter){
-                        mAdapter.notify();
-                    }
+                    mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+
                 }
             }
         });
     }
 
-    private void selectProgramme(int position){
+    private void selectProgramme(Programme programme) {
         Student student = Student.getCurrentUser();
-        Programme selectedProgramme = programmeList.get(position);
+        Programme selectedProgramme = programme;
 
-        if(selectedProgramme != null){
+        if (selectedProgramme != null) {
             student.setProgramme(selectedProgramme);
-            //open next fragment by notifying parent activity
-        }
-        else{
-            //testing
+            SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_LEVEL_PAGE);
+        } else {
             Toast.makeText(getActivity(), "By some miracle, selected programme was null", Toast.LENGTH_LONG).show();
         }
     }
@@ -160,28 +157,6 @@ public class ChooseProgrammeFragment extends Fragment implements AbsListView.OnI
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        selectProgramme(position);
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -33,32 +32,21 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ChooseSchoolFragment extends Fragment{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-
-    ArrayList<School> schoolList = new ArrayList<School>();
+    ArrayList<School> mSchools = new ArrayList<School>();
     ArrayList<String> schoolListNames = new ArrayList<String>();
+    private ProgressBar loadingIndicator;
+    private LinearLayoutManager mLayoutManager;
+    private ChooseSchoolAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     // TODO: Rename and change types of parameters
     public static ChooseSchoolFragment newInstance(String param1, String param2) {
@@ -70,128 +58,83 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ChooseSchoolFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, schoolListNames);
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chooseschoollist, container, false);
+        View view = inflater.inflate(R.layout.content_choose_school, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-        setEmptyText();
-        //fillSchoolList();
-        
-        /**for testing
-        Student student = Student.getCurrentUser();
-        String schoolId = "3xC8GeiRik";
-        School school = ParseObject.createWithoutData(School.class, schoolId);
-        student.setSchool(school);*/
+        loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
+//      set the recycler view
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.schools_list);
+        mRecyclerView.setHasFixedSize(true);
+//       Use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Create an object for the adapter
+        mSchools = new ArrayList<>();
+        mAdapter = new ChooseSchoolAdapter(mSchools);
+        mAdapter.setOnItemClickListener(new ChooseSchoolAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, School school) {
+                selectSchool(school);
+            }
+        });
+        // Set the adapter object to the RecyclerView
+        mRecyclerView.setAdapter(mAdapter);
+
+        //String programmeId = getProgrammeId();
+        //refreshList(programmeId);
+        fillSchoolList();
 
         return view;
     }
 
     public void fillSchoolList(){
-        Log.i("PARSE PULL", "!!!!!!!!1FILLING SCHOOL LIST!!!!!!!!!!");
-        schoolList.clear();
+        Log.i("PARSE PULL", "!!!!!!!!FILLING SCHOOL LIST!!!!!!!!!!");
+        mSchools.clear();
         schoolListNames.clear();
         ParseQuery<School> schoolQuery = School.getQuery();
         schoolQuery.findInBackground(new FindCallback<School>() {
             @Override
             public void done(List<School> objects, ParseException e) {
-                if(e == null){
-                    for(School school : objects){
-                        schoolList.add(school);
+                if (e == null) {
+                    for (School school : objects) {
+                        mSchools.add(school);
                         schoolListNames.add(school.getName());
                     }
+
                     //populate list view with schools with an adapter notify
-                    synchronized(mAdapter){
-                        mAdapter.notify();
-                    }
+                    mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
 
                 }
             }
         });
     }
 
-    public void saveSchoolListToParent(){
-        SetupWizardActivity.schoolList = schoolList;
-    }
-
-    public void loadSchoolListFromParent(){
-        schoolList = SetupWizardActivity.schoolList;
-        schoolListNames.clear();
-        for(School school : schoolList){
-            schoolListNames.add(school.getName());
-        }
-        synchronized(mAdapter){
-            mAdapter.notify();
-        }
-    }
-
-    private void selectSchool(int position){
+    private void selectSchool(School school){
         Student student = Student.getCurrentUser();
-        School selectedSchool = schoolList.get(position);
+        School selectedSchool = school;
 
         if(selectedSchool != null){
             student.setSchool(selectedSchool);
-            //open next fragment by notifying parent activity
+            SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_PROGRAMME_PAGE);
         }
         else{
-            //testing
             Toast.makeText(getActivity(), "By some miracle, selected school was null", Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(schoolList.size() <= 0)
-            fillSchoolList();
-        else
-            loadSchoolListFromParent();
-
-        synchronized(mAdapter){
-            mAdapter.notify();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(schoolList.size() > 0)
-            saveSchoolListToParent();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        fillSchoolList();
     }
 
     @Override
@@ -211,29 +154,8 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        selectSchool(position);
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
-    }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText() {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof android.support.v4.widget.ContentLoadingProgressBar) {
-            (emptyView).setVisibility(View.VISIBLE);
-        }
-    }
-
+    
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

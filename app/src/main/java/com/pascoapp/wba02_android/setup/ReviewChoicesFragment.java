@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Programme;
+import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 /**
@@ -21,8 +23,9 @@ import com.pascoapp.wba02_android.parseSubClasses.Student;
  * create an instance of this fragment.
  */
 public class ReviewChoicesFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    public static boolean mIsVisible = false;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -32,6 +35,13 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
 
     private OnFragmentInteractionListener mListener;
     private Student mStudent;
+
+    TextView voucherField;
+    TextView schoolField;
+    TextView programmeField;
+    TextView levelField;
+    TextView semesterField;
+    Button submitButton;
 
     public ReviewChoicesFragment() {
         // Required empty public constructor
@@ -70,12 +80,12 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_review_choices, container, false);
 
-        TextView voucherField = (TextView) view.findViewById(R.id.voucher);
-        TextView schoolField = (TextView) view.findViewById(R.id.school);
-        TextView programmeField = (TextView) view.findViewById(R.id.programme);
-        TextView levelField = (TextView) view.findViewById(R.id.level);
-        TextView semesterField = (TextView) view.findViewById(R.id.semester);
-        Button submitButton = (Button) view.findViewById(R.id.submit_button);
+        voucherField = (TextView) view.findViewById(R.id.voucher);
+        schoolField = (TextView) view.findViewById(R.id.school);
+        programmeField = (TextView) view.findViewById(R.id.programme);
+        levelField = (TextView) view.findViewById(R.id.level);
+        semesterField = (TextView) view.findViewById(R.id.semester);
+        submitButton = (Button) view.findViewById(R.id.submit_button);
 
         submitButton.setOnClickListener(this);
 
@@ -86,13 +96,47 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
         System.out.println(mStudent.getSemester());
 
 
-        voucherField.setText(String.valueOf(mStudent.getVoucher()));
-//        schoolField.setText(mStudent.getSchool());
-//        programmeField.setText(mStudent.getProgramme());
-        levelField.setText("Year " + String.valueOf(mStudent.getLevel()));
-        semesterField.setText("Semester " + String.valueOf(mStudent.getSemester()));
-
         return view;
+    }
+
+    public void checkReviews(){
+        voucherField.setText(String.valueOf(mStudent.getVoucher()));
+        ///test
+        if(mStudent.getSchool() != null)
+            schoolField.setText(((School)mStudent.getSchool()).getName());
+        else
+            schoolField.setText("Not Set, please go back and select a school");
+
+        if(mStudent.getProgramme() != null)
+            programmeField.setText(((Programme)mStudent.getProgramme()).getName());
+        else
+            programmeField.setText("Not Set, please go back and select a programme");
+
+        if(mStudent.getLevel() != null)
+            levelField.setText("Year " + String.valueOf(mStudent.getLevel().toString()));
+        else
+            levelField.setText("Not Set, please go back and select a year");
+
+        if(mStudent.getSemester() > 0)
+            semesterField.setText("Semester " + String.valueOf(mStudent.getSemester().toString()));
+        else
+            semesterField.setText("Not Set, please go back and select a semester");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        mIsVisible = false;
+        if(isVisibleToUser){
+            checkReviews();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkReviews();
+
     }
 
     public void onSubmitButtonPressed(Student student) {
