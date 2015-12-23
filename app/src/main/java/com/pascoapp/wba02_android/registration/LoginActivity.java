@@ -34,7 +34,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.setup.AuthenticateUserActivity;
+import com.pascoapp.wba02_android.AuthenticateUserActivity;
 
 import java.util.ArrayList;
 import java.util.List;

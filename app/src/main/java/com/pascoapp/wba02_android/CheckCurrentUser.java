@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.parse.ParseUser;
-import com.pascoapp.wba02_android.setup.AuthenticateUserActivity;
 import com.pascoapp.wba02_android.registration.RegistrationActivity;
 
 /**
@@ -24,6 +23,7 @@ public class CheckCurrentUser extends Activity {
         } else {
             startActivity(new Intent(this, AuthenticateUserActivity.class));
         }
+        finish();
 
         super.onCreate(savedInstanceState);
     }

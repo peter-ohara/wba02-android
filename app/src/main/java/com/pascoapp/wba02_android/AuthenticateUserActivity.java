@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.setup;
+package com.pascoapp.wba02_android;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.main.ChooseTestActivity;
-import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
+import com.pascoapp.wba02_android.setup.SetupWizardActivity;
+import com.pascoapp.wba02_android.setup.WelcomeActivity;
 
 public class AuthenticateUserActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 //        }
 
         goToChooseTestActivity();
+        finish();
     }
 
     private void goToChooseTestActivity() {
