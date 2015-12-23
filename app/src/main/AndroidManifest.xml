@@ -83,7 +83,7 @@
                 android:value="com.pascoapp.wba02_android.registration.SignUpActivity" />
         </activity>
         <activity
-            android:name=".setup.AuthenticateUserActivity"
+            android:name=".AuthenticateUserActivity"
             android:label="@string/title_activity_authenticate_user"
             android:parentActivityName=".CheckCurrentUser"
             android:theme="@style/AppTheme.NoActionBar">
