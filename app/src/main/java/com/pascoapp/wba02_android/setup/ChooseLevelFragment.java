@@ -58,7 +58,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
     private ListAdapter mAdapter;
 
     ArrayList<Level> levelList = new ArrayList<Level>();
-    ArrayList<String> levelListNames = new ArrayList<String>();
+    ArrayList<String> levelListNames = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     public static ChooseLevelFragment newInstance(String param1, String param2) {
@@ -103,23 +103,29 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
         //pull list of schools and fill list
-        fillLevelList();
+        //fillLevelList();
 
         return view;
     }
 
-    private void fillLevelList(){
-        ParseQuery<Level> levelQuery = Level.getQuery();
+    public void fillLevelList(){
+        ParseQuery<Level> levelQuery = new ParseQuery<Level>("Level");
         levelQuery.findInBackground(new FindCallback<Level>() {
             @Override
-            public void done(List<Level> objects, ParseException e) {
+            public void done(List<Level> levels, ParseException e) {
                 if(e == null){
-                    for(Level level : objects){
+                    //Log.i("!!!!!!!!!!!!!!LEVELS!!!!!!!!", "" + levels.size());
+                    for(Level level : levels){
                         levelList.add(level);
                         levelListNames.add(level.getName());
                     }
                     //populate list view with levels with an adapter notify
-                    mAdapter.notify();
+                    synchronized(mAdapter){
+                        mAdapter.notify();
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -130,7 +136,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         Level selectedLevel = levelList.get(position);
 
         if(selectedLevel != null){
-            student.setLevel(selectedLevel.getLevel());
+            student.setLevel(selectedLevel.getLevelIndex());
             //open next fragment by notifying parent activity
         }
         else{

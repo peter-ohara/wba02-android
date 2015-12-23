@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -89,6 +89,9 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, schoolListNames);
+
+
+
     }
 
     @Override
@@ -101,8 +104,9 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-        //pull list of schools and fill list
-        fillSchoolList();
+        setEmptyText();
+        //fillSchoolList();
+        
         /**for testing
         Student student = Student.getCurrentUser();
         String schoolId = "3xC8GeiRik";
@@ -112,7 +116,10 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
         return view;
     }
 
-    private void fillSchoolList(){
+    public void fillSchoolList(){
+        Log.i("PARSE PULL", "!!!!!!!!1FILLING SCHOOL LIST!!!!!!!!!!");
+        schoolList.clear();
+        schoolListNames.clear();
         ParseQuery<School> schoolQuery = School.getQuery();
         schoolQuery.findInBackground(new FindCallback<School>() {
             @Override
@@ -123,10 +130,28 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
                         schoolListNames.add(school.getName());
                     }
                     //populate list view with schools with an adapter notify
-                    mAdapter.notify();
+                    synchronized(mAdapter){
+                        mAdapter.notify();
+                    }
+
                 }
             }
         });
+    }
+
+    public void saveSchoolListToParent(){
+        SetupWizardActivity.schoolList = schoolList;
+    }
+
+    public void loadSchoolListFromParent(){
+        schoolList = SetupWizardActivity.schoolList;
+        schoolListNames.clear();
+        for(School school : schoolList){
+            schoolListNames.add(school.getName());
+        }
+        synchronized(mAdapter){
+            mAdapter.notify();
+        }
     }
 
     private void selectSchool(int position){
@@ -141,6 +166,32 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
             //testing
             Toast.makeText(getActivity(), "By some miracle, selected school was null", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(schoolList.size() <= 0)
+            fillSchoolList();
+        else
+            loadSchoolListFromParent();
+
+        synchronized(mAdapter){
+            mAdapter.notify();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(schoolList.size() > 0)
+            saveSchoolListToParent();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fillSchoolList();
     }
 
     @Override
@@ -175,11 +226,11 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
      */
-    public void setEmptyText(CharSequence emptyText) {
+    public void setEmptyText() {
         View emptyView = mListView.getEmptyView();
 
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
+        if (emptyView instanceof android.support.v4.widget.ContentLoadingProgressBar) {
+            (emptyView).setVisibility(View.VISIBLE);
         }
     }
 

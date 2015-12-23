@@ -12,7 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
+
+import java.util.ArrayList;
 
 public class SetupWizardActivity extends AppCompatActivity implements
         ChooseLevelFragment.OnFragmentInteractionListener,
@@ -48,6 +51,11 @@ public class SetupWizardActivity extends AppCompatActivity implements
      */
     private PagerAdapter mPagerAdapter;
 
+
+    //parse adapter lists
+    public static ArrayList<School> schoolList = new ArrayList<School>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +70,7 @@ public class SetupWizardActivity extends AppCompatActivity implements
         mPager = (ViewPager) findViewById(R.id.viewpager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
     }
 
     @Override

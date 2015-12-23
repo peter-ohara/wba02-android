@@ -13,28 +13,21 @@ public class Level extends ParseObject {
     public Level() {
     }
 
-    public String getCode() {
-        return getString("code");
-    }
-    public void setCode(String code) {
-        put("code", code);
-    }
-
     public String getName() {
         return getString("name");
     }
 
-    public int getLevel() {
-        return getInt("level");
+    public String getParent() {
+        return getString("Parent");
     }
 
-    public void setName(String name) {
-        put("name", name);
+    public int getLevelIndex() {
+        return getInt("index");
     }
 
     public static ParseQuery<Level> getQuery() {
         ParseQuery<Level> query = ParseQuery.getQuery(Level.class);
-        query.include("level");
+        query.include("Parent");
         return query;
     }
 }
