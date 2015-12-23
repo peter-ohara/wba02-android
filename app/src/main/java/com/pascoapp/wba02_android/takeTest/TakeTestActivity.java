@@ -1,14 +1,18 @@
 package com.pascoapp.wba02_android.takeTest;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -94,11 +98,28 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
             // User is looking at the first question, allow system to return to parent activity
-            super.onBackPressed();
+            confirmQuitting();
         } else {
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
+    }
+
+    private void confirmQuitting() {
+        new AlertDialog.Builder(TakeTestActivity.this)
+                .setTitle("Confirm Quit Test")
+                .setMessage("Do you really want to quit this test?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        quit();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void quit() {
+        super.onBackPressed();
     }
 
     @Override
@@ -121,5 +142,19 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case android.R.id.home:
+                confirmQuitting();
+                super.onOptionsItemSelected(item);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

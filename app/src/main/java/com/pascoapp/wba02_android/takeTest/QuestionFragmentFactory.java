@@ -8,14 +8,13 @@ import com.pascoapp.wba02_android.parseSubClasses.Question;
 public class QuestionFragmentFactory {
 
     public static QuestionFragment getQuestionFragment(Question question) {
-        String questionId = question.getObjectId();
 
         if (question.getType().equalsIgnoreCase("mcq")) {
-            return McqFragment.newInstance(questionId);
+            return McqFragment.newInstance(question);
         } else if (question.getType().equalsIgnoreCase("fillIn")) {
-            return FillInFragment.newInstance(questionId);
+            return FillInFragment.newInstance(question);
         } else if (question.getType().equalsIgnoreCase("essay")) {
-            return EssayFragment.newInstance(questionId);
+            return EssayFragment.newInstance(question);
         }
 
         return null;

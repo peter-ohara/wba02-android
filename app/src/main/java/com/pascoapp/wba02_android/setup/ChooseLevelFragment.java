@@ -190,7 +190,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        // TODO: Update argument questionType and name
         void onFragmentInteraction(Uri uri);
     }
 

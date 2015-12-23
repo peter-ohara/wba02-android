@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/message_view"
+    android:layout_width="match_parent"
+    android:layout_height="84dp"
+    android:layout_gravity="center"
+    android:background="#def0a5"
+    android:elevation="8dp"
+    tools:showIn="@layout/fragment_fill_in">
+
+    <TextView
+        android:id="@+id/correct_answer_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:text="You are correct!."
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#7eb530" />
+
+    <TextView
+        android:id="@+id/wrong_answer_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Oops, that&apos;s not correct."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#dd381d" />
+
+    <TextView
+        android:id="@+id/correction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wrong_answer_message"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:text="Channel Stage"
+        android:textColor="#dd381d" />
+
+</RelativeLayout>

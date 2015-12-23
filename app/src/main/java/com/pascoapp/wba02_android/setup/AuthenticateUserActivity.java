@@ -22,20 +22,22 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 
         Student student = Student.getCurrentUser();
 
-        if (student.getSchool() == null) {
-            goToSetupWizard(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
-        } else if (student.getProgramme() == null) {
-            goToSetupWizard(SetupWizardActivity.CHOOSE_PROGRAMME_PAGE);
-        } else if (student.getLevel() == null) {
-            goToSetupWizard(SetupWizardActivity.CHOOSE_LEVEL_PAGE);
-        } else if (student.getSemester() == null) {
-            goToSetupWizard(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
-        } else if (false) {
-            // student.getVoucher() == null // TODO: Implement the code on left correctly in Student
-            goToWelcomeActivity();
-        } else {
-            goToChooseTestActivity();
-        }
+//        if (student.getSchool() == null) {
+//            goToSetupWizard(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
+//        } else if (student.getProgramme() == null) {
+//            goToSetupWizard(SetupWizardActivity.CHOOSE_PROGRAMME_PAGE);
+//        } else if (student.getLevel() == null) {
+//            goToSetupWizard(SetupWizardActivity.CHOOSE_LEVEL_PAGE);
+//        } else if (student.getSemester() == null) {
+//            goToSetupWizard(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
+//        } else if (false) {
+//            // student.getVoucher() == null // TODO: Implement the code on left correctly in Student
+//            goToWelcomeActivity();
+//        } else {
+//            goToChooseTestActivity();
+//        }
+
+        goToChooseTestActivity();
     }
 
     private void goToChooseTestActivity() {

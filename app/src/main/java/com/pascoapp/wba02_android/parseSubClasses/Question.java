@@ -23,11 +23,11 @@ public class Question extends ParseObject {
     }
 
     public String getType() {
-        // TODO: Enforce type is one of these [essay|mcq|fillIn]
+        // TODO: Enforce questionType is one of these [essay|mcq|fillIn]
         return getString("type");
     }
     public void setType(String type) {
-        // TODO: Enforce type is one of these [essay|mcq|fillIn]
+        // TODO: Enforce questionType is one of these [essay|mcq|fillIn]
         put("type", type);
     }
 

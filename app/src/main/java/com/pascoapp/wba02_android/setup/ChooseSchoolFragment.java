@@ -194,7 +194,7 @@ public class ChooseSchoolFragment extends Fragment implements AbsListView.OnItem
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        // TODO: Update argument questionType and name
         void onFragmentInteraction(Uri uri);
     }
 
