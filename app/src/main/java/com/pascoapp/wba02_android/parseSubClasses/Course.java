@@ -5,7 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 /**
- * ParseObject Subclass for Course. Handles Course logic
+ * Handles Course logic
  */
 @ParseClassName("Course")
 public class Course extends ParseObject {
@@ -26,8 +26,8 @@ public class Course extends ParseObject {
         put("name", name);
     }
 
-    public ParseObject getProgramme() {
-        return getParseObject("programme");
+    public Programme getProgramme() {
+        return (Programme) getParseObject("programme");
     }
     public void setProgramme(Programme programme) {
         put("programme", programme);
@@ -36,7 +36,14 @@ public class Course extends ParseObject {
     public static ParseQuery<Course> getQuery() {
         ParseQuery<Course> query = ParseQuery.getQuery(Course.class);
         query.include("programme");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         return query;
     }
 
+    @Override
+    public String toString() {
+        return getCode() + ": "
+                + getName() + "; "
+                + getProgramme();
+    }
 }

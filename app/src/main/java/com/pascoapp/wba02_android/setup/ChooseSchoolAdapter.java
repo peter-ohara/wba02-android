@@ -24,11 +24,15 @@ public class ChooseSchoolAdapter extends RecyclerView.Adapter {
     }
 
     public class SchoolViewHolder extends RecyclerView.ViewHolder {
+
         public TextView titleView;
         public School school;
+
         public SchoolViewHolder(View itemView) {
             super(itemView);
+
             titleView = (TextView) itemView.findViewById(R.id.school_name);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -52,6 +56,7 @@ public class ChooseSchoolAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         School school = mSchools.get(position);
+
         ((SchoolViewHolder) holder).titleView.setText(school.getName());
         ((SchoolViewHolder) holder).school = school;
     }

@@ -6,7 +6,6 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
-import com.pascoapp.wba02_android.parseSubClasses.Level;
 import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
 import com.pascoapp.wba02_android.parseSubClasses.School;
@@ -23,10 +22,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
 
-        // [Optional] Power your app with Local Datastore. For more info, go to
-        // https://parse.com/docs/android/guide#local-datastore
-        Parse.enableLocalDatastore(this);
-
         // Register sub-classes
         ParseObject.registerSubclass(Lecturer.class);
         ParseObject.registerSubclass(Student.class);
@@ -35,7 +30,6 @@ public class App extends Application {
         ParseObject.registerSubclass(Course.class);
         ParseObject.registerSubclass(Test.class);
         ParseObject.registerSubclass(Question.class);
-        ParseObject.registerSubclass(Level.class);
 
         // Initialize parse
         Parse.initialize(this);

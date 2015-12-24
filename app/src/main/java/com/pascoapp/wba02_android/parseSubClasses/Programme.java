@@ -5,7 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 /**
- * ParseObject Subclass for Programme. Handles Programme logic
+ * Handles Programme logic
  */
 @ParseClassName("Programme")
 public class Programme extends ParseObject {
@@ -20,8 +20,8 @@ public class Programme extends ParseObject {
         put("name", name);
     }
 
-    public ParseObject getSchool() {
-        return getParseObject("school");
+    public School getSchool() {
+        return (School) getParseObject("school");
     }
     public void setSchool(School school) {
         put("school", school);
@@ -30,6 +30,12 @@ public class Programme extends ParseObject {
     public static ParseQuery<Programme> getQuery() {
         ParseQuery<Programme> query = ParseQuery.getQuery(Programme.class);
         query.include("school");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         return query;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " - " + getSchool().getShortName();
     }
 }

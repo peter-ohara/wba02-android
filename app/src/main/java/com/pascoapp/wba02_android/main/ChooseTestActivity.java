@@ -24,10 +24,10 @@ import com.parse.ParseUser;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.registration.RegistrationActivity;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
 import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Test;
-import com.pascoapp.wba02_android.registration.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +162,9 @@ public class ChooseTestActivity extends AppCompatActivity {
 //                    startActivity(new Intent(ChooseTestActivity.this, InboxActivity.class));
 //                }
 //                break;
+            case R.id.action_clear_cache:
+                ParseQuery.clearAllCachedResults();
+                break;
             case R.id.action_logout:
                 logout();
                 break;
@@ -174,14 +177,12 @@ public class ChooseTestActivity extends AppCompatActivity {
 
     private void logout() {
         ParseUser.logOut();
-        showLoginPage();
+        showRegistrationPage();
     }
 
-    private void showLoginPage() {
-        Intent intent = new Intent(ChooseTestActivity.this, LoginActivity.class);
+    private void showRegistrationPage() {
+        Intent intent = new Intent(ChooseTestActivity.this, RegistrationActivity.class);
         startActivity(intent);
-        // TODO: Fix this
-        // startActivityForResult(intent, SELECT_DEPARTMENT_REQUEST);
     }
 
     @Override

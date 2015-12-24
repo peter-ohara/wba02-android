@@ -5,13 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,11 +49,23 @@ public class ScoreFragment extends QuestionFragment {
         View view = inflater.inflate(R.layout.fragment_score, container, false);
 
         scoreView = (TextView) view.findViewById(R.id.score_text_view);
-        String scoreStr = listener.getScore() + " / " + listener.getMaxScore();
-        scoreView.setText(scoreStr);
+        updateScoreView();
 
         setView(view);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            updateScoreView();
+        }
+    }
+
+    private void updateScoreView() {
+        String scoreStr = listener.getScore() + " / " + listener.getMaxScore();
+        scoreView.setText(scoreStr);
     }
 
     @Override

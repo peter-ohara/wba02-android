@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -79,13 +80,6 @@ public class EnterVoucherFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed() {
-        if (mListener != null) {
-            mListener.onFragmentInteraction();
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -105,16 +99,18 @@ public class EnterVoucherFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        // TODO: Do Stuff
-        // Create Entry in Usage table for this student and this voucher
-        // And validate if voucher is legit
-        Student student = Student.getCurrentUser();
-
+        dismissKeyboard();
         String voucherNumber = voucherField.getText().toString();
-        student.setVoucher(voucherNumber);
+        if (mListener != null) {
+            mListener.onVoucherEntered(voucherNumber);
+        }
+    }
 
-        //onButtonPressed();
-        SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
+    private void dismissKeyboard() {
+        // hide virtual keyboard
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(voucherField.getWindowToken(),
+                InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     /**
@@ -128,7 +124,6 @@ public class EnterVoucherFragment extends Fragment implements View.OnClickListen
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument questionType and name
-        void onFragmentInteraction();
+        void onVoucherEntered(String voucherNumber);
     }
 }

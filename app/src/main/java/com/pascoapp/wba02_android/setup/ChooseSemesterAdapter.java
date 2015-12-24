@@ -15,30 +15,30 @@ import java.util.List;
 /**
  * Created by Kwaku on 12/23/2015.
  */
-public class ChooseLevelAdapter extends RecyclerView.Adapter {
+public class ChooseSemesterAdapter extends RecyclerView.Adapter {
 
-    public static final String LEVEL_ERROR = "An Error Occured: Please report this in the alpha release group";
-    private List<Integer> mLevels;
+    public static final String SEMESTER_ERROR = "An Error Occured: Please report this in the alpha release group";
+    private List<Integer> mSemesters;
     private OnItemClickListener mItemClickListener;
 
-    public ChooseLevelAdapter(ArrayList<Integer> mLevel) {
-        this.mLevels = mLevel;
+    public ChooseSemesterAdapter(ArrayList<Integer> mSemester) {
+        this.mSemesters = mSemester;
     }
 
-    public class LevelViewHolder extends RecyclerView.ViewHolder {
+    public class SemesterViewHolder extends RecyclerView.ViewHolder {
         public TextView titleView;
-        public Integer level;
+        public Integer semester;
 
-        public LevelViewHolder(View itemView) {
+        public SemesterViewHolder(View itemView) {
             super(itemView);
 
-            titleView = (TextView) itemView.findViewById(R.id.level_name);
+            titleView = (TextView) itemView.findViewById(R.id.semester_name);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(view, level);
+                        mItemClickListener.onItemClick(view, semester);
                     }
                 }
             });
@@ -49,58 +49,43 @@ public class ChooseLevelAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v  = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.level_list_item_template, parent, false);
-        LevelViewHolder vh = new LevelViewHolder(v);
+                .inflate(R.layout.semester_list_item_template, parent, false);
+        SemesterViewHolder vh = new SemesterViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Integer level = mLevels.get(position);
-        String levelStr;
+        Integer semester = mSemesters.get(position);
+        String semesterStr;
 
         // TODO: Change year strings to variables that can be switched
         // based on the schools naming conventions
 
-        switch(level) {
+        switch(semester) {
             case 1:
-                levelStr = "First Year";
+                semesterStr = "First Semester";
                 break;
             case 2:
-                levelStr = "Second Year";
-                break;
-            case 3:
-                levelStr = "Third Year";
-                break;
-            case 4:
-                levelStr = "Fourth Year";
-                break;
-            case 5:
-                levelStr = "Fifth Year";
-                break;
-            case 6:
-                levelStr = "6th Year";
-                break;
-            case 7:
-                levelStr = "7th Year";
+                semesterStr = "Second Semester";
                 break;
             default:
                 // TODO: Take this out in beta release and implement proper error handling
-                levelStr = LEVEL_ERROR;
+                semesterStr = SEMESTER_ERROR;
         }
 
-        ((LevelViewHolder) holder).titleView.setText(levelStr);
+        ((SemesterViewHolder) holder).titleView.setText(semesterStr);
 
-        ((LevelViewHolder) holder).level = level;
+        ((SemesterViewHolder) holder).semester = semester;
     }
 
     @Override
     public int getItemCount() {
-        return mLevels.size();
+        return mSemesters.size();
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Integer level);
+        void onItemClick(View view, Integer semester);
     }
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {

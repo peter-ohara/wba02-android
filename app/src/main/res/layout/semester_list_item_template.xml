@@ -5,14 +5,17 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/school_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:text="Kwame Nkrumah University of Science and Technology"
+        android:text="KNUST"
+        android:id="@+id/semester_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#444444"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:textColor="#444444"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

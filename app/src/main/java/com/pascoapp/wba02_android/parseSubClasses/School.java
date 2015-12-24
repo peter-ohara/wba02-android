@@ -5,7 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 /**
- * ParseObject Subclass for School. Handles School logic
+ * Handles School logic
  */
 @ParseClassName("School")
 public class School extends ParseObject {
@@ -21,8 +21,22 @@ public class School extends ParseObject {
         put("name", name);
     }
 
+    public String getShortName() {
+        return getString("shortName");
+    }
+
+    public void setShortName(String shortName) {
+        put("shortName", shortName);
+    }
+
     public static ParseQuery<School> getQuery() {
         ParseQuery<School> query = ParseQuery.getQuery(School.class);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         return query;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

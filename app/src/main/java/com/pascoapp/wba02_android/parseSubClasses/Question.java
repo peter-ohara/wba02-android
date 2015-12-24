@@ -7,7 +7,7 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 /**
- * ParseObject Subclass for Question. Handles Question logic
+ * Handles Question logic
  */
 @ParseClassName("Question")
 public class Question extends ParseObject {
@@ -45,8 +45,8 @@ public class Question extends ParseObject {
         put("answer", answer);
     }
 
-    public ParseObject getTest() {
-        return getParseObject("test");
+    public Test getTest() {
+        return (Test) getParseObject("test");
     }
     public void setTest(Test test) {
         put("test", test);
@@ -55,6 +55,16 @@ public class Question extends ParseObject {
     public static ParseQuery<Question> getQuery() {
         ParseQuery<Question> query = ParseQuery.getQuery(Question.class);
         query.include("test");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         return query;
+    }
+
+    @Override
+    public String toString() {
+        return getType() + "; "
+                + getTest() + "; "
+                + getQuestion() + "; "
+                + getChoices() + "; "
+                + getAnswer();
     }
 }

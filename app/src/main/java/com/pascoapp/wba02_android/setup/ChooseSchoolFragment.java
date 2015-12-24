@@ -41,8 +41,7 @@ public class ChooseSchoolFragment extends Fragment{
 
     private OnFragmentInteractionListener mListener;
 
-    ArrayList<School> mSchools = new ArrayList<School>();
-    ArrayList<String> schoolListNames = new ArrayList<String>();
+    ArrayList<School> mSchools;
     private ProgressBar loadingIndicator;
     private LinearLayoutManager mLayoutManager;
     private ChooseSchoolAdapter mAdapter;
@@ -76,12 +75,15 @@ public class ChooseSchoolFragment extends Fragment{
         View view = inflater.inflate(R.layout.content_choose_school, container, false);
 
         loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
-//      set the recycler view
+
+        // set the recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.schools_list);
         mRecyclerView.setHasFixedSize(true);
-//       Use a linear layout manager
+
+        // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
         // Create an object for the adapter
         mSchools = new ArrayList<>();
         mAdapter = new ChooseSchoolAdapter(mSchools);
@@ -91,49 +93,37 @@ public class ChooseSchoolFragment extends Fragment{
                 selectSchool(school);
             }
         });
+
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
-        //String programmeId = getProgrammeId();
-        //refreshList(programmeId);
         fillSchoolList();
 
         return view;
     }
 
-    public void fillSchoolList(){
-        Log.i("PARSE PULL", "!!!!!!!!FILLING SCHOOL LIST!!!!!!!!!!");
-        mSchools.clear();
-        schoolListNames.clear();
+    public void fillSchoolList() {
+        loadingIndicator.setVisibility(View.GONE);
+
         ParseQuery<School> schoolQuery = School.getQuery();
         schoolQuery.findInBackground(new FindCallback<School>() {
             @Override
-            public void done(List<School> objects, ParseException e) {
+            public void done(List<School> schools, ParseException e) {
                 if (e == null) {
-                    for (School school : objects) {
-                        mSchools.add(school);
-                        schoolListNames.add(school.getName());
-                    }
+                    mSchools.clear();
+                    mSchools.addAll(schools);
 
                     //populate list view with schools with an adapter notify
                     mAdapter.notifyDataSetChanged();
                     loadingIndicator.setVisibility(View.GONE);
-
                 }
             }
         });
     }
 
-    private void selectSchool(School school){
-        Student student = Student.getCurrentUser();
-        School selectedSchool = school;
-
-        if(selectedSchool != null){
-            student.setSchool(selectedSchool);
-            SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_PROGRAMME_PAGE);
-        }
-        else{
-            Toast.makeText(getActivity(), "By some miracle, selected school was null", Toast.LENGTH_LONG).show();
+    private void selectSchool(School school) {
+        if (mListener != null) {
+            mListener.onSchoolSelected(school);
         }
     }
 
@@ -153,8 +143,6 @@ public class ChooseSchoolFragment extends Fragment{
         super.onDetach();
         mListener = null;
     }
-
-
     
     /**
      * This interface must be implemented by activities that contain this
@@ -167,8 +155,7 @@ public class ChooseSchoolFragment extends Fragment{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument questionType and name
-        void onFragmentInteraction(Uri uri);
+        void onSchoolSelected(School school);
     }
 
 }

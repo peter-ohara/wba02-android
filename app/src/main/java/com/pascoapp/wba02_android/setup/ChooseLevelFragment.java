@@ -1,27 +1,18 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Level;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +23,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ChooseLevelFragment extends Fragment{
+public class ChooseLevelFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -41,9 +32,7 @@ public class ChooseLevelFragment extends Fragment{
 
     private OnFragmentInteractionListener mListener;
 
-    ArrayList<Level> mLevels = new ArrayList<Level>();
-    ArrayList<String> levelListNames = new ArrayList<String>();
-    private ProgressBar loadingIndicator;
+    ArrayList<Integer> mLevels;
     private LinearLayoutManager mLayoutManager;
     private ChooseLevelAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -75,67 +64,32 @@ public class ChooseLevelFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_choose_level, container, false);
 
-        loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
-//      set the recycler view
+        // set the recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.levels_list);
         mRecyclerView.setHasFixedSize(true);
-//       Use a linear layout manager
+
+        // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        // Create an object for the adapter
+
+        // Create a list for the adapter
         mLevels = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            mLevels.add(i);
+        }
+
         mAdapter = new ChooseLevelAdapter(mLevels);
         mAdapter.setOnItemClickListener(new ChooseLevelAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, Level level) {
+            public void onItemClick(View view, Integer level) {
                 selectLevel(level);
             }
         });
+
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
-        //String programmeId = getProgrammeId();
-        //refreshList(programmeId);
-        fillLevelList();
-
         return view;
-    }
-
-    public void fillLevelList(){
-        Log.i("PARSE PULL", "!!!!!!!!FILLING SCHOOL LIST!!!!!!!!!!");
-        mLevels.clear();
-        levelListNames.clear();
-        ParseQuery<Level> levelQuery = Level.getQuery();
-        //filter for selected school
-        if(Student.getCurrentUser().getLevel() != null)
-            //levelQuery.whereEqualTo("Parent", ((School)(Student.getCurrentUser().getSchool())).getObjectId()); //mistake: change Parent to school in parse
-        levelQuery.findInBackground(new FindCallback<Level>() {
-            @Override
-            public void done(List<Level> objects, ParseException e) {
-                if (e == null) {
-                    for (Level level : objects) {
-                        mLevels.add(level);
-                        levelListNames.add(level.getName());
-                    }
-                    //populate list view with levels with an adapter notify
-                    mAdapter.notifyDataSetChanged();
-                    loadingIndicator.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void selectLevel(Level level){
-        Student student = Student.getCurrentUser();
-        Level selectedLevel = level;
-
-        if(selectedLevel != null){
-            student.setLevel(selectedLevel.getLevelIndex());
-            SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
-        }
-        else{
-            Toast.makeText(getActivity(), "By some miracle, selected level was null", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -155,6 +109,11 @@ public class ChooseLevelFragment extends Fragment{
         mListener = null;
     }
 
+    private void selectLevel(Integer level){
+        if (mListener != null) {
+            mListener.onLevelSelected(level);
+        }
+    }
 
 
     /**
@@ -168,8 +127,7 @@ public class ChooseLevelFragment extends Fragment{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument questionType and name
-        void onFragmentInteraction(Uri uri);
+        void onLevelSelected(Integer level);
     }
 
 }

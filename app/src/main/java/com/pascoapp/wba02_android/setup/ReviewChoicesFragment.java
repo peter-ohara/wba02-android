@@ -100,27 +100,20 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
     }
 
     public void checkReviews(){
-        voucherField.setText(String.valueOf(mStudent.getVoucher()));
-        ///test
-        if(mStudent.getSchool() != null)
-            schoolField.setText(((School)mStudent.getSchool()).getName());
-        else
-            schoolField.setText("Not Set, please go back and select a school");
+        if (mStudent.getVoucher() != null) voucherField.setText(mStudent.getVoucher());
+        else voucherField.setText("Not Set, please go back and enter a valid voucher number");
 
-        if(mStudent.getProgramme() != null)
-            programmeField.setText(((Programme)mStudent.getProgramme()).getName());
-        else
-            programmeField.setText("Not Set, please go back and select a programme");
+        if(mStudent.getSchool() != null) schoolField.setText(mStudent.getSchool().getName());
+        else schoolField.setText("Not Set, please go back and select a school");
 
-        if(mStudent.getLevel() != null)
-            levelField.setText("Year " + String.valueOf(mStudent.getLevel().toString()));
-        else
-            levelField.setText("Not Set, please go back and select a year");
+        if(mStudent.getProgramme() != null) programmeField.setText(mStudent.getProgramme().getName());
+        else programmeField.setText("Not Set, please go back and select a programme");
 
-        if(mStudent.getSemester() > 0)
-            semesterField.setText("Semester " + String.valueOf(mStudent.getSemester().toString()));
-        else
-            semesterField.setText("Not Set, please go back and select a semester");
+        if(mStudent.getLevel() != null) levelField.setText("Year " + mStudent.getLevel());
+        else levelField.setText("Not Set, please go back and select a year");
+
+        if(mStudent.getSemester() > 0) semesterField.setText("Semester " + mStudent.getSemester());
+        else semesterField.setText("Not Set, please go back and select a semester");
     }
 
     @Override
@@ -141,7 +134,7 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
 
     public void onSubmitButtonPressed(Student student) {
         if (mListener != null) {
-            mListener.onSubmitInteraction(student);
+            mListener.onSubmitStudentsChoices(student);
         }
     }
 
@@ -178,6 +171,6 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onSubmitInteraction(Student student);
+        void onSubmitStudentsChoices(Student student);
     }
 }

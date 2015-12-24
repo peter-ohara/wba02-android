@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android.parseSubClasses;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
@@ -35,15 +36,15 @@ public class Student extends ParseUser {
         put("lastName", lastName);
     }
 
-    public ParseObject getSchool() {
-        return getParseObject("school");
+    public School getSchool() {
+        return (School) getParseObject("school");
     }
     public void setSchool(School school) {
         put("school", school);
     }
 
-    public ParseObject getProgramme() {
-        return getParseObject("programme");
+    public Programme getProgramme() {
+        return (Programme) getParseObject("programme");
     }
     public void setProgramme(Programme programme) {
         put("programme", programme);
@@ -63,8 +64,8 @@ public class Student extends ParseUser {
         put("semester", semester);
     }
 
-    public int getVoucher() {
-        return getInt("voucher");
+    public String getVoucher() {
+        return getString("voucher");
     }
     public void setVoucher(String voucher) {
         put("voucher", voucher);
@@ -74,9 +75,23 @@ public class Student extends ParseUser {
         return (Student) ParseUser.getCurrentUser();
     }
 
-    // TODO: Fix this
-//    public static ParseQuery<Student> getQuery() {
-//        ParseQuery<Student> query = ParseQuery.getQuery(Student.class);
-//        return query;
-//    }
+    // TODO: Check if it's possible to return a student straight away
+    public static ParseQuery<ParseUser> getUserQuery() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.include("school");
+        query.include("programme");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        return query;
+    }
+
+
+    @Override
+    public String toString() {
+        return getFullName() + "; "
+                + getSchool() + ": "
+                + getProgramme() + ": "
+                + getLevel() + ": "
+                + getSemester() + ": "
+                + getVoucher();
+    }
 }

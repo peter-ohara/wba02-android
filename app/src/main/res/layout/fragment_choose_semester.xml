@@ -4,16 +4,12 @@
     android:layout_height="match_parent"
     tools:context=".setup.ChooseSemesterFragment">
 
-    <TextView
-        android:id="@+id/textView2"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Choose Semester"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent"
+        android:divider="#E8E8E8"
+        android:dividerHeight="1dp"
+        android:id="@+id/semesters_list"
+        android:layout_gravity="center"/>
 
 </RelativeLayout>

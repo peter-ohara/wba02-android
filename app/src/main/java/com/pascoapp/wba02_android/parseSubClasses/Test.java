@@ -7,7 +7,7 @@ import com.parse.ParseQuery;
 import java.util.Date;
 
 /**
- * ParseObject Subclass for Test. Handles Test logic
+ * Handles Test logic
  */
 @ParseClassName("Test")
 public class Test extends ParseObject{
@@ -50,8 +50,8 @@ public class Test extends ParseObject{
         put("instructions", instructions);
     }
 
-    public ParseObject getCourse() {
-        return getParseObject("course");
+    public Course getCourse() {
+        return (Course) getParseObject("course");
     }
     public void setCourse(Course course) {
         put("course", course);
@@ -61,6 +61,16 @@ public class Test extends ParseObject{
         ParseQuery<Test> query = ParseQuery.getQuery(Test.class);
         query.include("lecturer");
         query.include("course");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         return query;
+    }
+
+    @Override
+    public String toString() {
+        return getType() + "; "
+                + getYear() + "; "
+                + getCourse() + "; "
+                + getLecturer() + "; "
+                + getDuration() + " hrs";
     }
 }

@@ -34,6 +34,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 import com.pascoapp.wba02_android.setup.WelcomeActivity;
 
 import java.util.ArrayList;
@@ -290,12 +291,12 @@ public class SignUpActivity extends AppCompatActivity implements LoaderManager.L
     private void signUp(String username, String email, String password) {
         progressDialog.setMessage("Creating new user...");
 
-        ParseUser user = new ParseUser();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
+        Student student = new Student();
+        student.setUsername(username);
+        student.setPassword(password);
+        student.setEmail(email);
 
-        user.signUpInBackground(new SignUpCallback() {
+        student.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 progressDialog.dismiss();

@@ -19,7 +19,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#E8E8E8"
+        android:divider="#d2bebe"
         android:dividerHeight="1dp"
         android:id="@+id/schools_list"
         android:layout_gravity="center"/>

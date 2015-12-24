@@ -85,8 +85,10 @@ public class ChooseCourseActivity extends AppCompatActivity {
 
         ParseQuery<Course> query = Course.getQuery();
 
-        query.whereEqualTo("programme",
-                ParseObject.createWithoutData(Programme.class, programmeId));
+        if (programmeId != null) {
+            query.whereEqualTo("programme",
+                    ParseObject.createWithoutData(Programme.class, programmeId));
+        } // else showAll Courses
 
         query.findInBackground(new FindCallback<Course>() {
             @Override

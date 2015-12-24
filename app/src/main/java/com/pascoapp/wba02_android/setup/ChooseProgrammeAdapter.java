@@ -19,16 +19,20 @@ public class ChooseProgrammeAdapter  extends RecyclerView.Adapter {
     private List<Programme> mProgrammes;
     private OnItemClickListener mItemClickListener;
 
-    public ChooseProgrammeAdapter(List<Programme> mProgramme) {
-        this.mProgrammes = mProgramme;
+    public ChooseProgrammeAdapter(List<Programme> mProgrammes) {
+        this.mProgrammes = mProgrammes;
     }
 
     public class ProgrammeViewHolder extends RecyclerView.ViewHolder {
+
         public TextView titleView;
         public Programme programme;
+
         public ProgrammeViewHolder(View itemView) {
             super(itemView);
+
             titleView = (TextView) itemView.findViewById(R.id.programme_name);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
