@@ -113,7 +113,8 @@ public class EnterVoucherFragment extends Fragment implements View.OnClickListen
         String voucherNumber = voucherField.getText().toString();
         student.setVoucher(voucherNumber);
 
-        onButtonPressed();
+        //onButtonPressed();
+        SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
     }
 
     /**

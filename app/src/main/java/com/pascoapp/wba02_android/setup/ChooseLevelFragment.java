@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -33,32 +32,21 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ChooseLevelFragment extends Fragment{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-
-    ArrayList<Level> levelList = new ArrayList<Level>();
-    ArrayList<String> levelListNames = new ArrayList<>();
+    ArrayList<Level> mLevels = new ArrayList<Level>();
+    ArrayList<String> levelListNames = new ArrayList<String>();
+    private ProgressBar loadingIndicator;
+    private LinearLayoutManager mLayoutManager;
+    private ChooseLevelAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     // TODO: Rename and change types of parameters
     public static ChooseLevelFragment newInstance(String param1, String param2) {
@@ -70,77 +58,82 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ChooseLevelFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, levelListNames);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chooselevel, container, false);
+        View view = inflater.inflate(R.layout.content_choose_level, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
+//      set the recycler view
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.levels_list);
+        mRecyclerView.setHasFixedSize(true);
+//       Use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Create an object for the adapter
+        mLevels = new ArrayList<>();
+        mAdapter = new ChooseLevelAdapter(mLevels);
+        mAdapter.setOnItemClickListener(new ChooseLevelAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Level level) {
+                selectLevel(level);
+            }
+        });
+        // Set the adapter object to the RecyclerView
+        mRecyclerView.setAdapter(mAdapter);
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-        //pull list of schools and fill list
-        //fillLevelList();
+        //String programmeId = getProgrammeId();
+        //refreshList(programmeId);
+        fillLevelList();
 
         return view;
     }
 
     public void fillLevelList(){
-        ParseQuery<Level> levelQuery = new ParseQuery<Level>("Level");
+        Log.i("PARSE PULL", "!!!!!!!!FILLING SCHOOL LIST!!!!!!!!!!");
+        mLevels.clear();
+        levelListNames.clear();
+        ParseQuery<Level> levelQuery = Level.getQuery();
+        //filter for selected school
+        if(Student.getCurrentUser().getLevel() != null)
+            //levelQuery.whereEqualTo("Parent", ((School)(Student.getCurrentUser().getSchool())).getObjectId()); //mistake: change Parent to school in parse
         levelQuery.findInBackground(new FindCallback<Level>() {
             @Override
-            public void done(List<Level> levels, ParseException e) {
-                if(e == null){
-                    //Log.i("!!!!!!!!!!!!!!LEVELS!!!!!!!!", "" + levels.size());
-                    for(Level level : levels){
-                        levelList.add(level);
+            public void done(List<Level> objects, ParseException e) {
+                if (e == null) {
+                    for (Level level : objects) {
+                        mLevels.add(level);
                         levelListNames.add(level.getName());
                     }
                     //populate list view with levels with an adapter notify
-                    synchronized(mAdapter){
-                        mAdapter.notify();
-                    }
-                }
-                else{
-                    Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                    mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });
     }
 
-    private void selectLevel(int position){
+    private void selectLevel(Level level){
         Student student = Student.getCurrentUser();
-        Level selectedLevel = levelList.get(position);
+        Level selectedLevel = level;
 
         if(selectedLevel != null){
             student.setLevel(selectedLevel.getLevelIndex());
-            //open next fragment by notifying parent activity
+            SetupWizardActivity.mPager.setCurrentItem(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
         }
         else{
-            //testing
             Toast.makeText(getActivity(), "By some miracle, selected level was null", Toast.LENGTH_LONG).show();
         }
     }
@@ -162,28 +155,7 @@ public class ChooseLevelFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
-        selectLevel(position);
-    }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -38,7 +38,8 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 //            goToChooseTestActivity();
 //        }
 
-        goToChooseTestActivity();
+        goToSetupWizard(0);
+        //goToChooseTestActivity();
         finish();
     }
 
