@@ -15,6 +15,8 @@ public class QuestionFragmentFactory {
             return FillInFragment.newInstance(question);
         } else if (question.getType().equalsIgnoreCase("essay")) {
             return EssayFragment.newInstance(question);
+        } else if (question.getType().equalsIgnoreCase("score")) {
+            return ScoreFragment.newInstance(question);
         }
 
         return null;

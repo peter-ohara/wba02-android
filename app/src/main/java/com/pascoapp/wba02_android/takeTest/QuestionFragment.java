@@ -1,9 +1,11 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,14 +51,15 @@ public abstract class QuestionFragment extends Fragment {
 
     // UI elements
     private View view;
-    private TextView mQuestionField;
+    private TextView mQuestionView;
     private View messageView;
     private TextView correctAnswerMessageTextView;
     private TextView wrongAnswerMessageTextView;
     private TextView correctionTextView;
     private Button checkButton;
 
-    private OnFragmentInteractionListener listener;
+    // TODO: Encapsulate this
+    protected OnFragmentInteractionListener listener;
 
     @android.support.annotation.Nullable
     @Override
@@ -139,17 +142,25 @@ public abstract class QuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mQuestionField = (TextView) view.findViewById(R.id.question);
-        mQuestionField.setText(question);
+        if (questionType.equalsIgnoreCase("score")) {
+            checkButton = (Button) view.findViewById(R.id.check_answer_button);
 
-        if (!questionType.equalsIgnoreCase("essay")) {
-            // Essays are do not have states so all the
+            checkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    endTest();
+                }
+            });
+        } else {
+            mQuestionView = (TextView) view.findViewById(R.id.question);
+            mQuestionView.setText(question);
+
+            checkButton = (Button) view.findViewById(R.id.check_answer_button);
+
             messageView = view.findViewById(R.id.message_view);
             correctAnswerMessageTextView = (TextView) view.findViewById(R.id.correct_answer_message);
             wrongAnswerMessageTextView = (TextView) view.findViewById(R.id.wrong_answer_message);
             correctionTextView = (TextView) view.findViewById(R.id.correction);
-
-            checkButton = (Button) view.findViewById(R.id.check_answer_button);
 
             if (answered) {
                 setAnsweredState();
@@ -161,6 +172,12 @@ public abstract class QuestionFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void endTest() {
+        if (listener != null) {
+            listener.onEndTest();
+        }
     }
 
     private void setUnAnsweredState() {
@@ -176,12 +193,12 @@ public abstract class QuestionFragment extends Fragment {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCheckButtonPressed();
+                checkAnswer();
             }
         });
     }
 
-    private void setAnsweredState() {
+    public void setAnsweredState() {
         answered = true;
 
         messageView.setVisibility(View.VISIBLE);
@@ -192,7 +209,7 @@ public abstract class QuestionFragment extends Fragment {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onContinueButtonPressed();
+                moveToNextPage();
             }
         });
     }
@@ -213,6 +230,13 @@ public abstract class QuestionFragment extends Fragment {
         correctAnswerMessageTextView.setText("You are correct!.");
         wrongAnswerMessageTextView.setText("");
         correctionTextView.setText("");
+
+        // For essays show the answer for mcq and fillIn don't show the answer
+        if (questionType.equalsIgnoreCase("essay")) {
+            correctionTextView.setText(getAdjustedAnswer());
+        } else {
+            correctionTextView.setText("");
+        }
     }
 
     private void displayWrongMessage() {
@@ -223,17 +247,55 @@ public abstract class QuestionFragment extends Fragment {
         correctionTextView.setText(getAdjustedAnswer());
     }
 
-    public void onCheckButtonPressed() {
-        setAnsweredState();
-
-        if (getAdjustedAnswer().equalsIgnoreCase(getStudentsAnswer())) {
-            setAnsweredCorrectlyState();
+    public void checkAnswer() {
+        if (questionType.equalsIgnoreCase("essay")) {
+            askUserIfTheyGotTheAnswerRight();
         } else {
-            setAnsweredWronglyState();
+            setAnsweredState();
+
+            if (getAdjustedAnswer().equalsIgnoreCase(getStudentsAnswer())) {
+                setAnsweredCorrectlyState();
+                if (listener != null) {
+                    listener.onAnsweredCorrectly();
+                }
+            } else {
+                setAnsweredWronglyState();
+                if (listener != null) {
+                    listener.onAnsweredWrongly();
+                }
+            }
         }
     }
 
-    public void onContinueButtonPressed() {
+    private void askUserIfTheyGotTheAnswerRight() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Did you get the answer right?");
+        builder.setMessage(getAdjustedAnswer());
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                setAnsweredState();
+                setAnsweredCorrectlyState();
+                if (listener != null) {
+                    listener.onAnsweredCorrectly();
+                }
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                setAnsweredState();
+                setAnsweredWronglyState();
+                if (listener != null) {
+                    listener.onAnsweredWrongly();
+                }
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void moveToNextPage() {
         if (listener != null) {
             listener.onNext();
         }
@@ -297,8 +359,12 @@ public abstract class QuestionFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
 
-        void onPrevious();
-
+        void onAnsweredCorrectly();
+        void onAnsweredWrongly();
         void onNext();
+
+        int getScore();
+        int getMaxScore();
+        void onEndTest();
     }
 }

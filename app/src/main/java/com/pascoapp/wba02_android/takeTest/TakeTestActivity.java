@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +26,8 @@ import com.pascoapp.wba02_android.parseSubClasses.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TakeTestActivity extends AppCompatActivity implements QuestionFragment.OnFragmentInteractionListener {
+public class TakeTestActivity extends AppCompatActivity
+        implements QuestionFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_TEST_ID =
             "com.pascoapp.wba02_android.TakeTest.TakeTestActivity.testId";
@@ -36,6 +38,11 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
     private ArrayList<Question> mQuestions;
     private ProgressBar loadingIndicator;
     private View coordinatorLayoutView;
+
+    private int mScore = 0;
+    private int markPerQuestion = 1;
+    private int wrongAnswerPenalty = 0;     // Some tests give penalties for wrong answers
+    private int mMaxScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +85,15 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
                 if (e == null) {
                     mQuestions.clear();
                     mQuestions.addAll(questions);
+
+                    // Add an empty question for the score fragment
+                    Question scoreQuestion = new Question();
+                    scoreQuestion.setType("score");
+
+                    mQuestions.add(scoreQuestion);
+
                     mPagerAdapter.notifyDataSetChanged();
+                    calculateMaxScore();
                 } else {
                     Snackbar.make(coordinatorLayoutView,
                             e.getCode() + " : " + e.getMessage(),
@@ -92,6 +107,10 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
                 }
             }
         });
+    }
+
+    private void calculateMaxScore() {
+        mMaxScore = mQuestions.size() - 1;  // - 1 because we added a score question to mQuestions
     }
 
     @Override
@@ -122,26 +141,21 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
         super.onBackPressed();
     }
 
+
     @Override
-    public void onPrevious() {
-        if (mPager.getCurrentItem() == 0) {
-            // User is looking at the first question, so do nothing
-            // TODO: Do something to make user know he's at the first item.
-        } else {
-            // Show the previous question
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+    public void onAnsweredCorrectly() {
+        mScore += markPerQuestion;
+    }
+
+    @Override
+    public void onAnsweredWrongly() {
+        mScore -= wrongAnswerPenalty;
     }
 
     @Override
     public void onNext() {
-        if (mPager.getCurrentItem() == mQuestions.size()) {
-            // User is looking at the last question, ask whether he wants to score the test
-            // TODO: Call code for scoring test.
-        } else {
-            // Show the previous question
-            mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-        }
+        // Move to next page
+        mPager.setCurrentItem(mPager.getCurrentItem() + 1);
     }
 
     @Override
@@ -156,5 +170,21 @@ public class TakeTestActivity extends AppCompatActivity implements QuestionFragm
                 break;
         }
         return true;
+    }
+
+    @Override
+    public int getScore() {
+        return mScore;
+    }
+
+    @Override
+    public int getMaxScore() {
+        return mMaxScore;
+    }
+
+    @Override
+    public void onEndTest() {
+        // TODO: Save Scores to pass before quiting
+        quit();
     }
 }

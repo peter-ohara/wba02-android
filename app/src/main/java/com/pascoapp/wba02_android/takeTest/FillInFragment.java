@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -70,7 +68,7 @@ public class FillInFragment extends QuestionFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == 42) {
-                    onCheckButtonPressed();
+                    checkAnswer();
                     dismissKeyboard();
                     handled = true;
                 }
