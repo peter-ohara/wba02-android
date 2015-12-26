@@ -22,6 +22,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pascoapp.wba02_android.App;
+import com.pascoapp.wba02_android.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.registration.RegistrationActivity;
@@ -151,17 +152,10 @@ public class ChooseTestActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-//            case R.id.action_inbox:
-//                // Check if users department has been set, if not show UserDepartmentActivity
-//                ParseObject department = mCurrentUser.getParseObject("department");
-//
-//                if (department == null) {
-//                    startActivity(new Intent(ChooseTestActivity.this, UserDepartmentActivity.class));
-//                } else {
-//                    startActivity(new Intent(ChooseTestActivity.this, InboxActivity.class));
-//                }
-//                break;
+        switch (item.getItemId()) {
+            case R.id.action_inbox:
+                startActivity(new Intent(ChooseTestActivity.this, MessageListActivity.class));
+                break;
             case R.id.action_clear_cache:
                 ParseQuery.clearAllCachedResults();
                 break;

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.pascoapp.wba02_android.main.ChooseTestActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 import com.pascoapp.wba02_android.setup.SetupWizardActivity;
@@ -26,6 +27,10 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 
         student = Student.getCurrentUser();
 
+        // Crashlytics
+        logUser();
+
+
         if (student.getSchool() == null) {
             goToSetupWizard(SetupWizardActivity.CHOOSE_SCHOOL_PAGE);
         } else if (student.getProgramme() == null) {
@@ -43,6 +48,12 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 
         finish();
     }
+
+    private void logUser() {
+        Crashlytics.setUserEmail(student.getEmail());
+        Crashlytics.setUserName(student.getFullName());
+    }
+
 
     private void goToChooseTestActivity() {
         String programmeId = student.getProgramme().getObjectId();

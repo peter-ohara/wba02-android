@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".main.ChooseTestActivity">
 
-    <!--<item-->
-        <!--android:id="@+id/action_inbox"-->
-        <!--android:icon="@drawable/ic_bell"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--android:title="Filter" />-->
+    <item
+        android:id="@+id/action_inbox"
+        android:icon="@drawable/ic_bell"
+        app:showAsAction="ifRoom"
+        android:title="Filter" />
 
     <item
         android:id="@+id/action_logout"

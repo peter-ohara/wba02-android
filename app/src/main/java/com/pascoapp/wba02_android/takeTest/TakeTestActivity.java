@@ -30,7 +30,7 @@ public class TakeTestActivity extends AppCompatActivity
         implements QuestionFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_TEST_ID =
-            "com.pascoapp.wba02_android.TakeTest.TakeTestActivity.testId";
+            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
 
     private ViewPager mPager;
 
@@ -83,17 +83,19 @@ public class TakeTestActivity extends AppCompatActivity
             public void done(List<Question> questions, ParseException e) {
                 loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
-                    mQuestions.clear();
-                    mQuestions.addAll(questions);
+                    if (questions.size() != 0) {
+                        mQuestions.clear();
+                        mQuestions.addAll(questions);
 
-                    // Add an empty question for the score fragment
-                    Question scoreQuestion = new Question();
-                    scoreQuestion.setType("score");
+                        // Add an empty question for the score fragment
+                        Question scoreQuestion = new Question();
+                        scoreQuestion.setType("score");
 
-                    mQuestions.add(scoreQuestion);
+                        mQuestions.add(scoreQuestion);
 
-                    mPagerAdapter.notifyDataSetChanged();
-                    calculateMaxScore();
+                        mPagerAdapter.notifyDataSetChanged();
+                        calculateMaxScore();
+                    }
                 } else {
                     Snackbar.make(coordinatorLayoutView,
                             e.getCode() + " : " + e.getMessage(),

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="72dp"
+    android:id="@+id/cv"
+    android:gravity="center_vertical" >
+
+    <ImageView
+        android:id="@+id/message_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitStart"
+        android:layout_marginLeft="?listPreferredItemPaddingLeft"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_bell"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/message_icon"
+        android:layout_alignWithParentIfMissing="true"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:textColor="?android:textColorPrimary"
+            android:text="We've determined that you'll most likely
+                            be treating these topics in class today."/>
+
+        <TextView
+            android:id="@+id/message_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:textColor="?android:textColorSecondary"
+            android:text="2 Hours Ago" />
+    </LinearLayout>
+
+</RelativeLayout>

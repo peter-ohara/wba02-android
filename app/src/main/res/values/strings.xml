@@ -85,5 +85,7 @@
     <string name="action_sign_up_short">Sign up</string>
 
     <string name="title_activity_setup_wizard">Setup Wizard</string>
+    <string name="title_message_list">messages</string>
+    <string name="title_message_detail">message Detail</string>
 
 </resources>
