@@ -87,5 +87,6 @@
     <string name="title_activity_setup_wizard">Setup Wizard</string>
     <string name="title_message_list">messages</string>
     <string name="title_message_detail">message Detail</string>
+    <string name="preference_file_current_course">com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.PREFERENCE_FILE_CURRENT_COURSE</string>
 
 </resources>

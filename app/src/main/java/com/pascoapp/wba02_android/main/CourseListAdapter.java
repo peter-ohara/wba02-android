@@ -28,7 +28,7 @@ public class CourseListAdapter extends RecyclerView.Adapter {
 
         public TextView titleView;
 
-        public String courseId;
+        public Course course;
 
         public CourseViewHolder(View itemView) {
             super(itemView);
@@ -39,7 +39,7 @@ public class CourseListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(view, courseId);
+                        mItemClickListener.onItemClick(view, course);
                     }
                 }
             });
@@ -61,7 +61,7 @@ public class CourseListAdapter extends RecyclerView.Adapter {
 
         ((CourseViewHolder) holder).titleView.setText(course.getCode() + " " + course.getName());
 
-        ((CourseViewHolder) holder).courseId = course.getObjectId();
+        ((CourseViewHolder) holder).course = course;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CourseListAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, String courseId);
+        void onItemClick(View view, Course course);
     }
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {

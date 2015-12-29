@@ -95,6 +95,7 @@ public class ChooseProgrammeFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         School school = null;
+        if (mListener != null) school = mListener.getSchool();
         fillProgrammeList(school);
 
         return view;
@@ -110,11 +111,14 @@ public class ChooseProgrammeFragment extends Fragment {
             query.whereEqualTo("school", school);
         }
 
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+
         query.findInBackground(new FindCallback<Programme>() {
             @Override
             public void done(List<Programme> programmes, ParseException e) {
                 loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
+                    mProgrammes.clear();
                     mProgrammes.addAll(programmes);
 
                     //populate list view with programmes with an adapter notify
@@ -159,6 +163,7 @@ public class ChooseProgrammeFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onProgrammeSelected(Programme programme);
+        School getSchool();
     }
 
 }

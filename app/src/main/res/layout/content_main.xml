@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".main.ChooseTestActivity"
-    tools:showIn="@layout/activity_choose_test">
+    tools:context=".main.MainActivity"
+    tools:showIn="@layout/activity_main">
 
     <ProgressBar
         style="?android:attr/progressBarStyle"

@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.pascoapp.wba02_android.main.ChooseTestActivity;
+import com.pascoapp.wba02_android.main.MainActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 import com.pascoapp.wba02_android.setup.SetupWizardActivity;
 import com.pascoapp.wba02_android.setup.WelcomeActivity;
@@ -43,7 +42,7 @@ public class AuthenticateUserActivity extends AppCompatActivity {
             // TODO: Implement proper voucher verification
             goToWelcomeActivity();
         } else {
-            goToChooseTestActivity();
+            goToMainActivity();
         }
 
         finish();
@@ -55,10 +54,8 @@ public class AuthenticateUserActivity extends AppCompatActivity {
     }
 
 
-    private void goToChooseTestActivity() {
-        String programmeId = student.getProgramme().getObjectId();
-        Intent intent = new Intent(AuthenticateUserActivity.this, ChooseTestActivity.class);
-        intent.putExtra(ChooseTestActivity.EXTRA_PROGRAMME_ID, programmeId);
+    private void goToMainActivity() {
+        Intent intent = new Intent(AuthenticateUserActivity.this, MainActivity.class);
         startActivity(intent);
     }
 

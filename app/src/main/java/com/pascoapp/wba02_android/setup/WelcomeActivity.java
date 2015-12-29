@@ -7,10 +7,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import com.pascoapp.wba02_android.main.ChooseTestActivity;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.pascoapp.wba02_android.main.MainActivity;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Programme;
+import com.pascoapp.wba02_android.parseSubClasses.School;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
+
+    public static final String KNUST_ID = "3xC8GeiRik";
+    public static final String ELECTRICAL_ENGINEERING_ID = "4G7KJXH4mY";
 
     Button activateScratchCardButton, demoButton;
 
@@ -46,11 +54,24 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     void openDemo() {
-        // TODO: Set Demo Parameters
-        String ELECTRICAL_ENGINEERING_PR0GRAMME_ID = "4G7KJXH4mY";
-        Intent intent = new Intent(WelcomeActivity.this, ChooseTestActivity.class);
-        intent.putExtra(ChooseTestActivity.EXTRA_PROGRAMME_ID, ELECTRICAL_ENGINEERING_PR0GRAMME_ID);
+        setDemoParameters();
+
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void setDemoParameters() {
+        School school = ParseObject.createWithoutData(School.class, KNUST_ID);
+        Programme programme = ParseObject.createWithoutData(Programme.class, ELECTRICAL_ENGINEERING_ID);
+        Integer level = 2;
+        Integer semester = 1;
+
+        Student student = (Student) ParseUser.getCurrentUser();
+        student.setSchool(school);
+        student.setProgramme(programme);
+        student.setLevel(level);
+        student.setSemester(semester);
+        // Do not save this modified user, we want the changes to be lost on app shutdown
     }
 
 }

@@ -105,8 +105,11 @@ public class ChooseSchoolFragment extends Fragment{
     public void fillSchoolList() {
         loadingIndicator.setVisibility(View.GONE);
 
-        ParseQuery<School> schoolQuery = School.getQuery();
-        schoolQuery.findInBackground(new FindCallback<School>() {
+        ParseQuery<School> query = School.getQuery();
+
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+
+        query.findInBackground(new FindCallback<School>() {
             @Override
             public void done(List<School> schools, ParseException e) {
                 if (e == null) {

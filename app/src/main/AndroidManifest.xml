@@ -26,31 +26,27 @@
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
 
         <activity
-            android:name=".main.ChooseTestActivity"
+            android:name=".main.MainActivity"
             android:label="@string/title_activity_choose_test"
-            android:parentActivityName=".main.ChooseCourseActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.ChooseCourseActivity" />
         </activity>
         <activity
             android:name=".takeTest.TakeTestActivity"
             android:label="@string/title_activity_take_test"
-            android:parentActivityName=".main.ChooseTestActivity"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.ChooseTestActivity" />
+                android:value=".main.MainActivity" />
         </activity>
         <activity
             android:name=".main.ChooseCourseActivity"
             android:label="@string/title_activity_choose_course"
-            android:parentActivityName=".main.ChooseTestActivity"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.ChooseTestActivity" />
+                android:value=".main.MainActivity" />
         </activity>
 
         <!-- Start here -->
@@ -94,10 +90,10 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".main.ChooseTestActivity">
+            android:parentActivityName=".main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.ChooseTestActivity" />
+                android:value=".main.MainActivity" />
         </activity>
         <activity
             android:name=".registration.LoginActivity"
@@ -132,11 +128,11 @@
         <activity
             android:name=".Inbox.MessageListActivity"
             android:label="@string/title_message_list"
-            android:parentActivityName=".main.ChooseTestActivity"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.main.ChooseTestActivity" />
+                android:value=".main.MainActivity" />
         </activity>
         <activity
             android:name=".Inbox.MessageDetailActivity"

@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,21 +18,26 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseCourseActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PROGRAMME_ID =
-            "com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.programmeId";
-
     public static final String SELECTED_COURSE_ID =
-            "com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.department_id";
+            "com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.courseId";
+
+    public static final String SELECTED_COURSE_CODE =
+            "com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.courseCode";
+
+    public static final String SELECTED_COURSE_NAME =
+            "com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.courseName";
 
     private ProgressBar loadingIndicator;
     private RecyclerView mRecyclerView;
@@ -62,33 +68,36 @@ public class ChooseCourseActivity extends AppCompatActivity {
         mAdapter = new CourseListAdapter(mCourses);
         mAdapter.setOnItemClickListener(new CourseListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, String courseId) {
-                persistSelectedDepartment(courseId);
-                setResultAndCloseParentActivity(courseId);
+            public void onItemClick(View view, Course course) {
+                persistSelectedDepartment(course);
+                setResultAndCloseActivity(course);
             }
         });
 
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
-        String programmeId = getProgrammeId();
-        refreshList(programmeId);
+        Student student = (Student) ParseUser.getCurrentUser();
+        fetchCourses(student.getProgramme(), student.getLevel(), student.getSemester());
     }
 
-    public String getProgrammeId() {
-        Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_PROGRAMME_ID);
-    }
-
-    public void refreshList(String programmeId) {
+    public void fetchCourses(Programme programme, Integer level, Integer semester) {
         loadingIndicator.setVisibility(View.VISIBLE);
 
         ParseQuery<Course> query = Course.getQuery();
 
-        if (programmeId != null) {
-            query.whereEqualTo("programme",
-                    ParseObject.createWithoutData(Programme.class, programmeId));
-        } // else showAll Courses
+        if (programme != null) {
+            query.whereEqualTo("programme", programme);
+        }
+
+        if (level != null) {
+            query.whereEqualTo("level", level);
+        }
+
+        if (semester != null) {
+            query.whereEqualTo("semester", semester);
+        }
+
 
         query.findInBackground(new FindCallback<Course>() {
             @Override
@@ -97,6 +106,14 @@ public class ChooseCourseActivity extends AppCompatActivity {
                 if (e == null) {
                     mCourses.clear();
                     mCourses.addAll(courses);
+                    Course allCourse = ParseObject.createWithoutData(Course.class, "all");
+
+                    // Append "All" to the beginning of the list
+                    allCourse.setObjectId("all");
+                    allCourse.setCode("ALL");
+                    allCourse.setName("");
+                    mCourses.add(0, allCourse);
+
                     mAdapter.notifyDataSetChanged();
                 } else {
                     System.out.println("Courses" + e.getCode() + " : " + e.getMessage());
@@ -106,18 +123,22 @@ public class ChooseCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void persistSelectedDepartment(String courseId) {
-        // TODO: Fix this.
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(App.CURRENT_COURSE_ID,
-                (String) courseId);
+    public void persistSelectedDepartment(Course course) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_current_course), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString(App.CURRENT_COURSE_ID, course.getObjectId());
+        editor.putString(App.CURRENT_COURSE_CODE, course.getCode());
+        editor.putString(App.CURRENT_COURSE_NAME, course.getName());
+        editor.commit();
     }
 
-    private void setResultAndCloseParentActivity(String courseId) {
+    private void setResultAndCloseActivity(Course course) {
         Intent result = new Intent();
-        result.putExtra(SELECTED_COURSE_ID, courseId);
+        result.putExtra(SELECTED_COURSE_ID, course.getObjectId());
+        result.putExtra(SELECTED_COURSE_CODE, course.getCode());
+        result.putExtra(SELECTED_COURSE_NAME, course.getName());
         setResult(RESULT_OK, result);
 
         finish();
@@ -133,7 +154,7 @@ public class ChooseCourseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch(id) {
             case android.R.id.home:
                 super.onOptionsItemSelected(item);
                 this.finish();

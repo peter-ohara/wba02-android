@@ -62,6 +62,13 @@ public class SetupWizardActivity extends AppCompatActivity implements
     private Student student;
     private View coordinatorLayoutView;
     private ProgressBar loadingIndicator;
+    private EnterVoucherFragment enterVoucherFragment;
+    private ChooseSchoolFragment chooseSchoolFragment;
+    private ChooseProgrammeFragment chooseProgrammeFragment;
+    private ChooseLevelFragment chooseLevelFragment;
+    private ChooseSemesterFragment chooseSemesterFragment;
+    private ReviewChoicesFragment reviewChoicesFragment;
+    private School mSchool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +132,9 @@ public class SetupWizardActivity extends AppCompatActivity implements
 
     @Override
     public void onSchoolSelected(School school) {
-        student.setSchool(school);
+        mSchool = school;
+        student.setSchool(mSchool);
+        if (chooseProgrammeFragment != null) chooseProgrammeFragment.fillProgrammeList(mSchool);
         moveToNextPage();
     }
 
@@ -133,6 +142,11 @@ public class SetupWizardActivity extends AppCompatActivity implements
     public void onProgrammeSelected(Programme programme) {
         student.setProgramme(programme);
         moveToNextPage();
+    }
+
+    @Override
+    public School getSchool() {
+        return mSchool;
     }
 
     @Override
@@ -195,17 +209,23 @@ public class SetupWizardActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case ENTER_VOUCHER_PAGE:
-                    return EnterVoucherFragment.newInstance("abc", "abc");
+                    enterVoucherFragment = EnterVoucherFragment.newInstance("abc", "abc");
+                    return enterVoucherFragment;
                 case CHOOSE_SCHOOL_PAGE:
-                    return ChooseSchoolFragment.newInstance("abc", "abc");
+                    chooseSchoolFragment = ChooseSchoolFragment.newInstance("abc", "abc");
+                    return chooseSchoolFragment;
                 case CHOOSE_PROGRAMME_PAGE:
-                    return ChooseProgrammeFragment.newInstance("abc", "abc");
+                    chooseProgrammeFragment = ChooseProgrammeFragment.newInstance("abc", "abc");
+                    return chooseProgrammeFragment;
                 case CHOOSE_LEVEL_PAGE:
-                    return ChooseLevelFragment.newInstance("abc", "abc");
+                    chooseLevelFragment = ChooseLevelFragment.newInstance("abc", "abc");
+                    return chooseLevelFragment;
                 case CHOOSE_SEMESTER_PAGE:
-                    return ChooseSemesterFragment.newInstance("abc", "abc");
+                    chooseSemesterFragment = ChooseSemesterFragment.newInstance("abc", "abc");
+                    return chooseSemesterFragment;
                 case REVIEW_CHOICES_PAGE:
-                    return ReviewChoicesFragment.newInstance("abc", "abc");
+                    reviewChoicesFragment = ReviewChoicesFragment.newInstance("abc", "abc");
+                    return reviewChoicesFragment;
                 default:
                     return null;
             }
