@@ -23,21 +23,7 @@ import com.pascoapp.wba02_android.parseSubClasses.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
- */
 public class ChooseSchoolFragment extends Fragment{
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,26 +33,8 @@ public class ChooseSchoolFragment extends Fragment{
     private ChooseSchoolAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    // TODO: Rename and change types of parameters
-    public static ChooseSchoolFragment newInstance(String param1, String param2) {
-        ChooseSchoolFragment fragment = new ChooseSchoolFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public ChooseSchoolFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        // Required empty public constructor
     }
 
     @Override

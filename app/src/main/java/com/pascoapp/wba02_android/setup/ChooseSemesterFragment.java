@@ -24,11 +24,6 @@ import java.util.ArrayList;
  */
 public class ChooseSemesterFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     ArrayList<Integer> mSemesters;
@@ -36,26 +31,8 @@ public class ChooseSemesterFragment extends Fragment {
     private ChooseSemesterAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    // TODO: Rename and change types of parameters
-    public static ChooseSemesterFragment newInstance(String param1, String param2) {
-        ChooseSemesterFragment fragment = new ChooseSemesterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public ChooseSemesterFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        // Required empty public constructor
     }
 
     @Override

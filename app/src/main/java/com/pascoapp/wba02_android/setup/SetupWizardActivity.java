@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -111,7 +109,7 @@ public class SetupWizardActivity extends AppCompatActivity implements
                 if (mPager.getCurrentItem() == 0) {
                     // If the user is currently looking at the first step, allow the system to handle the
                     // Back button. This calls finish() on this activity and pops the back stack.
-                    super.onOptionsItemSelected(item);
+                    return super.onOptionsItemSelected(item);
                 } else {
                     // Otherwise, select the previous step.
                     mPager.setCurrentItem(mPager.getCurrentItem() - 1);
@@ -209,22 +207,22 @@ public class SetupWizardActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case ENTER_VOUCHER_PAGE:
-                    enterVoucherFragment = EnterVoucherFragment.newInstance("abc", "abc");
+                    enterVoucherFragment = new EnterVoucherFragment();
                     return enterVoucherFragment;
                 case CHOOSE_SCHOOL_PAGE:
-                    chooseSchoolFragment = ChooseSchoolFragment.newInstance("abc", "abc");
+                    chooseSchoolFragment = new ChooseSchoolFragment();
                     return chooseSchoolFragment;
                 case CHOOSE_PROGRAMME_PAGE:
-                    chooseProgrammeFragment = ChooseProgrammeFragment.newInstance("abc", "abc");
+                    chooseProgrammeFragment = new ChooseProgrammeFragment();
                     return chooseProgrammeFragment;
                 case CHOOSE_LEVEL_PAGE:
-                    chooseLevelFragment = ChooseLevelFragment.newInstance("abc", "abc");
+                    chooseLevelFragment = new ChooseLevelFragment();
                     return chooseLevelFragment;
                 case CHOOSE_SEMESTER_PAGE:
-                    chooseSemesterFragment = ChooseSemesterFragment.newInstance("abc", "abc");
+                    chooseSemesterFragment = new ChooseSemesterFragment();
                     return chooseSemesterFragment;
                 case REVIEW_CHOICES_PAGE:
-                    reviewChoicesFragment = ReviewChoicesFragment.newInstance("abc", "abc");
+                    reviewChoicesFragment = new ReviewChoicesFragment();
                     return reviewChoicesFragment;
                 default:
                     return null;

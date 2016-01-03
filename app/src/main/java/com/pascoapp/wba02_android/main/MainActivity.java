@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
+        refreshTests();
+    }
+
+    private void refreshTests() {
         String courseId = getCurrentCourseId();
 
         if (courseId == null) {
@@ -219,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_clear_cache:
                 ParseQuery.clearAllCachedResults();
+                refreshTests();
                 break;
             case R.id.action_logout:
                 logout();

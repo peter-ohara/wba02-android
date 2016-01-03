@@ -14,24 +14,9 @@ import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReviewChoicesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ReviewChoicesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ReviewChoicesFragment extends Fragment implements View.OnClickListener {
 
     public static boolean mIsVisible = false;
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private Student mStudent;
@@ -45,33 +30,6 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
 
     public ReviewChoicesFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReviewChoicesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReviewChoicesFragment newInstance(String param1, String param2) {
-        ReviewChoicesFragment fragment = new ReviewChoicesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -94,7 +52,6 @@ public class ReviewChoicesFragment extends Fragment implements View.OnClickListe
         System.out.println(mStudent.getVoucher());
         System.out.println(mStudent.getLevel());
         System.out.println(mStudent.getSemester());
-
 
         return view;
     }
