@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.ic_wb_logo);
+        getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
 
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
         selectCourseButton = (Button) findViewById(R.id.select_department_button);
