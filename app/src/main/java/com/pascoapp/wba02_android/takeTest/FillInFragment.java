@@ -1,20 +1,10 @@
 package com.pascoapp.wba02_android.takeTest;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
@@ -24,15 +14,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FillInFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link FillInFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class FillInFragment extends QuestionFragment {
-
-    private EditText mAnswerField;
-
 
     /**
      * Use this factory method to create a new instance of
@@ -67,32 +53,9 @@ public class FillInFragment extends QuestionFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private void dismissKeyboard() {
-        // hide virtual keyboard
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mAnswerField.getWindowToken(),
-                InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }
-
-    @Override
-    public void enableAnswerField() {
-        mAnswerField.setEnabled(true);
-        mAnswerField.setFocusable(true);
-    }
-
-    @Override
-    public void disableAnswerField() {
-        mAnswerField.setEnabled(false);
-        mAnswerField.setFocusable(false);
-    }
-
     @Override
     public String getAdjustedAnswer() {
         return getAnswer();
     }
 
-    @Override
-    public String getStudentsAnswer() {
-        return mAnswerField.getText().toString();
-    }
 }

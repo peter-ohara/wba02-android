@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
@@ -17,7 +14,6 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EssayFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link EssayFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -58,23 +54,8 @@ public class EssayFragment extends QuestionFragment {
     }
 
     @Override
-    public void enableAnswerField() {
-        // No AnswerField so nothing here
-    }
-
-    @Override
-    public void disableAnswerField() {
-        // No AnswerField so nothing here
-    }
-
-    @Override
     public String getAdjustedAnswer() {
         return getAnswer();
     }
 
-    @Override
-    public String getStudentsAnswer() {
-        // Return the correct answer, thus the user will always be correct for an essay
-        return getAnswer();
-    }
 }

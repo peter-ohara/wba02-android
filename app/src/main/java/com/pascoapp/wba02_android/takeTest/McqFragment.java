@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link McqFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link McqFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -76,16 +73,6 @@ public class McqFragment extends QuestionFragment {
     }
 
     @Override
-    public void enableAnswerField() {
-
-    }
-
-    @Override
-    public void disableAnswerField() {
-
-    }
-
-    @Override
     public String getAdjustedAnswer() {
         String answer = getAnswer();
 
@@ -104,8 +91,4 @@ public class McqFragment extends QuestionFragment {
         }
     }
 
-    @Override
-    public String getStudentsAnswer() {
-        return null;
-    }
 }
