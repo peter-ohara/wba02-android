@@ -22,16 +22,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"
-        android:paddingBottom="48dp"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="All"
         android:id="@+id/select_department_button"
         android:layout_gravity="bottom|end"
-        android:textColor="@color/primary"
-        android:background="@color/icons"/>
+        android:textColor="@color/icons"
+        android:background="@color/primary"
+        android:elevation="4dp"/>
+
+    <include layout="@layout/content_main"
+        android:paddingBottom="48dp"/>
 
 </android.support.design.widget.CoordinatorLayout>
