@@ -31,6 +31,8 @@ public class TakeTestActivity extends AppCompatActivity
 
     public static final String EXTRA_TEST_ID =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
+    public static final String EXTRA_TEST_TITLE =
+            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testTitle";
 
     private ViewPager mPager;
 
@@ -52,6 +54,7 @@ public class TakeTestActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getTestTitle());
 
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
@@ -68,6 +71,11 @@ public class TakeTestActivity extends AppCompatActivity
     public String getTestId() {
         Intent intent = getIntent();
         return intent.getStringExtra(EXTRA_TEST_ID);
+    }
+
+    public String getTestTitle() {
+        Intent intent = getIntent();
+        return intent.getStringExtra(EXTRA_TEST_TITLE);
     }
 
     private void getQuestions(final String testId) {
@@ -87,14 +95,7 @@ public class TakeTestActivity extends AppCompatActivity
                         mQuestions.clear();
                         mQuestions.addAll(questions);
 
-                        // Add an empty question for the score fragment
-                        Question scoreQuestion = new Question();
-                        scoreQuestion.setType("score");
-
-                        mQuestions.add(scoreQuestion);
-
                         mPagerAdapter.notifyDataSetChanged();
-                        calculateMaxScore();
                     }
                 } else {
                     Snackbar.make(coordinatorLayoutView,

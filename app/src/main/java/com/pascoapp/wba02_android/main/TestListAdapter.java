@@ -33,6 +33,7 @@ public class TestListAdapter extends RecyclerView.Adapter {
         public TextView durationView;
 
         public String testId;
+        public String testTitle;
 
         public TestViewHolder(View itemView) {
             super(itemView);
@@ -45,7 +46,7 @@ public class TestListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(view, testId);
+                        mItemClickListener.onItemClick(view, testId, testTitle);
                     }
                 }
             });
@@ -92,6 +93,7 @@ public class TestListAdapter extends RecyclerView.Adapter {
         ((TestViewHolder) holder).durationView.setText(test.getDuration() + "hrs");
 
         ((TestViewHolder) holder).testId = test.getObjectId();
+        ((TestViewHolder) holder).testTitle = year + " " + type;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class TestListAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, String testId);
+        void onItemClick(View view, String testId, String testTitle);
     }
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {

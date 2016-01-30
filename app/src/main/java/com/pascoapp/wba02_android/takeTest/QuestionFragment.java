@@ -60,6 +60,7 @@ public abstract class QuestionFragment extends Fragment {
 
     // TODO: Encapsulate this
     protected OnFragmentInteractionListener listener;
+    private TextView mAnswerView;
 
     @android.support.annotation.Nullable
     @Override
@@ -155,20 +156,8 @@ public abstract class QuestionFragment extends Fragment {
             mQuestionView = (TextView) view.findViewById(R.id.question);
             mQuestionView.setText(question);
 
-            checkButton = (Button) view.findViewById(R.id.check_answer_button);
-
-            messageView = view.findViewById(R.id.message_view);
-            correctAnswerMessageTextView = (TextView) view.findViewById(R.id.correct_answer_message);
-            wrongAnswerMessageTextView = (TextView) view.findViewById(R.id.wrong_answer_message);
-            correctionTextView = (TextView) view.findViewById(R.id.correction);
-
-            if (answered) {
-                setAnsweredState();
-                if (answeredCorrectly) setAnsweredCorrectlyState();
-                else if (answeredWrongly) setAnsweredWronglyState();
-            } else {
-                setUnAnsweredState();
-            }
+            mAnswerView = (TextView) view.findViewById(R.id.answer_view);
+            mAnswerView.setText(getAdjustedAnswer());
         }
 
         return view;

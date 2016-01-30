@@ -39,9 +39,10 @@ public class AuthenticateUserActivity extends AppCompatActivity {
         } else if (student.getSemester() == null) {
             goToSetupWizard(SetupWizardActivity.CHOOSE_SEMESTER_PAGE);
         } else if (student.getVoucher() == null) {
-            // TODO: Implement proper voucher verification
             goToWelcomeActivity();
         } else {
+            // TODO: Implement proper voucher verification
+
             goToMainActivity();
         }
 

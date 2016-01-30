@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  */
 public class McqFragment extends QuestionFragment {
 
-    private RadioGroup mRadioGroup;
+    private TextView mChoices;
 
 
     /**
@@ -56,22 +57,19 @@ public class McqFragment extends QuestionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mcq, container, false);
 
-        mRadioGroup = (RadioGroup) view.findViewById(R.id.choices);
+        mChoices = (TextView) view.findViewById(R.id.choices);
 
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                enableCheckButton();
-            }
-        });
+        String possible_answers = "";
+        String[] indexes = new String[]{"a", "b", "c", "d", "e"};
 
         ArrayList<String> choices = getChoices();
         for (int i = 0; i < choices.size(); i++) {
-            RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setId(i + 1);
-            radioButton.setText(choices.get(i));
-            mRadioGroup.addView(radioButton);
+            possible_answers += indexes[i] + ". ";
+            possible_answers += choices.get(i);
+            possible_answers += "\n";
         }
+
+        mChoices.setText(possible_answers);
 
         setView(view);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -79,18 +77,12 @@ public class McqFragment extends QuestionFragment {
 
     @Override
     public void enableAnswerField() {
-        for (int i = 0; i < mRadioGroup.getChildCount(); i++) {
-            mRadioGroup.getChildAt(i).setEnabled(true);
-            mRadioGroup.getChildAt(i).setFocusable(true);
-        }
+
     }
 
     @Override
     public void disableAnswerField() {
-        for (int i = 0; i < mRadioGroup.getChildCount(); i++) {
-            mRadioGroup.getChildAt(i).setEnabled(false);
-            mRadioGroup.getChildAt(i).setFocusable(false);
-        }
+
     }
 
     @Override
@@ -114,10 +106,6 @@ public class McqFragment extends QuestionFragment {
 
     @Override
     public String getStudentsAnswer() {
-        int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
-        View radioButton = mRadioGroup.findViewById(radioButtonID);
-        int idx = mRadioGroup.indexOfChild(radioButton);
-        return getChoices().get(idx);
-
+        return null;
     }
 }

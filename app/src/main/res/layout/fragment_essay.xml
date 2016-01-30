@@ -8,89 +8,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="At which stage is most of the signal interference experienced in a typical communication system?"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/prompt"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="8dp" />
 
-        <Button
-            android:id="@+id/check_answer_button"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Answer:"
+            android:id="@+id/answer_label"
+            android:layout_below="@+id/question"
+            android:layout_marginTop="8dp"/>
+
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="#7eb530"
-            android:enabled="true"
-            android:text="Continue"
-            android:textColor="#ffffff" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Write your answer down then click check to see if you got it right."
-            android:id="@+id/textView4"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/message_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#def0a5"
-        android:elevation="8dp"
-        android:minHeight="84dp"
-        tools:showIn="@layout/fragment_fill_in"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/correct_answer_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="24dp"
-            android:text="Hope you got it right!"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#7eb530" />
-
-        <TextView
-            android:id="@+id/wrong_answer_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="Oops, that&apos;s not correct."
+            android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#dd381d" />
-
-        <TextView
-            android:id="@+id/correction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/correct_answer_message"
-            android:layout_margin="8dp"
-            android:text="A CPU (central processing unit) is the part of a computer that executes instructions. This can be implemented using a single IC, a number of ICs, discrete transistors or a room full of vacuum tubes.  A microprocessor is a single-chip implementation of a CPU.  Nowadays pretty much all CPUs for general use are microprocessors, causing the two terms to be practically synonymous."
-            />
-
+            android:text="Channel Stage"
+            android:id="@+id/answer_view"
+            android:layout_below="@+id/answer_label"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
-
 
 </FrameLayout>

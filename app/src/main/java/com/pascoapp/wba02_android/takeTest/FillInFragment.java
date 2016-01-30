@@ -63,43 +63,6 @@ public class FillInFragment extends QuestionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        mAnswerField = (EditText) view.findViewById(R.id.answer);
-        mAnswerField.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == 42) {
-                    checkAnswer();
-                    dismissKeyboard();
-                    handled = true;
-                }
-                return handled;
-            }
-        });
-
-        mAnswerField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(getStudentsAnswer())) {
-                    enableCheckButton();
-                } else {
-                    disableCheckButton();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         setView(view);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

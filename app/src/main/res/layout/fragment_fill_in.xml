@@ -8,55 +8,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:text="At which stage is most of the signal interference experienced in a typical communication system?"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_margin="8dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp" />
 
-        <android.support.design.widget.TextInputLayout
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Answer:"
+            android:id="@+id/answer_label"
+            android:layout_below="@+id/question"
+            android:layout_marginTop="8dp"/>
+
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/view"
-            android:layout_below="@+id/question"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/check_answer_button"
-            android:layout_margin="8dp">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/answer"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:hint="Enter Answer here"
-                android:singleLine="true"
-                android:imeActionLabel="Check"
-                android:imeActionId="42" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Check"
-            android:id="@+id/check_answer_button"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:enabled="false" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Channel Stage"
+            android:id="@+id/answer_view"
+            android:layout_below="@+id/answer_label"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
-
-    <include layout="@layout/message_view" />
 
 </FrameLayout>
