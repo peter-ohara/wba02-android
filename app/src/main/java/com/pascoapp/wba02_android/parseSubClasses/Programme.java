@@ -30,7 +30,7 @@ public class Programme extends ParseObject {
     public static ParseQuery<Programme> getQuery() {
         ParseQuery<Programme> query = ParseQuery.getQuery(Programme.class);
         query.include("school");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

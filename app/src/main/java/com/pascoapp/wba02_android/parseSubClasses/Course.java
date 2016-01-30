@@ -36,7 +36,7 @@ public class Course extends ParseObject {
     public static ParseQuery<Course> getQuery() {
         ParseQuery<Course> query = ParseQuery.getQuery(Course.class);
         query.include("programme");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

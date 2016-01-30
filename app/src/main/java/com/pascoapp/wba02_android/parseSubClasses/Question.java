@@ -55,7 +55,7 @@ public class Question extends ParseObject {
     public static ParseQuery<Question> getQuery() {
         ParseQuery<Question> query = ParseQuery.getQuery(Question.class);
         query.include("test");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

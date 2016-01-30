@@ -31,7 +31,7 @@ public class School extends ParseObject {
 
     public static ParseQuery<School> getQuery() {
         ParseQuery<School> query = ParseQuery.getQuery(School.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

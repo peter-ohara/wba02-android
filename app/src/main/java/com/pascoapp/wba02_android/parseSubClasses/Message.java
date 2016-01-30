@@ -47,7 +47,7 @@ public class Message extends ParseObject {
     public static ParseQuery<Message> getQuery() {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.include("programme");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

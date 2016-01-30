@@ -37,7 +37,7 @@ public class Lecturer extends ParseObject {
 
     public static ParseQuery<Lecturer> getQuery() {
         ParseQuery<Lecturer> query = ParseQuery.getQuery(Lecturer.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

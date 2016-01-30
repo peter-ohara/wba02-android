@@ -104,6 +104,8 @@ public class MessageListActivity extends AppCompatActivity {
             );
         }
 
+        query.orderByDescending("createdAt");
+
         query.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> messages, ParseException e) {
@@ -163,7 +165,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Message message = mMessages.get(position);
+            final Message message = mMessages.get(position);
             holder.mMessage = message;
             holder.titleView.setText(message.getTitle());
 
@@ -175,21 +177,9 @@ public class MessageListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(MessageDetailFragment.ARG_ITEM_ID, holder.mMessage.getObjectId());
-                        MessageDetailFragment fragment = new MessageDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.message_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, MessageDetailActivity.class);
-                        intent.putExtra(MessageDetailFragment.ARG_ITEM_ID, holder.mMessage.getObjectId());
-
-                        context.startActivity(intent);
-                    }
+                    Intent intent = new Intent(MessageListActivity.this, MessageDetailActivity.class);
+                    intent.putExtra(MessageDetailActivity.EXTRA_MESSAGE_ID, message.getObjectId());
+                    startActivity(intent);
                 }
             });
         }
@@ -201,7 +191,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         private void setMessageDate(ViewHolder holder, Message message) {
             // Setting the date
-            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(((Date) message.get("createdAt")).getTime(),
+            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(((Date) message.getCreatedAt()).getTime(),
                     System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
             holder.dateView.setText(timeAgo);
         }
@@ -213,7 +203,7 @@ public class MessageListActivity extends AppCompatActivity {
 
 
             // generate color based on a key (same key returns the same color), useful for list/grid views
-            color = generator.getColor((String) message.get("objectId"));
+            color = generator.getColor((String) message.getObjectId());
 
             TextDrawable drawable = TextDrawable.builder()
                     .buildRect(

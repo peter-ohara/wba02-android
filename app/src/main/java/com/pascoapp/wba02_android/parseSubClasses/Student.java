@@ -80,7 +80,7 @@ public class Student extends ParseUser {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.include("school");
         query.include("programme");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 

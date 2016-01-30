@@ -2,12 +2,21 @@ package com.pascoapp.wba02_android.Inbox;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Message;
 
 /**
  * An activity representing a single message detail screen. This
@@ -17,54 +26,57 @@ import com.pascoapp.wba02_android.R;
  */
 public class MessageDetailActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE_ID = "message_id";
+    public static final String MESSAGE_CLASSNAME = "Message";
+    private ParseObject mMessage;
+    private View coordinatorLayoutView;
+    private WebView webview;
+    private View mProgressView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(MessageDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(MessageDetailFragment.ARG_ITEM_ID));
-            MessageDetailFragment fragment = new MessageDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.message_detail_container, fragment)
-                    .commit();
-        }
+        coordinatorLayoutView = findViewById(R.id.snackbarPosition);
+        mProgressView = findViewById(R.id.login_progress);
+        webview = (WebView)this.findViewById(R.id.webview);
+
+        webview.getSettings().setJavaScriptEnabled(true);
+
+        Intent intent = getIntent();
+        String guideId = intent.getStringExtra(EXTRA_MESSAGE_ID);
+
+        mProgressView.setVisibility(View.VISIBLE);
+        ParseQuery<Message> query = Message.getQuery();
+        query.getInBackground(guideId, new GetCallback<Message>() {
+            public void done(Message object, ParseException e) {
+                mProgressView.setVisibility(View.GONE);
+                if (e == null) {
+                    mMessage = object;
+                    loadItemInWebView(mMessage, webview);
+                } else {
+                    Snackbar.make(coordinatorLayoutView,
+                            e.getCode() + " : " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            NavUtils.navigateUpTo(this, new Intent(this, MessageListActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private void loadItemInWebView(ParseObject item, WebView webview) {
+        String content = item.getString("content");
+
+        // Now we do some html magic
+        String title = mMessage.getString("title");
+        String HTMLString = "<h3 style='text-align:center;'>" + title + "</h3>";
+        HTMLString += "<hr>";
+        HTMLString += content;
+
+        // Load the edited string
+        webview.loadDataWithBaseURL("", HTMLString, "text/html", "UTF-8", "");
     }
 }

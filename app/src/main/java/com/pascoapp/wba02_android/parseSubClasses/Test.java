@@ -61,7 +61,7 @@ public class Test extends ParseObject{
         ParseQuery<Test> query = ParseQuery.getQuery(Test.class);
         query.include("lecturer");
         query.include("course");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }
 
