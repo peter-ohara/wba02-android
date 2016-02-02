@@ -295,7 +295,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                 progressDialog.dismiss();
 
                 if (e == null) {
-                    startMainActivity();
+                    startAuthenticateActivity();
                 } else {
                     handleError(e);
                 }
@@ -309,7 +309,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     }
 
 
-    private void startMainActivity() {
+    private void startAuthenticateActivity() {
         Intent intent = new Intent(LoginActivity.this, AuthenticateUserActivity.class);
         startActivity(intent);
     }

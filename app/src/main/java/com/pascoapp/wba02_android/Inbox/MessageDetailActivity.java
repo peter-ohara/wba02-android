@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.Inbox;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -59,6 +61,8 @@ public class MessageDetailActivity extends AppCompatActivity {
                 if (e == null) {
                     mMessage = object;
                     loadItemInWebView(mMessage, webview);
+                } else if (e.getCode() == 102) {
+                    // Ignore this error
                 } else {
                     Snackbar.make(coordinatorLayoutView,
                             e.getCode() + " : " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
@@ -67,16 +71,42 @@ public class MessageDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void loadItemInWebView(ParseObject item, WebView webview) {
+    private void loadItemInWebView(ParseObject item, final WebView w) {
+        String title = item.getString("title");
         String content = item.getString("content");
 
-        // Now we do some html magic
-        String title = mMessage.getString("title");
-        String HTMLString = "<h3 style='text-align:center;'>" + title + "</h3>";
-        HTMLString += "<hr>";
-        HTMLString += content;
+        String HTMLString = String.format(
+                "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<title>%s</title>" +
+                "<style>"                           +
+                "    h3 {"                          +
+                "        text-align:center;"        +
+                "        font-weight:100;"          +
+                "    }"                             +
+                "    a {"                           +
+                "        text-decoration: none;"    +
+                "        color: #ff0093;"           +
+                "    }"                             +
+                "    hr {"                          +
+                "        border: 0;"                +
+                "        height: 0;"                +
+                "        border-top: 1px solid rgba(0, 0, 0, 0.1);"             +
+                "        border-bottom: 1px solid rgba(255, 255, 255, 0.3);"    +
+                "    }"                             +
+                "</style>"                          +
+                "<script type=\"text/javascript\" async " +
+                "  src=\"file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full\"></script>" +
+                "</head>" +
+                "<body>" +
+                "<h3>%s</h3>" +
+                "<hr>" +
+                "<p>%s</p>" +
+                "</body>" +
+                "</html>", title, title, content);
 
-        // Load the edited string
-        webview.loadDataWithBaseURL("", HTMLString, "text/html", "UTF-8", "");
+        w.getSettings().setJavaScriptEnabled(true);
+        w.loadDataWithBaseURL("http://bar", HTMLString, "text/html", "utf-8", "");
     }
 }

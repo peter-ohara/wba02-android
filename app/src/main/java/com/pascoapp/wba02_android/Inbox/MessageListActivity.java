@@ -115,6 +115,8 @@ public class MessageListActivity extends AppCompatActivity {
                     mMessages.addAll(messages);
 
                     mMessages = messages;
+                } else if (e.getCode() == 102) {
+                    // Ignore this error
                 } else {
                     Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
                             Snackbar.LENGTH_INDEFINITE)

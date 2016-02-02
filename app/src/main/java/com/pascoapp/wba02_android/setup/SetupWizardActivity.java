@@ -172,8 +172,6 @@ public class SetupWizardActivity extends AppCompatActivity implements
                     // No need to send student along as Extra since it has been saved.
                     // It would be fetched at the other end
                     startActivity(intent);
-                    // Close the Setup Wizard and prevent navigation back to it
-                    finish();
                 } else {
                     Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
                             Snackbar.LENGTH_INDEFINITE)

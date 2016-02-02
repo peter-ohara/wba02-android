@@ -10,48 +10,11 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp">
 
-        <TextView
-            android:id="@+id/question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="At which stage is most of the signal interference experienced in a typical communication system?"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/choices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/question"
-            android:orientation="vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginTop="8dp"></TextView>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Answer:"
-            android:id="@+id/answer_label"
-            android:layout_below="@+id/choices"
-            android:layout_marginTop="8dp"/>
-
-
-        <TextView
+        <WebView
+            android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Channel Stage"
-            android:id="@+id/answer_view"
-            android:layout_below="@+id/answer_label"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
     </RelativeLayout>

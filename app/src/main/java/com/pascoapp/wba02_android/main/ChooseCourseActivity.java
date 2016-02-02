@@ -115,8 +115,11 @@ public class ChooseCourseActivity extends AppCompatActivity {
                     mCourses.add(0, allCourse);
 
                     mAdapter.notifyDataSetChanged();
+                } else if (e.getCode() == 102) {
+                    // Ignore this error
                 } else {
                     System.out.println("Courses" + e.getCode() + " : " + e.getMessage());
+                    // TODO: Change to Snackbar
                     Toast.makeText(ChooseCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

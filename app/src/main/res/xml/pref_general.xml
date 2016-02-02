@@ -30,4 +30,26 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_add_friends_to_messages" />
 
+    <Preference
+        android:title="Rate this App"
+        android:summary="This app is awesome">
+
+        <intent android:action="android.intent.action.VIEW"
+            android:data="market://details?id=com.your_package" />
+
+    </Preference>
+
+    <Preference
+        android:title="Send us Feedback"
+        android:summary="Let us here your pain">
+
+        <intent android:action="android.intent.action.VIEW"
+            android:data="mailto:wiresandbytes@gmail.com" />
+    </Preference>
+
+    <Preference android:title="Fill the pasco survey" >
+        <intent android:action="android.intent.action.VIEW"
+            android:data="https://docs.google.com/forms/d/1ZtkiBALiniPZUXQFdv6BF0f1I4o23Vm4ByiOn8PeFt8/viewform?usp=send_form" />
+    </Preference>
+
 </PreferenceScreen>

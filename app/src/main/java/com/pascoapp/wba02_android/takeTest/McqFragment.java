@@ -21,8 +21,6 @@ import java.util.ArrayList;
  */
 public class McqFragment extends QuestionFragment {
 
-    private TextView mChoices;
-
 
     /**
      * Use this factory method to create a new instance of
@@ -54,8 +52,6 @@ public class McqFragment extends QuestionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mcq, container, false);
 
-        mChoices = (TextView) view.findViewById(R.id.choices);
-
         String possible_answers = "";
         String[] indexes = new String[]{"a", "b", "c", "d", "e"};
 
@@ -63,10 +59,10 @@ public class McqFragment extends QuestionFragment {
         for (int i = 0; i < choices.size(); i++) {
             possible_answers += indexes[i] + ". ";
             possible_answers += choices.get(i);
-            possible_answers += "\n";
+            possible_answers += "<br>";
         }
 
-        mChoices.setText(possible_answers);
+        setChoicesString(possible_answers);
 
         setView(view);
         return super.onCreateView(inflater, container, savedInstanceState);

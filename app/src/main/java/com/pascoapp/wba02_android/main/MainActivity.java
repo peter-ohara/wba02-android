@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRegistrationPage() {
         Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

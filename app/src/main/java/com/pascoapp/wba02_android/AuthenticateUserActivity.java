@@ -56,17 +56,20 @@ public class AuthenticateUserActivity extends AppCompatActivity {
 
 
     private void goToMainActivity() {
-        Intent intent = new Intent(AuthenticateUserActivity.this, MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private void goToWelcomeActivity() {
-        Intent intent = new Intent(AuthenticateUserActivity.this, WelcomeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private void goToSetupWizard(int page) {
-        Intent intent = new Intent(AuthenticateUserActivity.this, SetupWizardActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SetupWizardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(SetupWizardActivity.EXTRA_PAGE, page);
         startActivity(intent);
     }

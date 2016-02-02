@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public abstract class QuestionFragment extends Fragment {
     // Member Variables related to the question
     private String question;
     private ArrayList<String> choices;
+    private String choicesString = "";
     private String answer;
     private String questionType;
 
@@ -44,11 +46,9 @@ public abstract class QuestionFragment extends Fragment {
 
     // UI elements
     private View view;
-    private TextView mQuestionView;
-    private Button checkButton;
 
     // TODO: Encapsulate this
-    private TextView mAnswerView;
+    private WebView webview;
 
     @android.support.annotation.Nullable
     @Override
@@ -74,6 +74,14 @@ public abstract class QuestionFragment extends Fragment {
 
     public String getAnswer() {
         return answer;
+    }
+
+    public String getChoicesString() {
+        return choicesString;
+    }
+
+    public void setChoicesString(String choicesString) {
+        this.choicesString = choicesString;
     }
 
     @Override
@@ -107,11 +115,11 @@ public abstract class QuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mQuestionView = (TextView) view.findViewById(R.id.question);
-        mQuestionView.setText(question);
+        webview = (WebView) view.findViewById(R.id.webview);
 
-        mAnswerView = (TextView) view.findViewById(R.id.answer_view);
-        mAnswerView.setText(getAdjustedAnswer());
+        loadItemInWebView(
+                getQuestion(), getChoicesString(),
+                getAnswer(), getAdjustedAnswer(), questionType, webview);
 
         return view;
     }
@@ -123,6 +131,48 @@ public abstract class QuestionFragment extends Fragment {
                 + "Answer: " + getAdjustedAnswer();
     }
 
-    public abstract String getAdjustedAnswer();
+    protected void loadItemInWebView(String question, String choices, String answer,
+                                     String adjustedAnswer, String questionType, WebView w) {
 
+        String answerPrefix;
+        if (questionType.equalsIgnoreCase("mcq")) answerPrefix = answer + ".";
+        else answerPrefix = "";
+
+        String HTMLString = String.format(
+                "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<title>%s</title>" +
+                "<style>"                           +
+                "    h3 {"                          +
+                "        text-align:center;"        +
+                "        font-weight:100;"          +
+                "    }"                             +
+                "    a {"                           +
+                "        text-decoration: none;"    +
+                "        color: #ff0093;"           +
+                "    }"                             +
+                "    hr {"                          +
+                "        border: 0;"                +
+                "        height: 0;"                +
+                "        border-top: 1px solid rgba(0, 0, 0, 0.1);"             +
+                "        border-bottom: 1px solid rgba(255, 255, 255, 0.3);"    +
+                "    }"                             +
+                "</style>"                          +
+                "<script type=\"text/javascript\" async " +
+                "  src=\"file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full\"></script>" +
+                "</head>" +
+                "<body>" +
+                "<p>%s</p>" +
+                "<p>%s</p>" +
+                "<p>Answer:</p>" +
+                "<p>%s %s</p>" +
+                "</body>" +
+                "</html>", question, question, choices, answerPrefix, adjustedAnswer);
+
+        w.getSettings().setJavaScriptEnabled(true);
+        w.loadDataWithBaseURL("http://bar", HTMLString, "text/html", "utf-8", "");
+    }
+
+    public abstract String getAdjustedAnswer();
 }
