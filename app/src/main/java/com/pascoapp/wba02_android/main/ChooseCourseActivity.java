@@ -87,17 +87,8 @@ public class ChooseCourseActivity extends AppCompatActivity {
 
         ParseQuery<Course> query = Course.getQuery();
 
-        if (programme != null) {
-            query.whereEqualTo("programme", programme);
-        }
-
-        if (level != null) {
-            query.whereEqualTo("level", level);
-        }
-
-        if (semester != null) {
-            query.whereEqualTo("semester", semester);
-        }
+        // TODO:
+        // Filter query by courses that student has selected for current duration duration
 
         query.selectKeys(Arrays.asList("code", "name"));
 

@@ -133,14 +133,10 @@ public class MainActivity extends AppCompatActivity {
     private ParseQuery<Course> getCourseQuery() {
         Student student = (Student) ParseUser.getCurrentUser();
 
-        assert student.getProgramme() != null;
-        assert student.getLevel() != null;
-        assert student.getSemester() != null;
-
         ParseQuery<Course> query = Course.getQuery();
-        query.whereEqualTo("programme", student.getProgramme());
-        query.whereEqualTo("level", student.getLevel());
-        query.whereEqualTo("semester", student.getSemester());
+
+        // TODO:
+        // Filter query by courses that student has selected for current duration duration
 
         return query;
     }
@@ -166,7 +162,10 @@ public class MainActivity extends AppCompatActivity {
                 if (e == null) {
                     if (tests.size() == 0) {
                         emptyView.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
                     } else {
+                        emptyView.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
                         mTests.clear();
                         mTests.addAll(tests);
                         mAdapter.notifyDataSetChanged();
@@ -204,7 +203,10 @@ public class MainActivity extends AppCompatActivity {
                 if (e == null) {
                     if (tests.size() == 0) {
                         emptyView.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
                     } else {
+                        emptyView.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
                         mTests.clear();
                         mTests.addAll(tests);
                         mAdapter.notifyDataSetChanged();
