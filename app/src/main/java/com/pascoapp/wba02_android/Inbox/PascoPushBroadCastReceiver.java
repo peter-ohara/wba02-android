@@ -20,7 +20,7 @@ public class PascoPushBroadCastReceiver extends ParsePushBroadcastReceiver {
     protected void onPushOpen(Context context, Intent intent) {
         Bundle extras = intent.getExtras();
         String jsonData = extras.getString("com.parse.Data");
-        JSONObject json = null;
+        JSONObject json;
         try {
             json = new JSONObject(jsonData);
             String messageId = json.getString("messageId");

@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.pascoapp.wba02_android.R;
@@ -302,6 +303,9 @@ public class SignUpActivity extends AppCompatActivity implements LoaderManager.L
                 progressDialog.dismiss();
 
                 if (e == null) {
+                    // Clear any cached results from previous logins
+                    ParseQuery.clearAllCachedResults();
+
                     startWelcomeActivity();
                 } else {
                     handleError(e);

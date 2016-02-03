@@ -1,6 +1,5 @@
 package com.pascoapp.wba02_android.Inbox;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -9,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 public class MessageListActivity extends AppCompatActivity {
 
-    private List<Message> mMessages = new ArrayList<>();
+    private List<Message> mMMessages = new ArrayList<>();
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -76,7 +76,7 @@ public class MessageListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Create an object for the adapter
-        mAdapter = new MessageListAdapter(mMessages);
+        mAdapter = new MessageListAdapter(mMMessages);
 
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
@@ -109,14 +109,13 @@ public class MessageListActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> messages, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
-                    mMessages.clear();
-                    mMessages.addAll(messages);
-
-                    mMessages = messages;
-                } else if (e.getCode() == 102) {
-                    // Ignore this error
+                    mMMessages.clear();
+                    mMMessages.addAll(messages);
+                    mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
                             Snackbar.LENGTH_INDEFINITE)
@@ -126,6 +125,7 @@ public class MessageListActivity extends AppCompatActivity {
                                     fetchMessages(programmeId);
                                 }
                             }).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });

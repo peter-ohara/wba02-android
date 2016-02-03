@@ -102,7 +102,6 @@ public class ChooseCourseActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Course>() {
             @Override
             public void done(List<Course> courses, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
                     mCourses.clear();
                     mCourses.addAll(courses);
@@ -115,12 +114,14 @@ public class ChooseCourseActivity extends AppCompatActivity {
                     mCourses.add(0, allCourse);
 
                     mAdapter.notifyDataSetChanged();
-                } else if (e.getCode() == 102) {
-                    // Ignore this error
+                    loadingIndicator.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     System.out.println("Courses" + e.getCode() + " : " + e.getMessage());
                     // TODO: Change to Snackbar
                     Toast.makeText(ChooseCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });

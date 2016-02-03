@@ -159,11 +159,13 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Test>() {
             @Override
             public void done(List<Test> tests, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
                     mTests.clear();
                     mTests.addAll(tests);
                     mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
                             Snackbar.LENGTH_INDEFINITE)
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                                     refreshTestList(course);
                                 }
                             }).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });
@@ -188,11 +191,13 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Test>() {
             @Override
             public void done(List<Test> tests, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
                     mTests.clear();
                     mTests.addAll(tests);
                     mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
                             Snackbar.LENGTH_INDEFINITE)
@@ -202,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                                     refreshTestList(courseQuery);
                                 }
                             }).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });

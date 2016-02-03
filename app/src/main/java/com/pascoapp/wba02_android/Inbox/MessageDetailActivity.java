@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -57,15 +58,16 @@ public class MessageDetailActivity extends AppCompatActivity {
         ParseQuery<Message> query = Message.getQuery();
         query.getInBackground(guideId, new GetCallback<Message>() {
             public void done(Message object, ParseException e) {
-                mProgressView.setVisibility(View.GONE);
                 if (e == null) {
                     mMessage = object;
                     loadItemInWebView(mMessage, webview);
-                } else if (e.getCode() == 102) {
-                    // Ignore this error
+                    mProgressView.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     Snackbar.make(coordinatorLayoutView,
                             e.getCode() + " : " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    mProgressView.setVisibility(View.GONE);
                 }
             }
         });

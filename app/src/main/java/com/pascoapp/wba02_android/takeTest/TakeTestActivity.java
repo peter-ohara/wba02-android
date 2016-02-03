@@ -79,14 +79,19 @@ public class TakeTestActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> questions, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
                     if (questions.size() != 0) {
                         mQuestions.clear();
                         mQuestions.addAll(questions);
 
                         mPagerAdapter.notifyDataSetChanged();
+                    } else {
+                        // TODO: showEmptyView
+                        // showEmptyView();
                     }
+                    loadingIndicator.setVisibility(View.GONE);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
                 } else {
                     Snackbar.make(coordinatorLayoutView,
                             e.getCode() + " : " + e.getMessage(),
@@ -97,6 +102,7 @@ public class TakeTestActivity extends AppCompatActivity {
                                     getQuestions(testId);
                                 }
                             }).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });

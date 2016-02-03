@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -84,13 +85,15 @@ public class ChooseProgrammeFragment extends Fragment {
         query.findInBackground(new FindCallback<Programme>() {
             @Override
             public void done(List<Programme> programmes, ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
                 if (e == null) {
                     mProgrammes.clear();
                     mProgrammes.addAll(programmes);
-
-                    //populate list view with programmes with an adapter notify
                     mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(getActivity(),
+                            e.getCode() + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    loadingIndicator.setVisibility(View.GONE);
                 }
             }
         });

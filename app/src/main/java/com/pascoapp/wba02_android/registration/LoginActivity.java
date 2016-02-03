@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.AuthenticateUserActivity;
@@ -295,6 +296,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                 progressDialog.dismiss();
 
                 if (e == null) {
+                    // Clear any cached results from previous logins
+                    ParseQuery.clearAllCachedResults();
+
                     startAuthenticateActivity();
                 } else {
                     handleError(e);

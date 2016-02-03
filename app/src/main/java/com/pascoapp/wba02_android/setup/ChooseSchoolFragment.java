@@ -71,7 +71,7 @@ public class ChooseSchoolFragment extends Fragment{
     }
 
     public void fillSchoolList() {
-        loadingIndicator.setVisibility(View.GONE);
+        loadingIndicator.setVisibility(View.VISIBLE);
 
         ParseQuery<School> query = School.getQuery();
 
@@ -83,9 +83,11 @@ public class ChooseSchoolFragment extends Fragment{
                 if (e == null) {
                     mSchools.clear();
                     mSchools.addAll(schools);
-
-                    //populate list view with schools with an adapter notify
                     mAdapter.notifyDataSetChanged();
+                    loadingIndicator.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(getActivity(),
+                            e.getCode() + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     loadingIndicator.setVisibility(View.GONE);
                 }
             }
