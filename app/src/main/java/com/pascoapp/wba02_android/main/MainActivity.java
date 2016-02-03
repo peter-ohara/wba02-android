@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TestListAdapter mAdapter;
     private View coordinatorLayoutView;
     private Button selectCourseButton;
+    private View emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
-
+        emptyView = (View) findViewById(R.id.empty_view);
         mRecyclerView = (RecyclerView) findViewById(R.id.tests_list);
         mRecyclerView.setHasFixedSize(true);
 
@@ -163,9 +164,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(List<Test> tests, ParseException e) {
                 if (e == null) {
-                    mTests.clear();
-                    mTests.addAll(tests);
-                    mAdapter.notifyDataSetChanged();
+                    if (tests.size() == 0) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        mTests.clear();
+                        mTests.addAll(tests);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     loadingIndicator.setVisibility(View.GONE);
                 } else if (e.getCode() == 120) {
                     // Result not cached Error. Ignore it
@@ -197,9 +202,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(List<Test> tests, ParseException e) {
                 if (e == null) {
-                    mTests.clear();
-                    mTests.addAll(tests);
-                    mAdapter.notifyDataSetChanged();
+                    if (tests.size() == 0) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        mTests.clear();
+                        mTests.addAll(tests);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     loadingIndicator.setVisibility(View.GONE);
                 } else if (e.getCode() == 120) {
                     // Result not cached Error. Ignore it

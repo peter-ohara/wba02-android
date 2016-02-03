@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Sorry but we don&apos;t have any tests for this course yet.\nIf you have any past questions for this course, please take pictures of it and send it to us at pascoapp@gmail.com.\nWe&apos;ll upload it into our system for you and you may even win a free Pasco voucher!"
+        android:id="@+id/textView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp" />
+</RelativeLayout>
