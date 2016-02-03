@@ -33,6 +33,7 @@ import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -156,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
 
         ParseQuery<Test> query = Test.getQuery();
         query.whereEqualTo("course", course);
+        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
+
         query.findInBackground(new FindCallback<Test>() {
             @Override
             public void done(List<Test> tests, ParseException e) {
@@ -188,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
         ParseQuery<Test> query = Test.getQuery();
         query.whereMatchesQuery("course", courseQuery);
+        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
+
         query.findInBackground(new FindCallback<Test>() {
             @Override
             public void done(List<Test> tests, ParseException e) {

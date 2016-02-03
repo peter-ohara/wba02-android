@@ -19,6 +19,7 @@ import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.parseSubClasses.School;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChooseProgrammeFragment extends Fragment {
@@ -74,6 +75,7 @@ public class ChooseProgrammeFragment extends Fragment {
         loadingIndicator.setVisibility(View.VISIBLE);
 
         ParseQuery<Programme> query = Programme.getQuery();
+        query.selectKeys(Arrays.asList("name"));
 
         //filter for selected school if user has chosen his school already
         if (school != null) {
@@ -81,7 +83,6 @@ public class ChooseProgrammeFragment extends Fragment {
         }
 
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
-
         query.findInBackground(new FindCallback<Programme>() {
             @Override
             public void done(List<Programme> programmes, ParseException e) {

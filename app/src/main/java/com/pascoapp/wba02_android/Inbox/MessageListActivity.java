@@ -29,6 +29,7 @@ import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Message;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,7 @@ public class MessageListActivity extends AppCompatActivity {
         }
 
         query.orderByDescending("createdAt");
+        query.selectKeys(Arrays.asList("title"));
 
         query.findInBackground(new FindCallback<Message>() {
             @Override

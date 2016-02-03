@@ -21,6 +21,7 @@ import com.pascoapp.wba02_android.parseSubClasses.School;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChooseSchoolFragment extends Fragment{
@@ -74,9 +75,9 @@ public class ChooseSchoolFragment extends Fragment{
         loadingIndicator.setVisibility(View.VISIBLE);
 
         ParseQuery<School> query = School.getQuery();
+        query.selectKeys(Arrays.asList("name"));
 
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
-
         query.findInBackground(new FindCallback<School>() {
             @Override
             public void done(List<School> schools, ParseException e) {

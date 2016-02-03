@@ -26,6 +26,7 @@ import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChooseCourseActivity extends AppCompatActivity {
@@ -97,6 +98,8 @@ public class ChooseCourseActivity extends AppCompatActivity {
         if (semester != null) {
             query.whereEqualTo("semester", semester);
         }
+
+        query.selectKeys(Arrays.asList("code", "name"));
 
 
         query.findInBackground(new FindCallback<Course>() {
