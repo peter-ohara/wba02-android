@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.parse.FindCallback;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Test> mTests;
     private TestListAdapter mAdapter;
     private View coordinatorLayoutView;
-    private Button selectCourseButton;
+    private Toolbar selectCourseToolbar;
     private View emptyView;
 
     @Override
@@ -58,15 +57,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
 
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
-        selectCourseButton = (Button) findViewById(R.id.select_department_button);
-        selectCourseButton.setText(getCurrentCourseId());
 
-        selectCourseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChooseCourseActivity();
-            }
-        });
+        setUpCourseToolbar();
 
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         emptyView = (View) findViewById(R.id.empty_view);
@@ -94,6 +86,26 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         refreshTests();
+    }
+
+    private void setUpCourseToolbar() {
+        selectCourseToolbar = (Toolbar) findViewById(R.id.select_department_button);
+        selectCourseToolbar.setTitle(getCurrentCourseId());
+        selectCourseToolbar.inflateMenu(R.menu.menu_course_toolbar);
+        selectCourseToolbar.hideOverflowMenu();
+
+        selectCourseToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.action_switch_course:
+                        showChooseCourseActivity();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void refreshTests() {
@@ -144,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     private void showChooseCourseActivity() {
         Intent intent = new Intent(MainActivity.this, ChooseCourseActivity.class);
         startActivityForResult(intent, SELECT_COURSE_REQUEST);
-        overridePendingTransition(R.anim.pull_up_from_bottom, android.R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
     }
 
     public void refreshTestList(final Course course) {
@@ -290,13 +302,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTestsFromCourse(String courseId, String courseCode, String courseName) {
-        selectCourseButton.setText(courseCode + " " + courseName);
+        selectCourseToolbar.setTitle(courseCode + " " + courseName);
         Course course = ParseObject.createWithoutData(Course.class, courseId);
         refreshTestList(course);
     }
 
     private void getTestsFromAllCourses() {
-        selectCourseButton.setText("ALL");
+        selectCourseToolbar.setTitle("ALL");
         ParseQuery<Course> courseQuery = getCourseQuery();
         refreshTestList(courseQuery);
     }

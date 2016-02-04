@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -140,13 +139,13 @@ public class ChooseCourseActivity extends AppCompatActivity {
         setResult(RESULT_OK, result);
 
         finish();
-        overridePendingTransition(android.R.anim.fade_in, R.anim.pull_out_to_bottom);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_up);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, R.anim.pull_out_to_bottom);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_up);
     }
 
     @Override
@@ -156,7 +155,7 @@ public class ChooseCourseActivity extends AppCompatActivity {
             case android.R.id.home:
                 super.onOptionsItemSelected(item);
                 this.finish();
-                overridePendingTransition(android.R.anim.fade_in, R.anim.pull_out_to_bottom);
+                overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_up);
                 break;
             default:
                 break;
