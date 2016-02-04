@@ -10,6 +10,18 @@
         android:title="Filter" />
 
     <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_account_box_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Profile" />
+
+    <item
+        android:id="@+id/action_store"
+        android:icon="@drawable/ic_cart_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Store" />
+
+    <item
         android:id="@+id/action_logout"
         app:showAsAction="never"
         android:title="Log Out" />
@@ -18,7 +30,6 @@
         android:id="@+id/action_clear_cache"
         app:showAsAction="never"
         android:title="Clear Cached Data" />
-
 
     <item
         android:id="@+id/action_settings"
