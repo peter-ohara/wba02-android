@@ -9,9 +9,6 @@
     tools:context=".main.MainActivity">
 
 
-
-
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="16sp"
-            android:text="Sorry but we don&apos;t have any tests for this course yet.\nIf you have any past questions for this course, please take pictures of it and send it to us at pascoapp@gmail.com.\nWe&apos;ll upload it into our system for you and you may even win a free Pasco voucher!"
+            android:text="We apologize for the inconveniences caused but it seems our interns misplaced the pasco for this course. If you have some, please click the button below to send it to us and we'll gladly type them into our system for you."
             android:id="@+id/textView"
             android:layout_below="@+id/imageView"
             android:layout_marginLeft="24dp"
