@@ -58,4 +58,6 @@ dependencies {
 
     // Library for colored Square Icons with letter inside like in gmail
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+
+    compile 'com.android.support:preference-v7:23.1.0'
 }

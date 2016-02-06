@@ -90,6 +90,7 @@ public class ChooseCourseActivity extends AppCompatActivity {
         // Filter query by courses that student has selected for current duration duration
 
         query.selectKeys(Arrays.asList("code", "name"));
+        query.orderByAscending("code");
 
 
         query.findInBackground(new FindCallback<Course>() {

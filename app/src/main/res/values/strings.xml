@@ -87,5 +87,14 @@
     <string name="title_activity_setup_wizard">Setup Wizard</string>
     <string name="title_message_list">Inbox</string>
     <string name="preference_file_current_course">com.pascoapp.wba02_android.ChooseCourseActivity.ChooseCourseActivity.PREFERENCE_FILE_CURRENT_COURSE</string>
+    <string name="action_feedback">Send feedback</string>
+    <string name="action_help">Help</string>
+    <string name="title_activity_help">Help</string>
+    <string name="action_terms_of_service">Terms of service</string>
+    <string name="action_privacy_policy">Privacy policy</string>
+    <string name="action_version_info">Version info</string>
+    <string name="action_view_in_google_play_store">View in Google Play Store</string>
+    <string name="action_credits">Credits</string>
+    <string name="title_activity_credits">Credits</string>
 
 </resources>
