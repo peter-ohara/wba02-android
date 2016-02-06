@@ -7,14 +7,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
@@ -27,6 +35,7 @@ import com.pascoapp.wba02_android.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.parseSubClasses.Programme;
 import com.pascoapp.wba02_android.parseSubClasses.Student;
 import com.pascoapp.wba02_android.registration.RegistrationActivity;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
@@ -49,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private View coordinatorLayoutView;
     private Toolbar selectCourseToolbar;
     private View emptyView;
+    private ArrayList<Course> mCourses;
+    private SelectCourseSpinnerAdapter mSpinnerAdapter;
+    private Spinner mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
 
-        setUpCourseToolbar();
-
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         emptyView = (View) findViewById(R.id.empty_view);
+
+        setUpCourseToolbar();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.tests_list);
         mRecyclerView.setHasFixedSize(true);
 
@@ -92,20 +105,71 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpCourseToolbar() {
         selectCourseToolbar = (Toolbar) findViewById(R.id.select_department_button);
-        selectCourseToolbar.setTitle(getCurrentCourseId());
-        selectCourseToolbar.inflateMenu(R.menu.menu_course_toolbar);
-        selectCourseToolbar.hideOverflowMenu();
 
-        selectCourseToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.toolbar_spinner,
+                selectCourseToolbar, false);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        selectCourseToolbar.addView(spinnerContainer, lp);
+
+
+        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.toolbar_spinner);
+        mSpinnerAdapter = new SelectCourseSpinnerAdapter();
+
+        mSpinner.setAdapter(mSpinnerAdapter); // set the adapter to provide layout of rows and content
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Course course = (Course) mSpinnerAdapter.getItem(position);
 
-                switch (menuItem.getItemId()) {
-                    case R.id.action_switch_course:
-                        showChooseCourseActivity();
-                        return true;
+                if (course.getObjectId().equalsIgnoreCase("all")) {
+                    getTestsFromAllCourses();
+                } else {
+                    getTestsFromCourse(course.getObjectId(), course.getCode(), course.getName());
                 }
-                return false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        fetchCourses();
+    }
+
+    public void fetchCourses() {
+        ParseQuery<Course> query = Course.getQuery();
+
+        // TODO:
+        // Filter query by courses that student has selected for current duration duration
+
+        query.selectKeys(Arrays.asList("code", "name"));
+        query.orderByAscending("code");
+
+        query.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> courses, ParseException e) {
+                if (e == null) {
+                    mSpinnerAdapter.clear();
+                    mSpinnerAdapter.addCourses((ArrayList<Course>) courses);
+
+                    // Append "All" to the beginning of the list
+                    Course allCourse = ParseObject.createWithoutData(Course.class, "all");
+                    allCourse.setObjectId("all");
+                    allCourse.setCode("ALL");
+                    allCourse.setName("");
+                    mSpinnerAdapter.addCourse(0, allCourse);
+                    mSpinnerAdapter.notifyDataSetChanged();
+
+                    mSpinner.setSelection(25);
+                } else if (e.getCode() == 120) {
+                    // Result not cached Error. Ignore it
+                } else {
+                    System.out.println("Courses" + e.getCode() + " : " + e.getMessage());
+                    // TODO: Change to Snackbar
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -255,13 +319,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_inbox:
                 startActivity(new Intent(MainActivity.this, MessageListActivity.class));
                 break;
-            case R.id.action_clear_cache:
-                ParseQuery.clearAllCachedResults();
-                refreshTests();
-                break;
-            case R.id.action_logout:
-                logout();
-                break;
+//            case R.id.action_clear_cache:
+//                ParseQuery.clearAllCachedResults();
+//                refreshTests();
+//                break;
+//            case R.id.action_logout:
+//                logout();
+//                break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
@@ -293,25 +357,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == SELECT_COURSE_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                String courseId = data.getStringExtra(ChooseCourseActivity.SELECTED_COURSE_ID);
-                String courseCode = data.getStringExtra(ChooseCourseActivity.SELECTED_COURSE_CODE);
-                String courseName = data.getStringExtra(ChooseCourseActivity.SELECTED_COURSE_NAME);
-
-                if (courseId.equalsIgnoreCase("all")) {
-                    getTestsFromAllCourses();
-                } else {
-                    getTestsFromCourse(courseId, courseCode, courseName);
-                }
-            }
-        }
     }
 
     private void getTestsFromCourse(String courseId, String courseCode, String courseName) {

@@ -21,15 +21,15 @@
         app:showAsAction="ifRoom"
         android:title="Store" />
 
-    <item
-        android:id="@+id/action_logout"
-        app:showAsAction="never"
-        android:title="Log Out" />
+    <!--<item-->
+        <!--android:id="@+id/action_logout"-->
+        <!--app:showAsAction="never"-->
+        <!--android:title="Log Out" />-->
 
-    <item
-        android:id="@+id/action_clear_cache"
-        app:showAsAction="never"
-        android:title="Clear Cached Data" />
+    <!--<item-->
+        <!--android:id="@+id/action_clear_cache"-->
+        <!--app:showAsAction="never"-->
+        <!--android:title="Clear Cached Data" />-->
 
     <item
         android:id="@+id/action_settings"

@@ -42,8 +42,6 @@ public class Course extends ParseObject {
 
     @Override
     public String toString() {
-        return getCode() + ": "
-                + getName() + "; "
-                + getProgramme();
+        return getCode() + " " + getName();
     }
 }
