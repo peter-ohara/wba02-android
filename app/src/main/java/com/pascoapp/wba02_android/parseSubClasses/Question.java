@@ -31,6 +31,13 @@ public class Question extends ParseObject {
         put("type", type);
     }
 
+    public Number getQuestionNumber() {
+        return getNumber("number");
+    }
+    public void setQuestionNumber(Number number) {
+        put("number", number);
+    }
+
     public List<String> getChoices() {
         return getList("choices");
     }

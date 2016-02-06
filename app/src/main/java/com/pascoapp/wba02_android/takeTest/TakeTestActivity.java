@@ -76,6 +76,8 @@ public class TakeTestActivity extends AppCompatActivity {
         query.whereEqualTo("test",
                 ParseObject.createWithoutData(Test.class, testId));
 
+        query.orderByAscending("number");
+
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> questions, ParseException e) {
