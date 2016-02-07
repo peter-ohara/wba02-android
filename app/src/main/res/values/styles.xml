@@ -24,10 +24,10 @@
     </style>
 
     <style name="Widget.MyApp.HeaderBar.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
-        <item name="android:background">?android:selectableItemBackground</item>
-        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:dropDownSelector">?attr/selectableItemBackground</item>
         <item name="android:divider">@null</item>
-        <item name="android:overlapAnchor">true</item>
+        <item name="overlapAnchor">false</item>
     </style>
 
 </resources>

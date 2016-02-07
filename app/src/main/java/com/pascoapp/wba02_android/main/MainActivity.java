@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpCourseToolbar() {
         selectCourseToolbar = (Toolbar) findViewById(R.id.select_department_button);
 
-        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.toolbar_spinner,
+        View spinnerContainer = LayoutInflater.from(MainActivity.this).inflate(R.layout.toolbar_spinner,
                 selectCourseToolbar, false);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
