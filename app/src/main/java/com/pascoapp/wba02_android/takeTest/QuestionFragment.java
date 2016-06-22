@@ -6,12 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -34,7 +33,7 @@ public abstract class QuestionFragment extends Fragment {
 
     // Member Variables related to the question
     private String question;
-    private ArrayList<String> choices;
+    private Map<String, String>choices;
     private String choicesString = "";
     private String answer;
     private String questionType;
@@ -68,7 +67,7 @@ public abstract class QuestionFragment extends Fragment {
         this.question = question;
     }
 
-    public ArrayList<String> getChoices() {
+    public Map<String, String> getChoices() {
         return choices;
     }
 
@@ -89,7 +88,7 @@ public abstract class QuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             question = getArguments().getString(ARG_QUESTION);
-            choices = getArguments().getStringArrayList(ARG_CHOICES);
+            choices = (Map<String, String>) getArguments().getSerializable(ARG_CHOICES);
             answer = getArguments().getString(ARG_ANSWER);
             questionType = getArguments().getString(ARG_TYPE);
         }

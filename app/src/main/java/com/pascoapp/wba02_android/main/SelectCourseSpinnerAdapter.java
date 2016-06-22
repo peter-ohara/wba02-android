@@ -17,17 +17,15 @@ import java.util.ArrayList;
 public class SelectCourseSpinnerAdapter extends BaseAdapter {
 
     private ArrayList<Course> mCourses = new ArrayList<>();
+    private ArrayList<String> mCourseKeys = new ArrayList<>();
 
     public void clear() {
         mCourses.clear();
     }
 
-    public void addCourse(int position, Course course) {
+    public void addCourse(int position, Course course, String courseKey) {
         mCourses.add(position, course);
-    }
-
-    public void addCourses(ArrayList<Course> courses) {
-        mCourses.addAll(courses);
+        mCourseKeys.add(position, courseKey);
     }
 
     @Override
@@ -38,6 +36,14 @@ public class SelectCourseSpinnerAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return mCourses.get(position);
+    }
+
+    public String getItemKey(int position) {
+        return mCourseKeys.get(position);
+    }
+
+    public int getItemPosition(String courseKey) {
+        return mCourseKeys.indexOf(courseKey);
     }
 
     @Override

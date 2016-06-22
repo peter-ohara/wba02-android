@@ -1,41 +1,38 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Handles Programme logic
  */
-@ParseClassName("Programme")
-public class Programme extends ParseObject {
+@IgnoreExtraProperties
+public class Programme {
+
+    public String name;
+    public String school;
 
     public Programme() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public Programme(String name, String school) {
+        this.name = name;
+        this.school = school;
     }
 
     public String getName() {
-        return getString("name");
-    }
-    public void setName(String name) {
-        put("name", name);
+        return name;
     }
 
-    public School getSchool() {
-        return (School) getParseObject("school");
-    }
-    public void setSchool(School school) {
-        put("school", school);
-    }
-
-    public static ParseQuery<Programme> getQuery() {
-        ParseQuery<Programme> query = ParseQuery.getQuery(Programme.class);
-        query.include("school");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+    public String getSchool() {
+        return school;
     }
 
     @Override
     public String toString() {
-        return getName() + " - " + getSchool().getShortName();
+        return "Programme{" +
+                "name='" + name + '\'' +
+                ", school='" + school + '\'' +
+                '}';
     }
 }

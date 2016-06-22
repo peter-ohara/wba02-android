@@ -33,6 +33,6 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Question " + mQuestions.get(position).getQuestionNumber();
+        return "Question "; // + mQuestions.get(position).getQuestionNumber();
     }
 }

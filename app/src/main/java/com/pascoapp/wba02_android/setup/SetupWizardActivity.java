@@ -2,7 +2,6 @@ package com.pascoapp.wba02_android.setup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -14,13 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.parse.ParseException;
-import com.parse.SaveCallback;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.AuthenticateUserActivity;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Programme;
-import com.pascoapp.wba02_android.parseSubClasses.School;
-import com.pascoapp.wba02_android.parseSubClasses.Student;
+import com.pascoapp.wba02_android.parseSubClasses.User;
 
 public class SetupWizardActivity extends AppCompatActivity implements
         EnterVoucherFragment.OnFragmentInteractionListener,
@@ -45,7 +42,10 @@ public class SetupWizardActivity extends AppCompatActivity implements
     public static final int CHOOSE_SEMESTER_PAGE = 4;
     public static final int REVIEW_CHOICES_PAGE = 5;
 
-//    private OnSetupChangesListener mListener;
+    private OnSetupChangedListener mListener;
+
+    private DatabaseReference mDatabaseRef;
+
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -57,7 +57,6 @@ public class SetupWizardActivity extends AppCompatActivity implements
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-    private Student student;
     private View coordinatorLayoutView;
     private ProgressBar loadingIndicator;
     private EnterVoucherFragment enterVoucherFragment;
@@ -66,7 +65,8 @@ public class SetupWizardActivity extends AppCompatActivity implements
     private ChooseLevelFragment chooseLevelFragment;
     private ChooseSemesterFragment chooseSemesterFragment;
     private ReviewChoicesFragment reviewChoicesFragment;
-    private School mSchool;
+    private String mSchoolKey;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,9 @@ public class SetupWizardActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        userRef = mDatabaseRef.child("users").child(User.getUid());
+
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
 
@@ -85,8 +88,6 @@ public class SetupWizardActivity extends AppCompatActivity implements
         mPager = (ViewPager) findViewById(R.id.viewpager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-
-        student = Student.getCurrentUser();
     }
 
     @Override
@@ -124,66 +125,46 @@ public class SetupWizardActivity extends AppCompatActivity implements
 
     @Override
     public void onVoucherEntered(String voucherNumber) {
-        student.setVoucher(voucherNumber);
+        userRef.child("voucher").setValue(voucherNumber);
         moveToNextPage();
     }
 
     @Override
-    public void onSchoolSelected(School school) {
-        mSchool = school;
-        student.setSchool(mSchool);
-        if (chooseProgrammeFragment != null) chooseProgrammeFragment.fillProgrammeList(mSchool);
+    public void onSchoolSelected(String schoolKey) {
+        mSchoolKey = schoolKey;
+        userRef.child("school").setValue(mSchoolKey);
+        if (chooseProgrammeFragment != null) chooseProgrammeFragment.fillProgrammeList(mSchoolKey);
         moveToNextPage();
     }
 
     @Override
-    public void onProgrammeSelected(Programme programme) {
-        student.setProgramme(programme);
+    public void onProgrammeSelected(String programmeKey) {
+        userRef.child("programme").setValue(programmeKey);
         moveToNextPage();
     }
 
     @Override
-    public School getSchool() {
-        return mSchool;
+    public String getSchoolKey() {
+        return mSchoolKey;
     }
 
     @Override
     public void onLevelSelected(Integer level) {
-        student.setLevel(level);
+        userRef.child("level").setValue(level);
         moveToNextPage();
     }
 
     @Override
     public void onSemesterSelected(Integer semester) {
-        student.setSemester(semester);
+        userRef.child("semester").setValue(semester);
         moveToNextPage();
     }
 
     @Override
-    public void onSubmitStudentsChoices(final Student student) {
+    public void onSubmitStudentsChoices() {
         loadingIndicator.setVisibility(View.VISIBLE);
-
-        student.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                loadingIndicator.setVisibility(View.GONE);
-                if (e == null) {
-                    Intent intent = new Intent(SetupWizardActivity.this, AuthenticateUserActivity.class);
-                    // No need to send student along as Extra since it has been saved.
-                    // It would be fetched at the other end
-                    startActivity(intent);
-                } else {
-                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    onSubmitStudentsChoices(student);
-                                }
-                            }).show();
-                }
-            }
-        });
+        Intent intent = new Intent(SetupWizardActivity.this, AuthenticateUserActivity.class);
+        startActivity(intent);
     }
 
     public void moveToNextPage() {
@@ -234,7 +215,7 @@ public class SetupWizardActivity extends AppCompatActivity implements
 
     }
 
-//    public interface OnSetupChangedListener {
-//        void onSchoolChanged(School school);
-//    }
+    public interface OnSetupChangedListener {
+        void onSchoolChanged(String schoolKey);
+    }
 }

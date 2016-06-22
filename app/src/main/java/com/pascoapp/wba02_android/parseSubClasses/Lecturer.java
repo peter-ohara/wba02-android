@@ -1,48 +1,48 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Handles Lecturer logic
  */
-@ParseClassName("Lecturer")
-public class Lecturer extends ParseObject {
+@IgnoreExtraProperties
+public class Lecturer {
+
+    public String firstName;
+    public String middleInitials;
+    public String middleNames;
+    public String lastName;
 
     public Lecturer() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public Lecturer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getFirstName() {
-        return getString("firstName");
+        return firstName;
     }
-    public void setFirstName(String firstName) {
-        put("firstName", firstName);
+
+    public String getMiddleInitials() {
+        return middleInitials;
+    }
+
+    public String getMiddleNames() {
+        return middleNames;
     }
 
     public String getLastName() {
-        return getString("lastName");
-    }
-    public void setLastName(String lastName) {
-        put("lastName", lastName);
-    }
-
-    public String getFullName() {
-        return getString("firstName") + " " + getString("lastName");
-    }
-    public void setName(String firstName, String lastName) {
-        put("firstName", firstName);
-        put("lastName", lastName);
-    }
-
-    public static ParseQuery<Lecturer> getQuery() {
-        ParseQuery<Lecturer> query = ParseQuery.getQuery(Lecturer.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+        return lastName;
     }
 
     @Override
     public String toString() {
-        return getFullName();
+        return "Lecturer{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

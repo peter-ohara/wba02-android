@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Test;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -64,36 +62,36 @@ public class TestListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Test test = mTests.get(position);
-
-        String year;
-        String type;
-        Lecturer lecturer;
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(test.getYear());
-        year = String.valueOf(cal.get(Calendar.YEAR));
-
-        if (test.getType().equalsIgnoreCase("end")) {
-            type = "End of Semester Exam";
-        } else if (test.getType().equalsIgnoreCase("midsem")) {
-            type = "Mid-Semester Exam";
-        } else if (test.getType().equalsIgnoreCase("classtest")) {
-            type = "Class Test";
-        } else if (test.getType().equalsIgnoreCase("assignment")) {
-            type = "Assignment";
-        } else {
-            type = "Unknown";
-        }
-
-        lecturer = test.getLecturer();
-
-        ((TestViewHolder) holder).titleView.setText(year + " " + type);
-        ((TestViewHolder) holder).lecturerView.setText(lecturer.getFullName());
-        ((TestViewHolder) holder).durationView.setText(test.getDuration() + "hrs");
-
-        ((TestViewHolder) holder).testId = test.getObjectId();
-        ((TestViewHolder) holder).testTitle = year + " " + type;
+//        Test test = mTests.get(position);
+//
+//        String year;
+//        String type;
+//        Lecturer lecturer;
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(test.getYear());
+//        year = String.valueOf(cal.get(Calendar.YEAR));
+//
+//        if (test.getType().equalsIgnoreCase("end")) {
+//            type = "End of Semester Exam";
+//        } else if (test.getType().equalsIgnoreCase("midsem")) {
+//            type = "Mid-Semester Exam";
+//        } else if (test.getType().equalsIgnoreCase("classtest")) {
+//            type = "Class Test";
+//        } else if (test.getType().equalsIgnoreCase("assignment")) {
+//            type = "Assignment";
+//        } else {
+//            type = "Unknown";
+//        }
+//
+//        lecturer = test.getLecturer();
+//
+//        ((TestViewHolder) holder).titleView.setText(year + " " + type);
+//        ((TestViewHolder) holder).lecturerView.setText(lecturer.getFullName());
+//        ((TestViewHolder) holder).durationView.setText(test.getDuration() + "hrs");
+//
+//        ((TestViewHolder) holder).testId = test.getObjectId();
+//        ((TestViewHolder) holder).testTitle = year + " " + type;
     }
 
     @Override

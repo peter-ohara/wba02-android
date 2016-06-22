@@ -1,32 +1,12 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
-
-repositories {
-    maven {
-        url 'http://dl.bintray.com/amulyakhare/maven'
-    }
-
-    // Library for colored Square Icons with letter inside like in gmail
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.pascoapp.wba02_android"
-        minSdkVersion 10
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -37,21 +17,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-
-    // Parse Data
-    compile 'com.parse.bolts:bolts-android:1.+'
-    compile 'com.parse:parse-android:1.+'
 
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
@@ -60,4 +37,19 @@ dependencies {
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
     compile 'com.android.support:preference-v7:23.1.0'
+
+    // Firebase
+    compile 'com.google.firebase:firebase-core:9.0.2'
+
+    // Firebase Realtime Database
+    compile 'com.google.firebase:firebase-database:9.0.2'
+
+    // FirebaseUI Auth
+    compile 'com.firebaseui:firebase-ui-auth:0.4.1'
+
+    // FirebaseUI Database
+    compile 'com.firebaseui:firebase-ui-database:0.4.1'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

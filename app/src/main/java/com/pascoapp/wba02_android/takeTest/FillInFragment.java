@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +33,7 @@ public class FillInFragment extends QuestionFragment {
         Bundle args = new Bundle();
 
         args.putString(ARG_QUESTION, question.getQuestion());
-        args.putStringArrayList(ARG_CHOICES, (ArrayList<String>) question.getChoices());
+        args.putSerializable(ARG_CHOICES, (Serializable) question.getChoices());
         args.putString(ARG_ANSWER, question.getAnswer());
         args.putString(ARG_TYPE, question.getType());
 

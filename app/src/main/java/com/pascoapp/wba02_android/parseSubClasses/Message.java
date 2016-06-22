@@ -1,60 +1,53 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.Date;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Handles Message logic
  */
-@ParseClassName("Message")
-public class Message extends ParseObject {
+@IgnoreExtraProperties
+public class Message {
+
+    public String title;
+    public String content;
+    public Long date;
+
+    public String programme;
+
     public Message() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public Message(String title, String content, Long date, String programme) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.programme = programme;
     }
 
     public String getTitle() {
-        return getString("title");
-    }
-    public void setTitle(String title) {
-        put("title", title);
+        return title;
     }
 
     public String getContent() {
-        return getString("content");
-    }
-    public void setContent(String content) {
-        put("content", content);
+        return content;
     }
 
-    public Date getDate() {
-        // TODO: Change this to sent time
-        return getCreatedAt();
+    public Long getDate() {
+        return date;
     }
 
-    public void setDate(Date date) {
-        put("date", date);
-    }
-
-    public Programme getProgramme() {
-        return (Programme) getParseObject("programme");
-    }
-    public void setProgramme(Programme programme) {
-        put("programme", programme);
-    }
-
-    public static ParseQuery<Message> getQuery() {
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.include("programme");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+    public String getProgramme() {
+        return programme;
     }
 
     @Override
     public String toString() {
-        return getTitle() + ": "
-                + getContent() + "; "
-                + getProgramme();
+        return "Message{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", date=" + date +
+                ", programme='" + programme + '\'' +
+                '}';
     }
 }

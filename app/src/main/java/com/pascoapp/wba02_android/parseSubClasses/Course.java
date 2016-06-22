@@ -1,47 +1,71 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Handles Course logic
  */
-@ParseClassName("Course")
-public class Course extends ParseObject {
+@IgnoreExtraProperties
+public class Course {
+
+    public String code;
+    public String name;
+    public Long semester;
+    public Long level;
+    public String programme;
+    public String school;
+
     public Course() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public Course(String code, String name, Long semester, Long level, String programme, String school) {
+        this.code = code;
+        this.name = name;
+        this.semester = semester;
+        this.level = level;
+        this.programme = programme;
+        this.school = school;
+    }
+
+    public Course(String code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public String getCode() {
-        return getString("code");
-    }
-    public void setCode(String code) {
-        put("code", code);
+        return code;
     }
 
     public String getName() {
-        return getString("name");
-    }
-    public void setName(String name) {
-        put("name", name);
+        return name;
     }
 
-    public Programme getProgramme() {
-        return (Programme) getParseObject("programme");
-    }
-    public void setProgramme(Programme programme) {
-        put("programme", programme);
+    public Long getSemester() {
+        return semester;
     }
 
-    public static ParseQuery<Course> getQuery() {
-        ParseQuery<Course> query = ParseQuery.getQuery(Course.class);
-        query.include("programme");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+    public Long getLevel() {
+        return level;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
+
+    public String getSchool() {
+        return school;
     }
 
     @Override
     public String toString() {
-        return getCode() + " " + getName();
+        return "Course{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", semester='" + semester + '\'' +
+                ", level='" + level + '\'' +
+                ", programme='" + programme + '\'' +
+                ", school='" + school + '\'' +
+                '}';
     }
 }

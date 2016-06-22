@@ -2,35 +2,24 @@ package com.pascoapp.wba02_android.Inbox;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.pascoapp.wba02_android.R;
-
 import com.pascoapp.wba02_android.parseSubClasses.Message;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,47 +80,47 @@ public class MessageListActivity extends AppCompatActivity {
         }
 
         String programmeId = null;
-        fetchMessages(programmeId);
+//        fetchMessages(programmeId);
     }
 
-    private void fetchMessages(final String programmeId) {
-        loadingIndicator.setVisibility(View.VISIBLE);
-
-        ParseQuery<Message> query = Message.getQuery();
-
-        if (programmeId != null) {
-            query.whereEqualTo("programme",
-                    ParseObject.createWithoutData(Message.class, programmeId)
-            );
-        }
-
-        query.orderByDescending("createdAt");
-        query.selectKeys(Arrays.asList("title"));
-
-        query.findInBackground(new FindCallback<Message>() {
-            @Override
-            public void done(List<Message> messages, ParseException e) {
-                if (e == null) {
-                    mMMessages.clear();
-                    mMMessages.addAll(messages);
-                    mAdapter.notifyDataSetChanged();
-                    loadingIndicator.setVisibility(View.GONE);
-                } else if (e.getCode() == 120) {
-                    // Result not cached Error. Ignore it
-                } else {
-                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    fetchMessages(programmeId);
-                                }
-                            }).show();
-                    loadingIndicator.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
+//    private void fetchMessages(final String programmeId) {
+//        loadingIndicator.setVisibility(View.VISIBLE);
+//
+//        ParseQuery<Message> query = Message.getQuery();
+//
+//        if (programmeId != null) {
+//            query.whereEqualTo("programme",
+//                    ParseObject.createWithoutData(Message.class, programmeId)
+//            );
+//        }
+//
+//        query.orderByDescending("createdAt");
+//        query.selectKeys(Arrays.asList("title"));
+//
+//        query.findInBackground(new FindCallback<Message>() {
+//            @Override
+//            public void done(List<Message> messages, ParseException e) {
+//                if (e == null) {
+//                    mMMessages.clear();
+//                    mMMessages.addAll(messages);
+//                    mAdapter.notifyDataSetChanged();
+//                    loadingIndicator.setVisibility(View.GONE);
+//                } else if (e.getCode() == 120) {
+//                    // Result not cached Error. Ignore it
+//                } else {
+//                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
+//                            Snackbar.LENGTH_INDEFINITE)
+//                            .setAction("Retry", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    fetchMessages(programmeId);
+//                                }
+//                            }).show();
+//                    loadingIndicator.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -182,7 +171,7 @@ public class MessageListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MessageListActivity.this, MessageDetailActivity.class);
-                    intent.putExtra(MessageDetailActivity.EXTRA_MESSAGE_ID, message.getObjectId());
+//                    intent.putExtra(MessageDetailActivity.EXTRA_MESSAGE_ID, message.getObjectId());
                     startActivity(intent);
                 }
             });
@@ -195,9 +184,9 @@ public class MessageListActivity extends AppCompatActivity {
 
         private void setMessageDate(ViewHolder holder, Message message) {
             // Setting the date
-            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(((Date) message.getCreatedAt()).getTime(),
-                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
-            holder.dateView.setText(timeAgo);
+//            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(((Date) message.getCreatedAt()).getTime(),
+//                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
+//            holder.dateView.setText(timeAgo);
         }
 
         private void setMessageIcon(ViewHolder holder, Message message) {
@@ -206,16 +195,16 @@ public class MessageListActivity extends AppCompatActivity {
             generator = ColorGenerator.MATERIAL;
 
 
-            // generate color based on a key (same key returns the same color), useful for list/grid views
-            color = generator.getColor((String) message.getObjectId());
+//            // generate color based on a key (same key returns the same color), useful for list/grid views
+//            color = generator.getColor((String) message.getObjectId());
+//
+//            TextDrawable drawable = TextDrawable.builder()
+//                    .buildRect(
+//                            ((String) message.get("title")).substring(0,1).toUpperCase(),
+//                            color
+//                    );
 
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRect(
-                            ((String) message.get("title")).substring(0,1).toUpperCase(),
-                            color
-                    );
-
-            holder.imageView.setImageDrawable(drawable);
+//            holder.imageView.setImageDrawable(drawable);
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

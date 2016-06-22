@@ -1,38 +1,29 @@
 package com.pascoapp.wba02_android.setup;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.School;
-import com.pascoapp.wba02_android.parseSubClasses.Student;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ChooseSchoolFragment extends Fragment{
 
     private OnFragmentInteractionListener mListener;
 
-    ArrayList<School> mSchools;
-    private ProgressBar loadingIndicator;
     private LinearLayoutManager mLayoutManager;
-    private ChooseSchoolAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private FirebaseRecyclerAdapter<School, SchoolHolder> mAdapter;
+    private DatabaseReference mRef;
 
     public ChooseSchoolFragment() {
         // Required empty public constructor
@@ -43,7 +34,7 @@ public class ChooseSchoolFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_choose_school, container, false);
 
-        loadingIndicator = (ProgressBar) view.findViewById(R.id.loading_indicator);
+        mRef = FirebaseDatabase.getInstance().getReference().child("schools");
 
         // set the recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.schools_list);
@@ -53,51 +44,24 @@ public class ChooseSchoolFragment extends Fragment{
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // Create an object for the adapter
-        mSchools = new ArrayList<>();
-        mAdapter = new ChooseSchoolAdapter(mSchools);
-        mAdapter.setOnItemClickListener(new ChooseSchoolAdapter.OnItemClickListener() {
+        mAdapter = new FirebaseRecyclerAdapter<School, SchoolHolder>(School.class, R.layout.school_list_item_template, SchoolHolder.class, mRef) {
             @Override
-            public void onItemClick(View view, School school) {
-                selectSchool(school);
+            public void populateViewHolder(SchoolHolder schoolViewHolder, School school, int position) {
+                String schoolKey = getRef(position).getKey();
+                schoolViewHolder.setTitle(school.getName());
+                schoolViewHolder.setOnClickListeners(schoolKey, mListener);
             }
-        });
+        };
 
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
-        fillSchoolList();
-
         return view;
     }
 
-    public void fillSchoolList() {
-        loadingIndicator.setVisibility(View.VISIBLE);
-
-        ParseQuery<School> query = School.getQuery();
-        query.selectKeys(Arrays.asList("name"));
-
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
-        query.findInBackground(new FindCallback<School>() {
-            @Override
-            public void done(List<School> schools, ParseException e) {
-                if (e == null) {
-                    mSchools.clear();
-                    mSchools.addAll(schools);
-                    mAdapter.notifyDataSetChanged();
-                    loadingIndicator.setVisibility(View.GONE);
-                } else {
-                    Toast.makeText(getActivity(),
-                            e.getCode() + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    loadingIndicator.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void selectSchool(School school) {
+    private void selectSchool(String schoolKey) {
         if (mListener != null) {
-            mListener.onSchoolSelected(school);
+            mListener.onSchoolSelected(schoolKey);
         }
     }
 
@@ -117,19 +81,43 @@ public class ChooseSchoolFragment extends Fragment{
         super.onDetach();
         mListener = null;
     }
-    
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
+
+    public static class SchoolHolder extends RecyclerView.ViewHolder{
+        View mView;
+
+        public SchoolHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+
+        public void setTitle(String name) {
+            TextView field = (TextView) mView.findViewById(R.id.school_name);
+            field.setText(name);
+        }
+
+        public void setOnClickListeners(final String schoolKey,
+                                        final OnFragmentInteractionListener mListener) {
+
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onSchoolSelected(schoolKey);
+                    }
+                }
+            });
+        }
+    }
+
+
     public interface OnFragmentInteractionListener {
-        void onSchoolSelected(School school);
+        void onSchoolSelected(String schoolKey);
     }
 
 }

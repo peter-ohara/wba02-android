@@ -6,55 +6,55 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.LogOutCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.App;
+import com.pascoapp.wba02_android.CheckCurrentUser;
 import com.pascoapp.wba02_android.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
-import com.pascoapp.wba02_android.parseSubClasses.Course;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Programme;
-import com.pascoapp.wba02_android.parseSubClasses.Student;
-import com.pascoapp.wba02_android.registration.RegistrationActivity;
+import com.pascoapp.wba02_android.parseSubClasses.Course;
+import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
+import com.pascoapp.wba02_android.parseSubClasses.Test;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
 import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
-import com.pascoapp.wba02_android.parseSubClasses.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SELECT_COURSE_REQUEST = 43;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ProgressBar loadingIndicator;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private ArrayList<Test> mTests;
-    private TestListAdapter mAdapter;
+    private FirebaseRecyclerAdapter<Test, TestHolder> mAdapter;
     private View coordinatorLayoutView;
     private Toolbar selectCourseToolbar;
     private View emptyView;
@@ -62,9 +62,13 @@ public class MainActivity extends AppCompatActivity {
     private SelectCourseSpinnerAdapter mSpinnerAdapter;
     private Spinner mSpinner;
 
+    private DatabaseReference mCoursesRef;
+    private DatabaseReference mTestsRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,23 +88,70 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(MainActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        mTestsRef = FirebaseDatabase.getInstance().getReference().child("tests");
+        // TODO: Filter query by tests/programme that student has selected for current duration duration
+
         // Create an object for the adapter
-        mTests = new ArrayList<>();
-        mAdapter = new TestListAdapter(mTests);
-        mAdapter.setOnItemClickListener(new TestListAdapter.OnItemClickListener() {
+        mAdapter = new FirebaseRecyclerAdapter<Test, TestHolder>(Test.class, R.layout.test_list_item_template, TestHolder.class, mTestsRef) {
             @Override
-            public void onItemClick(View view, String testId, String testTitle) {
-                Intent intent = new Intent(MainActivity.this, TakeTestActivity.class);
-                intent.putExtra(TakeTestActivity.EXTRA_TEST_ID, testId);
-                intent.putExtra(TakeTestActivity.EXTRA_TEST_TITLE, testTitle);
-                startActivity(intent);
+            public void populateViewHolder(final TestHolder testViewHolder, final Test test, final int position) {
+
+                DatabaseReference mLecturerRef = FirebaseDatabase.getInstance().getReference()
+                        .child("lecturers").child(test.getLecturer());
+
+                mLecturerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
+
+                        String lecturerName = lecturer.getFirstName() + " " + lecturer.getLastName();
+                        final String testKey = getRef(position).getKey();
+
+
+                        String year;
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(test.getYear());
+                        year = String.valueOf(cal.get(Calendar.YEAR));
+
+                        String type;
+                        if (test.getType().equalsIgnoreCase("endOfSem")) {
+                            type = "End of Semester Exam";
+                        } else if (test.getType().equalsIgnoreCase("midSem")) {
+                            type = "Mid-Semester Exam";
+                        } else if (test.getType().equalsIgnoreCase("classTest")) {
+                            type = "Class Test";
+                        } else if (test.getType().equalsIgnoreCase("assignment")) {
+                            type = "Assignment";
+                        } else {
+                            type = "Unknown";
+                        }
+                        final String testTitle = year + " " + type;
+
+                        testViewHolder.setTitle(testTitle);
+                        testViewHolder.setLecturer(lecturerName);
+                        testViewHolder.setDuration(test.getDuration() + "hrs");
+
+                        testViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainActivity.this, TakeTestActivity.class);
+                                intent.putExtra(TakeTestActivity.EXTRA_TEST_ID, testKey);
+                                intent.putExtra(TakeTestActivity.EXTRA_TEST_TITLE, testTitle);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
-        });
+        };
 
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
-
-        refreshTests();
     }
 
     private void setUpCourseToolbar() {
@@ -121,72 +172,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Course course = (Course) mSpinnerAdapter.getItem(position);
+                String courseKey = mSpinnerAdapter.getItemKey(position);
+                persistSelectedCourse(courseKey, course.getCode(), course.getName());
 
-                if (course.getObjectId().equalsIgnoreCase("all")) {
-                    getTestsFromAllCourses();
-                } else {
-                    getTestsFromCourse(course.getObjectId(), course.getCode(), course.getName());
-                }
+                selectCourseToolbar.setTitle(course.getCode() + " " + course.getCode());
+                getTestsFromCourse(courseKey, course.getCode(), course.getName());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                Toast.makeText(MainActivity.this, "Nothing Selected", Toast.LENGTH_SHORT).show();
             }
         });
 
-        fetchCourses();
+        fetchBoughtCourses();
     }
 
-    public void fetchCourses() {
-        ParseQuery<Course> query = Course.getQuery();
-
-        // TODO:
-        // Filter query by courses that student has selected for current duration duration
-
-        query.selectKeys(Arrays.asList("code", "name"));
-        query.orderByAscending("code");
-
-        query.findInBackground(new FindCallback<Course>() {
-            @Override
-            public void done(List<Course> courses, ParseException e) {
-                if (e == null) {
-                    mSpinnerAdapter.clear();
-                    mSpinnerAdapter.addCourses((ArrayList<Course>) courses);
-
-                    // Append "All" to the beginning of the list
-                    Course allCourse = ParseObject.createWithoutData(Course.class, "all");
-                    allCourse.setObjectId("all");
-                    allCourse.setCode("ALL");
-                    allCourse.setName("");
-                    mSpinnerAdapter.addCourse(0, allCourse);
-                    mSpinnerAdapter.notifyDataSetChanged();
-
-                    mSpinner.setSelection(25);
-                } else if (e.getCode() == 120) {
-                    // Result not cached Error. Ignore it
-                } else {
-                    System.out.println("Courses" + e.getCode() + " : " + e.getMessage());
-                    // TODO: Change to Snackbar
-                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void refreshTests() {
-        String courseId = getCurrentCourseId();
-
-        if (courseId == null) {
-            showChooseCourseActivity();
-        } else if (courseId.equalsIgnoreCase("all")) {
-            getTestsFromAllCourses();
-        } else {
-            getTestsFromCourse(getCurrentCourseId(), getCurrentCourseCode(), getCurrentCourseName());
-        }
-    }
-
-    private String getCurrentCourseId() {
+    private String getCurrentCourseKey() {
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_current_course), Context.MODE_PRIVATE);
 
@@ -207,102 +209,50 @@ public class MainActivity extends AppCompatActivity {
         return sharedPref.getString(App.CURRENT_COURSE_NAME, null);
     }
 
-    @NonNull
-    private ParseQuery<Course> getCourseQuery() {
-        Student student = (Student) ParseUser.getCurrentUser();
+    public void persistSelectedCourse(String courseKey, String courseCode, String courseName) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_current_course), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-        ParseQuery<Course> query = Course.getQuery();
-
-        // TODO:
-        // Filter query by courses that student has selected for current duration duration
-
-        return query;
+        editor.putString(App.CURRENT_COURSE_ID, courseKey);
+        editor.putString(App.CURRENT_COURSE_CODE, courseCode);
+        editor.putString(App.CURRENT_COURSE_NAME, courseName);
+        editor.commit();
     }
 
-    private void showChooseCourseActivity() {
-        Intent intent = new Intent(MainActivity.this, ChooseCourseActivity.class);
-        startActivityForResult(intent, SELECT_COURSE_REQUEST);
-        overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
-    }
-
-    public void refreshTestList(final Course course) {
-        assert course != null;
-
-        loadingIndicator.setVisibility(View.VISIBLE);
-
-        ParseQuery<Test> query = Test.getQuery();
-        query.whereEqualTo("course", course);
-        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
-
-        query.findInBackground(new FindCallback<Test>() {
+    public void fetchBoughtCourses() {
+        // TODO: Filter query by courses that student has bought for current duration
+        mCoursesRef = FirebaseDatabase.getInstance().getReference().child("courses");
+        mCoursesRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void done(List<Test> tests, ParseException e) {
-                if (e == null) {
-                    if (tests.size() == 0) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        mRecyclerView.setVisibility(View.GONE);
-                    } else {
-                        emptyView.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mTests.clear();
-                        mTests.addAll(tests);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                    loadingIndicator.setVisibility(View.GONE);
-                } else if (e.getCode() == 120) {
-                    // Result not cached Error. Ignore it
-                } else {
-                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    refreshTestList(course);
-                                }
-                            }).show();
-                    loadingIndicator.setVisibility(View.GONE);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mSpinnerAdapter.clear();
+
+                int i = 0;
+                for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
+                    Course course = courseSnapshot.getValue(Course.class);
+                    mSpinnerAdapter.addCourse(i, course, courseSnapshot.getKey());
+                    // Log.i("Course", course.getCode()+": "+course.getName());
+                }
+
+                mSpinnerAdapter.notifyDataSetChanged();
+
+                String currentCoursekey = getCurrentCourseKey();
+                String currentCourseCode = getCurrentCourseCode();
+                String currentCourseName = getCurrentCourseName();
+
+                Log.d(TAG,
+                        currentCoursekey + " : " + currentCourseCode + " : " + currentCourseName);
+
+                if (currentCoursekey != null) {
+                    // Select that course from the spinner
+                    mSpinner.setSelection(mSpinnerAdapter.getItemPosition(currentCoursekey));
                 }
             }
-        });
-    }
 
-    public void refreshTestList(final ParseQuery<Course> courseQuery) {
-        assert courseQuery != null;
-
-        loadingIndicator.setVisibility(View.VISIBLE);
-
-        ParseQuery<Test> query = Test.getQuery();
-        query.whereMatchesQuery("course", courseQuery);
-        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
-
-        query.findInBackground(new FindCallback<Test>() {
             @Override
-            public void done(List<Test> tests, ParseException e) {
-                if (e == null) {
-                    if (tests.size() == 0) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        mRecyclerView.setVisibility(View.GONE);
-                    } else {
-                        emptyView.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mTests.clear();
-                        mTests.addAll(tests);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                    loadingIndicator.setVisibility(View.GONE);
-                } else if (e.getCode() == 120) {
-                    // Result not cached Error. Ignore it
-                } else {
-                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    refreshTestList(courseQuery);
-                                }
-                            }).show();
-                    loadingIndicator.setVisibility(View.GONE);
-                }
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -344,30 +294,84 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void getTestsFromCourse(String coursekey, String courseCode, String courseName) {
+        //        assert course != null;
+//
+//        loadingIndicator.setVisibility(View.VISIBLE);
+//
+//        ParseQuery<Test> query = Test.getQuery();
+//        query.whereEqualTo("course", course);
+//        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
+//
+//        query.findInBackground(new FindCallback<Test>() {
+//            @Override
+//            public void done(List<Test> tests, ParseException e) {
+//                if (e == null) {
+//                    if (tests.size() == 0) {
+//                        emptyView.setVisibility(View.VISIBLE);
+//                        mRecyclerView.setVisibility(View.GONE);
+//                    } else {
+//                        emptyView.setVisibility(View.GONE);
+//                        mRecyclerView.setVisibility(View.VISIBLE);
+//                        mTests.clear();
+//                        mTests.addAll(tests);
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//                    loadingIndicator.setVisibility(View.GONE);
+//                } else if (e.getCode() == 120) {
+//                    // Result not cached Error. Ignore it
+//                } else {
+//                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
+//                            Snackbar.LENGTH_INDEFINITE)
+//                            .setAction("Retry", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    refreshTestList(course);
+//                                }
+//                            }).show();
+//                    loadingIndicator.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+    }
+
     private void logout() {
-        ParseUser.logOutInBackground(new LogOutCallback() {
-            @Override
-            public void done(ParseException e) {
-                showRegistrationPage();
-            }
-        });
+        // TODO: The tutorial passes an argument to getInstance,
+        // confirm that this argument is not necessary
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // user is now signed out
+                        startActivity(new Intent(MainActivity.this, CheckCurrentUser.class));
+                        finish();
+                    }
+                });
     }
 
-    private void showRegistrationPage() {
-        Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    public static class TestHolder extends RecyclerView.ViewHolder{
+
+        public View mView;
+
+        public TestHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+
+        public void setTitle(String name) {
+            TextView field = (TextView) mView.findViewById(R.id.test_item_title);
+            field.setText(name);
+        }
+
+        public void setLecturer(String lecturer) {
+            TextView field = (TextView) mView.findViewById(R.id.test_item_lecturer);
+            field.setText(lecturer);
+        }
+
+        public void setDuration(String duration) {
+            TextView field = (TextView) mView.findViewById(R.id.test_item_duration);
+            field.setText(duration);
+        }
     }
 
-    private void getTestsFromCourse(String courseId, String courseCode, String courseName) {
-        selectCourseToolbar.setTitle(courseCode + " " + courseName);
-        Course course = ParseObject.createWithoutData(Course.class, courseId);
-        refreshTestList(course);
-    }
-
-    private void getTestsFromAllCourses() {
-        selectCourseToolbar.setTitle("ALL");
-        ParseQuery<Course> courseQuery = getCourseQuery();
-        refreshTestList(courseQuery);
-    }
 }

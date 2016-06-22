@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.takeTest.QuestionFragment;
 
 import java.util.ArrayList;
 import java.util.List;

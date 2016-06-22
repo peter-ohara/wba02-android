@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Student;
 
 public class EnterVoucherFragment extends Fragment implements View.OnClickListener {
 

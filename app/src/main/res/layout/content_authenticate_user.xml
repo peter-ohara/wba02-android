@@ -8,4 +8,21 @@
     tools:context=".AuthenticateUserActivity"
     tools:showIn="@layout/activity_authenticate_user">
 
+    <ImageView
+        android:src="@drawable/pasco_logo_transparent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imageView4" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/progressBar"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/primary" />
 </RelativeLayout>

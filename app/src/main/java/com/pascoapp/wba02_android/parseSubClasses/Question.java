@@ -1,77 +1,129 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Handles Question logic
  */
-@ParseClassName("Question")
-public class Question extends ParseObject {
+@IgnoreExtraProperties
+public class Question {
+
+    public String type;
+
+    public String question;
+    public Map<String, String> choices;
+
+    public String answer;
+    public String explanation;
+
+    public String number;
+    public String section;
+    public Long semester;
+    public Long quarter;
+
+    public String test;
+    public String lecturer;
+    public String course;
+    public String programme;
+    public String school;
+
 
     public Question() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public String getQuestion() {
-        return getString("question");
-    }
-    public void setQuestion(String question) {
-        put("question", question);
+    public Question(String type, String question, Map<String, String> choices, String answer, String explanation, String number, String section, Long semester, Long quarter, String test, String lecturer, String course, String programme, String school) {
+        this.type = type;
+        this.question = question;
+        this.choices = choices;
+        this.answer = answer;
+        this.explanation = explanation;
+        this.number = number;
+        this.section = section;
+        this.semester = semester;
+        this.quarter = quarter;
+        this.test = test;
+        this.lecturer = lecturer;
+        this.course = course;
+        this.programme = programme;
+        this.school = school;
     }
 
     public String getType() {
-        // TODO: Enforce questionType is one of these [essay|mcq|fillIn|score]
-        return getString("type");
-    }
-    public void setType(String type) {
-        // TODO: Enforce questionType is one of these [essay|mcq|fillIn|score]
-        put("type", type);
+        return type;
     }
 
-    public Number getQuestionNumber() {
-        return getNumber("number");
-    }
-    public void setQuestionNumber(Number number) {
-        put("number", number);
+    public String getQuestion() {
+        return question;
     }
 
-    public List<String> getChoices() {
-        return getList("choices");
-    }
-    public void setChoices(List<String> choices) {
-        put("choices", choices);
+    public Map<String, String> getChoices() {
+        return choices;
     }
 
     public String getAnswer() {
-        return getString("answer");
-    }
-    public void setAnswer(String answer) {
-        put("answer", answer);
+        return answer;
     }
 
-    public Test getTest() {
-        return (Test) getParseObject("test");
-    }
-    public void setTest(Test test) {
-        put("test", test);
+    public String getExplanation() {
+        return explanation;
     }
 
-    public static ParseQuery<Question> getQuery() {
-        ParseQuery<Question> query = ParseQuery.getQuery(Question.class);
-        query.include("test");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+    public String getNumber() {
+        return number;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public Long getSemester() {
+        return semester;
+    }
+
+    public Long getQuarter() {
+        return quarter;
+    }
+
+    public String getTest() {
+        return test;
+    }
+
+    public String getLecturer() {
+        return lecturer;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
+
+    public String getSchool() {
+        return school;
     }
 
     @Override
     public String toString() {
-        return getType() + "; "
-                + getTest() + "; "
-                + getQuestion() + "; "
-                + getChoices() + "; "
-                + getAnswer();
+        return "Question{" +
+                "type='" + type + '\'' +
+                ", question='" + question + '\'' +
+                ", choices=" + choices +
+                ", answer='" + answer + '\'' +
+                ", explanation='" + explanation + '\'' +
+                ", number='" + number + '\'' +
+                ", section='" + section + '\'' +
+                ", semester=" + semester +
+                ", quarter=" + quarter +
+                ", test='" + test + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                ", course='" + course + '\'' +
+                ", programme='" + programme + '\'' +
+                ", school='" + school + '\'' +
+                '}';
     }
 }

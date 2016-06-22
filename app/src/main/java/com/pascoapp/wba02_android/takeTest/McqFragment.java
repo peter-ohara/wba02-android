@@ -2,15 +2,17 @@ package com.pascoapp.wba02_android.takeTest;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.parseSubClasses.Question;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +23,9 @@ import java.util.ArrayList;
  */
 public class McqFragment extends QuestionFragment {
 
+
+    private static final String LOG_TAG = McqFragment.class.getSimpleName();
+    private Map<String, String> choices;
 
     /**
      * Use this factory method to create a new instance of
@@ -34,7 +39,7 @@ public class McqFragment extends QuestionFragment {
         Bundle args = new Bundle();
 
         args.putString(ARG_QUESTION, question.getQuestion());
-        args.putStringArrayList(ARG_CHOICES, (ArrayList<String>) question.getChoices());
+        args.putSerializable(ARG_CHOICES, (Serializable) question.getChoices());
         args.putString(ARG_ANSWER, question.getAnswer());
         args.putString(ARG_TYPE, question.getType());
 
@@ -53,13 +58,15 @@ public class McqFragment extends QuestionFragment {
         View view = inflater.inflate(R.layout.fragment_mcq, container, false);
 
         String possible_answers = "";
-        String[] indexes = new String[]{"a", "b", "c", "d", "e"};
 
-        ArrayList<String> choices = getChoices();
-        for (int i = 0; i < choices.size(); i++) {
-            possible_answers += indexes[i] + ". ";
-            possible_answers += choices.get(i);
+        choices = getChoices();
+        Iterator it = choices.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            possible_answers += pair.getKey() + ". ";
+            possible_answers += pair.getValue();
             possible_answers += "<br>";
+            it.remove(); // avoids a ConcurrentModificationException
         }
 
         setChoicesString(possible_answers);
@@ -72,19 +79,9 @@ public class McqFragment extends QuestionFragment {
     public String getAdjustedAnswer() {
         String answer = getAnswer();
 
-        if (answer.equalsIgnoreCase("a")) {
-            return getChoices().get(0);
-        } else if (answer.equalsIgnoreCase("b")) {
-            return getChoices().get(1);
-        } else if (answer.equalsIgnoreCase("c")) {
-            return getChoices().get(2);
-        } else if (answer.equalsIgnoreCase("d")) {
-            return getChoices().get(3);
-        } else if (answer.equalsIgnoreCase("e")) {
-            return getChoices().get(4);
-        } else {
-            return QUESTION_ERROR;
-        }
+        Log.d(LOG_TAG, answer);
+        Log.d(LOG_TAG, choices.toString());
+        return choices.get(answer);
     }
 
 }

@@ -1,76 +1,82 @@
 package com.pascoapp.wba02_android.parseSubClasses;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.Date;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Handles Test logic
  */
-@ParseClassName("Test")
-public class Test extends ParseObject{
+@IgnoreExtraProperties
+public class Test {
+
+    public String type;
+    public Long duration;
+    public String instructions;
+
+    public String lecturer;
+    public String course;
+    public String programme;
+    public String school;
+
+    public Long year;
 
     public Test() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Lecturer getLecturer() {
-        return (Lecturer) getParseObject("lecturer");
-    }
-    public void setLecturer(ParseObject lecturer) {
-        put("lecturer", lecturer);
-    }
-
-    public Date getYear() {
-        return getDate("year");
-    }
-    public void setYear(Date year) {
-        put("year", year);
+    public Test(String type, Long duration, String instructions, String lecturer, String course, String programme, String school, Long year) {
+        this.type = type;
+        this.duration = duration;
+        this.instructions = instructions;
+        this.lecturer = lecturer;
+        this.course = course;
+        this.programme = programme;
+        this.school = school;
+        this.year = year;
     }
 
     public String getType() {
-        return getString("type");
-    }
-    public void setType(String type) {
-        put("type", type);
+        return type;
     }
 
-    public Number getDuration() {
-        return getNumber("duration");
-    }
-    public void setDuration(Number duration) {
-        put("duration", duration);
+    public Long getDuration() {
+        return duration;
     }
 
     public String getInstructions() {
-        return getString("instructions");
-    }
-    public void setInstructions(String instructions) {
-        put("instructions", instructions);
+        return instructions;
     }
 
-    public Course getCourse() {
-        return (Course) getParseObject("course");
-    }
-    public void setCourse(Course course) {
-        put("course", course);
+    public String getLecturer() {
+        return lecturer;
     }
 
-    public static ParseQuery<Test> getQuery() {
-        ParseQuery<Test> query = ParseQuery.getQuery(Test.class);
-        query.include("lecturer");
-        query.include("course");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        return query;
+    public String getCourse() {
+        return course;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public Long getYear() {
+        return year;
     }
 
     @Override
     public String toString() {
-        return getType() + "; "
-                + getYear() + "; "
-                + getCourse() + "; "
-                + getLecturer() + "; "
-                + getDuration() + " hrs";
+        return "Test{" +
+                "type='" + type + '\'' +
+                ", duration='" + duration + '\'' +
+                ", instructions='" + instructions + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                ", course='" + course + '\'' +
+                ", programme='" + programme + '\'' +
+                ", school='" + school + '\'' +
+                ", year='" + year + '\'' +
+                '}';
     }
 }
