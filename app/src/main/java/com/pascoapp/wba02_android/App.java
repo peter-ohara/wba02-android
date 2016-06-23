@@ -2,6 +2,8 @@ package com.pascoapp.wba02_android;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Application class for the Pasco App
  */
@@ -15,5 +17,8 @@ public class App extends Application {
     public void onCreate() {
 
         super.onCreate();
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
     }
 }

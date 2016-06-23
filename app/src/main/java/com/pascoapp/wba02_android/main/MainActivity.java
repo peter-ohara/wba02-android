@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,14 +38,11 @@ import com.pascoapp.wba02_android.CheckCurrentUser;
 import com.pascoapp.wba02_android.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Course;
-import com.pascoapp.wba02_android.parseSubClasses.Lecturer;
-import com.pascoapp.wba02_android.parseSubClasses.Test;
+import com.pascoapp.wba02_android.firebasePojos.Course;
+import com.pascoapp.wba02_android.firebasePojos.Lecturer;
+import com.pascoapp.wba02_android.firebasePojos.Test;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
 import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,12 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loadingIndicator;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private ArrayList<Test> mTests;
     private FirebaseRecyclerAdapter<Test, TestHolder> mAdapter;
     private View coordinatorLayoutView;
     private Toolbar selectCourseToolbar;
     private View emptyView;
-    private ArrayList<Course> mCourses;
     private SelectCourseSpinnerAdapter mSpinnerAdapter;
     private Spinner mSpinner;
 
@@ -88,10 +84,23 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(MainActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        createAdapter();
+
+        // Set the adapter object to the RecyclerView
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
+
+    private void createAdapter() {
         mTestsRef = FirebaseDatabase.getInstance().getReference().child("tests");
         // TODO: Filter query by tests/programme that student has selected for current duration duration
 
-        // Create an object for the adapter
+        loadingIndicator.setVisibility(View.VISIBLE);
         mAdapter = new FirebaseRecyclerAdapter<Test, TestHolder>(Test.class, R.layout.test_list_item_template, TestHolder.class, mTestsRef) {
             @Override
             public void populateViewHolder(final TestHolder testViewHolder, final Test test, final int position) {
@@ -108,10 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         final String testKey = getRef(position).getKey();
 
 
-                        String year;
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(test.getYear());
-                        year = String.valueOf(cal.get(Calendar.YEAR));
+                        Long year = test.getYear();
 
                         String type;
                         if (test.getType().equalsIgnoreCase("endOfSem")) {
@@ -150,8 +156,31 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        // Set the adapter object to the RecyclerView
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                loadingIndicator.setVisibility(View.GONE);
+
+                if (mAdapter.getItemCount() == 0) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+
+                if (mAdapter.getItemCount() == 0) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void setUpCourseToolbar() {
@@ -252,7 +281,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Snackbar.make(coordinatorLayoutView,
+                        databaseError.getCode() + " : " + databaseError.getMessage(),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -269,13 +300,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_inbox:
                 startActivity(new Intent(MainActivity.this, MessageListActivity.class));
                 break;
-//            case R.id.action_clear_cache:
-//                ParseQuery.clearAllCachedResults();
-//                refreshTests();
-//                break;
-//            case R.id.action_logout:
-//                logout();
-//                break;
+            case R.id.action_logout:
+                logout();
+                break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
@@ -295,49 +322,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTestsFromCourse(String coursekey, String courseCode, String courseName) {
-        //        assert course != null;
-//
-//        loadingIndicator.setVisibility(View.VISIBLE);
-//
-//        ParseQuery<Test> query = Test.getQuery();
-//        query.whereEqualTo("course", course);
-//        query.selectKeys(Arrays.asList("lecturer", "year", "type", "duration"));
-//
-//        query.findInBackground(new FindCallback<Test>() {
-//            @Override
-//            public void done(List<Test> tests, ParseException e) {
-//                if (e == null) {
-//                    if (tests.size() == 0) {
-//                        emptyView.setVisibility(View.VISIBLE);
-//                        mRecyclerView.setVisibility(View.GONE);
-//                    } else {
-//                        emptyView.setVisibility(View.GONE);
-//                        mRecyclerView.setVisibility(View.VISIBLE);
-//                        mTests.clear();
-//                        mTests.addAll(tests);
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                    loadingIndicator.setVisibility(View.GONE);
-//                } else if (e.getCode() == 120) {
-//                    // Result not cached Error. Ignore it
-//                } else {
-//                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-//                            Snackbar.LENGTH_INDEFINITE)
-//                            .setAction("Retry", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    refreshTestList(course);
-//                                }
-//                            }).show();
-//                    loadingIndicator.setVisibility(View.GONE);
-//                }
-//            }
-//        });
+        // TODO: Change the query that mAdapter is using
     }
 
     private void logout() {
-        // TODO: The tutorial passes an argument to getInstance,
-        // confirm that this argument is not necessary
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

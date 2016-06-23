@@ -9,7 +9,6 @@ import android.webkit.WebView;
 
 import com.pascoapp.wba02_android.R;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 

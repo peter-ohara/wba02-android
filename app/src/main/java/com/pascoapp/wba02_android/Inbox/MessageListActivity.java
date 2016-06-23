@@ -7,20 +7,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Message;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.pascoapp.wba02_android.firebasePojos.Message;
 
 /**
  * An activity representing a list of messages. This activity
@@ -32,8 +32,6 @@ import java.util.List;
  */
 public class MessageListActivity extends AppCompatActivity {
 
-    private List<Message> mMMessages = new ArrayList<>();
-
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -42,7 +40,9 @@ public class MessageListActivity extends AppCompatActivity {
     private View coordinatorLayoutView;
     private ProgressBar loadingIndicator;
     private LinearLayoutManager mLayoutManager;
-    private MessageListAdapter mAdapter;
+    private FirebaseRecyclerAdapter<Message, MessageHolder> mAdapter;
+    private DatabaseReference mMessagesRef;
+    private ColorGenerator generator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,9 @@ public class MessageListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        /** TextDrawable library from github.com/amulyakhare/TextDrawable  **/
+        generator = ColorGenerator.MATERIAL;
 
         coordinatorLayoutView = findViewById(R.id.message_list);
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
@@ -65,8 +68,41 @@ public class MessageListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(MessageListActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // Create an object for the adapter
-        mAdapter = new MessageListAdapter(mMMessages);
+        mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+        // TODO: Filter query by this users information;
+        // TODO: Order by date
+
+        loadingIndicator.setVisibility(View.VISIBLE);
+        mAdapter = new FirebaseRecyclerAdapter<Message, MessageHolder>(Message.class, R.layout.message_list_content, MessageHolder.class, mMessagesRef) {
+            @Override
+            public void populateViewHolder(final MessageHolder messageViewHolder, final Message message, final int position) {
+
+                final String messageKey = getRef(position).getKey();
+
+                messageViewHolder.setTitle(message.getTitle());
+
+                messageViewHolder.setDate(message.getDate());
+
+                messageViewHolder.setIcon(generator, message, messageKey);
+
+                messageViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MessageListActivity.this, MessageDetailActivity.class);
+                        intent.putExtra(MessageDetailActivity.EXTRA_MESSAGE_ID, messageKey);
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                loadingIndicator.setVisibility(View.GONE);
+            }
+        });
 
         // Set the adapter object to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
@@ -79,48 +115,7 @@ public class MessageListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        String programmeId = null;
-//        fetchMessages(programmeId);
     }
-
-//    private void fetchMessages(final String programmeId) {
-//        loadingIndicator.setVisibility(View.VISIBLE);
-//
-//        ParseQuery<Message> query = Message.getQuery();
-//
-//        if (programmeId != null) {
-//            query.whereEqualTo("programme",
-//                    ParseObject.createWithoutData(Message.class, programmeId)
-//            );
-//        }
-//
-//        query.orderByDescending("createdAt");
-//        query.selectKeys(Arrays.asList("title"));
-//
-//        query.findInBackground(new FindCallback<Message>() {
-//            @Override
-//            public void done(List<Message> messages, ParseException e) {
-//                if (e == null) {
-//                    mMMessages.clear();
-//                    mMMessages.addAll(messages);
-//                    mAdapter.notifyDataSetChanged();
-//                    loadingIndicator.setVisibility(View.GONE);
-//                } else if (e.getCode() == 120) {
-//                    // Result not cached Error. Ignore it
-//                } else {
-//                    Snackbar.make(coordinatorLayoutView, e.getCode() + " : " + e.getMessage(),
-//                            Snackbar.LENGTH_INDEFINITE)
-//                            .setAction("Retry", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    fetchMessages(programmeId);
-//                                }
-//                            }).show();
-//                    loadingIndicator.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,95 +134,49 @@ public class MessageListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.ViewHolder> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
 
-        private final List<Message> mMessages;
-        private ColorGenerator generator;
+    public static class MessageHolder extends RecyclerView.ViewHolder{
+
+        public View mView;
+
         private int color;
 
-        public MessageListAdapter(List<Message> messages) {
-            mMessages = messages;
+        public MessageHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_list_content, parent, false);
-            return new ViewHolder(view);
+        public void setTitle(String title) {
+            TextView field = (TextView) mView.findViewById(R.id.message_title);
+            field.setText(title);
         }
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            final Message message = mMessages.get(position);
-            holder.mMessage = message;
-            holder.titleView.setText(message.getTitle());
-
-            setMessageDate(holder, message);
-
-            setMessageIcon(holder, message);
-
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MessageListActivity.this, MessageDetailActivity.class);
-//                    intent.putExtra(MessageDetailActivity.EXTRA_MESSAGE_ID, message.getObjectId());
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mMessages.size();
-        }
-
-        private void setMessageDate(ViewHolder holder, Message message) {
+        private void setDate(Long date) {
+            TextView field = (TextView) mView.findViewById(R.id.message_date);
             // Setting the date
-//            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(((Date) message.getCreatedAt()).getTime(),
-//                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
-//            holder.dateView.setText(timeAgo);
+            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(date,
+                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
+            field.setText(timeAgo);
         }
 
-        private void setMessageIcon(ViewHolder holder, Message message) {
-            // Setting the Icon
-            /** TextDrawable library from github.com/amulyakhare/TextDrawable  **/
-            generator = ColorGenerator.MATERIAL;
+        private void setIcon(ColorGenerator generator, Message message, String messageKey) {
+            ImageView field = (ImageView) mView.findViewById(R.id.message_icon);
 
+            // generate color based on a key (same key returns the same color), useful for list/grid views
+            color = generator.getColor(messageKey);
 
-//            // generate color based on a key (same key returns the same color), useful for list/grid views
-//            color = generator.getColor((String) message.getObjectId());
-//
-//            TextDrawable drawable = TextDrawable.builder()
-//                    .buildRect(
-//                            ((String) message.get("title")).substring(0,1).toUpperCase(),
-//                            color
-//                    );
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRect(
+                            ((String) message.getTitle()).substring(0,1).toUpperCase(),
+                            color
+                    );
 
-//            holder.imageView.setImageDrawable(drawable);
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public TextView titleView;
-            public TextView dateView;
-            public ImageView imageView;
-
-            public Message mMessage;
-
-            public ViewHolder(View view) {
-                super(view);
-
-                mView = view;
-                titleView = (TextView) itemView.findViewById(R.id.message_title);
-                dateView = (TextView) itemView.findViewById(R.id.message_date);
-                imageView = (ImageView) itemView.findViewById(R.id.message_icon);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + titleView.getText() + "'";
-            }
+           field.setImageDrawable(drawable);
         }
     }
 }

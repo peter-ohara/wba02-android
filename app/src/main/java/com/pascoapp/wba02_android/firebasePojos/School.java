@@ -1,38 +1,36 @@
-package com.pascoapp.wba02_android.parseSubClasses;
+package com.pascoapp.wba02_android.firebasePojos;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-/**
- * Handles Programme logic
- */
 @IgnoreExtraProperties
-public class Programme {
+public class School {
 
     public String name;
-    public String school;
+    public String shortName;
 
-    public Programme() {
+
+    public School() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Programme(String name, String school) {
+    public School(String name, String shortName) {
         this.name = name;
-        this.school = school;
+        this.shortName = shortName;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getSchool() {
-        return school;
+    public String getShortName() {
+        return shortName;
     }
 
     @Override
     public String toString() {
-        return "Programme{" +
+        return "School{" +
                 "name='" + name + '\'' +
-                ", school='" + school + '\'' +
+                ", shortName='" + shortName + '\'' +
                 '}';
     }
 }

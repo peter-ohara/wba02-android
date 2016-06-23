@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.parseSubClasses;
+package com.pascoapp.wba02_android.firebasePojos;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

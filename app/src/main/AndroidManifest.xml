@@ -33,15 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
-        <activity
-            android:name=".main.ChooseCourseActivity"
-            android:label="@string/title_activity_choose_course"
-            android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity" />
-        </activity>
 
         <!-- Start here -->
         <activity
@@ -53,15 +44,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".AuthenticateUserActivity"
-            android:label="@string/title_activity_authenticate_user"
-            android:parentActivityName=".CheckCurrentUser"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CheckCurrentUser" />
         </activity>
         <activity
             android:name=".settings.SettingsActivity"
