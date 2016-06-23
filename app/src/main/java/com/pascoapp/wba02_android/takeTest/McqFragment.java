@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Question;
+import com.pascoapp.wba02_android.firebasePojos.Question;
 
 import java.io.Serializable;
 import java.util.Iterator;

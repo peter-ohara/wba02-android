@@ -1,6 +1,6 @@
 package com.pascoapp.wba02_android.takeTest;
 
-import com.pascoapp.wba02_android.parseSubClasses.Question;
+import com.pascoapp.wba02_android.firebasePojos.Question;
 
 /**
  * Generates appropriate Fragment for question

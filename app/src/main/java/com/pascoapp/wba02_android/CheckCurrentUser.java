@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pascoapp.wba02_android.main.MainActivity;
 
 import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
@@ -27,19 +28,26 @@ public class CheckCurrentUser extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authenticate_user);
+        setContentView(R.layout.branded_launch_screen);
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
-            startAuthenticationActivity();
+            startMainActivity();
         } else {
             // not signed in
             startActivityForResult(
-                    // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setProviders(
+                                    AuthUI.EMAIL_PROVIDER,
+                                    AuthUI.GOOGLE_PROVIDER)
+                            .setTheme(R.style.AppTheme)
+                            .build(),
                     RC_SIGN_IN);
         }
 
@@ -55,7 +63,7 @@ public class CheckCurrentUser extends Activity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
 
-                startAuthenticationActivity();
+                startMainActivity();
             } else {
                 // user is not signed in. Maybe just wait for the user to press
                 // "sign in" again, or show a message
@@ -70,8 +78,8 @@ public class CheckCurrentUser extends Activity {
         database.child("users").child(userId).child("username").setValue(name);
     }
 
-    private void startAuthenticationActivity() {
-        startActivity(new Intent(this, AuthenticateUserActivity.class));
+    private void startMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

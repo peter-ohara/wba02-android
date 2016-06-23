@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.pascoapp.wba02_android.parseSubClasses.Question;
+import com.pascoapp.wba02_android.firebasePojos.Question;
 
 import java.util.List;
 

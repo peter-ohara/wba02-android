@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.parseSubClasses.Course;
+import com.pascoapp.wba02_android.firebasePojos.Course;
 
 import java.util.ArrayList;
 
