@@ -45,9 +45,9 @@ import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String CURRENT_COURSE_KEY = "com.pascoapp.wba02_android.App.courseId";
-    public static final String CURRENT_COURSE_CODE = "com.pascoapp.wba02_android.App.courseCode";
-    public static final String CURRENT_COURSE_NAME = "com.pascoapp.wba02_android.App.courseName";
+    public static final String CURRENT_COURSE_KEY = "com.pascoapp.wba02_android.MainActivity.courseId";
+    public static final String CURRENT_COURSE_CODE = "com.pascoapp.wba02_android.MainActivity.courseCode";
+    public static final String CURRENT_COURSE_NAME = "com.pascoapp.wba02_android.MainActivity.courseName";
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private ProgressBar loadingIndicator;
