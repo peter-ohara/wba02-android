@@ -48,6 +48,7 @@ public class TakeTestActivity extends AppCompatActivity {
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
         mPager = (ViewPager) findViewById(R.id.viewpager);
+        mPager.setOffscreenPageLimit(10);
 
         mQuestions = new ArrayList<>();
         mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), mQuestions);
