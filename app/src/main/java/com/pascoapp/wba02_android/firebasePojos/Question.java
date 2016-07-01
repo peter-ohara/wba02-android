@@ -29,6 +29,8 @@ public class Question {
     public String programme;
     public String school;
 
+    public String key;
+
 
     public Question() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

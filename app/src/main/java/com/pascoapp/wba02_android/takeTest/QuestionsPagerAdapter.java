@@ -23,7 +23,14 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Question currentQuestion = mQuestions.get(position);
-        return QuestionFragmentFactory.getQuestionFragment(currentQuestion);
+        if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
+            return McqFragment.newInstance(currentQuestion);
+        } else if (currentQuestion.getType().equalsIgnoreCase("fillIn")) {
+            return FillInFragment.newInstance(currentQuestion);
+        } else if (currentQuestion.getType().equalsIgnoreCase("essay")) {
+            return EssayFragment.newInstance(currentQuestion);
+        }
+        return null;
     }
 
     @Override
@@ -33,6 +40,6 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Question "; // + mQuestions.get(position).getQuestionNumber();
+        return "Question " + mQuestions.get(position).getNumber();
     }
 }

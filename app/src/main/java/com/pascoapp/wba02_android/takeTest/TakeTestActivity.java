@@ -81,6 +81,7 @@ public class TakeTestActivity extends AppCompatActivity {
                 mQuestions.clear();
                 for (DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
                     Question question = questionSnapshot.getValue(Question.class);
+                    question.key = dataSnapshot.getKey();
                     mQuestions.add(question);
                 }
                 mPagerAdapter.notifyDataSetChanged();
