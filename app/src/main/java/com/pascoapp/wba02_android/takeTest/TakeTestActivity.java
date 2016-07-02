@@ -13,15 +13,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.firebasePojos.Question;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TakeTestActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TEST_ID =
+    public static final String EXTRA_TEST_KEY =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
     public static final String EXTRA_TEST_TITLE =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testTitle";
@@ -60,7 +62,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
     public String getTestId() {
         Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_TEST_ID);
+        return intent.getStringExtra(EXTRA_TEST_KEY);
     }
 
     public String getTestTitle() {
@@ -71,11 +73,9 @@ public class TakeTestActivity extends AppCompatActivity {
     private void getQuestions(final String testKey) {
         loadingIndicator.setVisibility(View.VISIBLE);
 
-        // TODO: Filter by testKey
-        // TODO: Order by ascending question number
-
         mQuestionsRef = FirebaseDatabase.getInstance().getReference().child("questions");
-        mQuestionsRef.addValueEventListener(new ValueEventListener() {
+        Query questionsQuery = mQuestionsRef.orderByChild("test").equalTo(testKey);
+        questionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mQuestions.clear();
@@ -84,6 +84,10 @@ public class TakeTestActivity extends AppCompatActivity {
                     question.key = dataSnapshot.getKey();
                     mQuestions.add(question);
                 }
+
+                // Sort by ascending question number
+                Collections.sort(mQuestions, new QuestionComparator());
+
                 mPagerAdapter.notifyDataSetChanged();
                 loadingIndicator.setVisibility(View.GONE);
             }
@@ -108,4 +112,5 @@ public class TakeTestActivity extends AppCompatActivity {
     private void quit() {
         super.onBackPressed();
     }
+
 }

@@ -73,7 +73,6 @@ public class McqFragment extends Fragment {
         args.putString(ARG_QUESTION, question.getQuestion());
         args.putSerializable(ARG_CHOICES, (Serializable) question.getChoices());
         args.putString(ARG_ANSWER, question.getAnswer());
-        args.putString(ARG_TYPE, question.getType());
 
         fragment.setArguments(args);
         return fragment;

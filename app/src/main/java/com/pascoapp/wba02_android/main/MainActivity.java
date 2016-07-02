@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, TakeTestActivity.class);
-                                intent.putExtra(TakeTestActivity.EXTRA_TEST_ID, testKey);
+                                intent.putExtra(TakeTestActivity.EXTRA_TEST_KEY, testKey);
                                 intent.putExtra(TakeTestActivity.EXTRA_TEST_TITLE, testTitle);
                                 startActivity(intent);
                             }
