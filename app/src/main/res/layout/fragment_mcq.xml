@@ -63,7 +63,7 @@
 
         <Button
             android:id="@+id/checkButton"
-            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
+            android:theme="@style/checkButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/answerArea"
@@ -71,7 +71,6 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#21c3f3"
             android:text="Check"
             android:textSize="20sp" />
 

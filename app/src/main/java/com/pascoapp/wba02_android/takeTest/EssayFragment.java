@@ -136,7 +136,7 @@ public class EssayFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.essayTemplate
+        String htmlString = QuestionTemplates.getInstance(getContext()).essayTemplate
                 .replace("{ question }", question);
         loadItemInWebView(webview, htmlString);
     }

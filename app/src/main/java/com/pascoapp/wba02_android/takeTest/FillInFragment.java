@@ -134,7 +134,7 @@ public class FillInFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.fillInTemplate
+        String htmlString = QuestionTemplates.getInstance(getContext()).fillInTemplate
                 .replace("{ question }", question);
         loadItemInWebView(webview, htmlString);
     }

@@ -162,7 +162,7 @@ public class McqFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.mcqTemplate
+        String htmlString = QuestionTemplates.getInstance(getContext()).mcqTemplate
                 .replace("{ question }", question);
         loadItemInWebView(webview, htmlString);
     }
