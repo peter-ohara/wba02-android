@@ -30,4 +30,10 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <style name="checkButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/check_button</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
+
+    <color name="check_button">#21c3f3</color>
 </resources>

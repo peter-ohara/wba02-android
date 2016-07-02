@@ -30,7 +30,7 @@ MathJax.Ajax.Preloading(
   "[MathJax]/extensions/AssistiveMML.js"
 );
 
-MathJax.Hub.Config({"v1.0-compatible":false});
+MathJax.Hub.Config({ "v1.0-compatible":false, messageStyle:"none", tex2jax:{ preview:"none" } });
 
 MathJax.InputJax.AsciiMath=MathJax.InputJax({id:"AsciiMath",version:"2.6.0",directory:MathJax.InputJax.directory+"/AsciiMath",extensionDir:MathJax.InputJax.extensionDir+"/AsciiMath",config:{fixphi:true,useMathMLspacing:true,displaystyle:true,decimalsign:"."}});MathJax.InputJax.AsciiMath.Register("math/asciimath");MathJax.InputJax.AsciiMath.loadComplete("config.js");
 MathJax.OutputJax.CommonHTML=MathJax.OutputJax({id:"CommonHTML",version:"2.6.0",directory:MathJax.OutputJax.directory+"/CommonHTML",extensionDir:MathJax.OutputJax.extensionDir+"/CommonHTML",autoloadDir:MathJax.OutputJax.directory+"/CommonHTML/autoload",fontDir:MathJax.OutputJax.directory+"/CommonHTML/fonts",webfontDir:MathJax.OutputJax.fontDir+"/HTML-CSS",config:{matchFontHeight:true,scale:100,minScaleAdjust:50,mtextFontInherit:false,undefinedFamily:"STIXGeneral,'Cambria Math','Arial Unicode MS',serif",EqnChunk:(MathJax.Hub.Browser.isMobile?20:100),EqnChunkFactor:1.5,EqnChunkDelay:100,linebreaks:{automatic:false,width:"container"}}});if(!MathJax.Hub.config.delayJaxRegistration){MathJax.OutputJax.CommonHTML.Register("jax/mml")}MathJax.OutputJax.CommonHTML.loadComplete("config.js");
