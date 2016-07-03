@@ -77,4 +77,7 @@
     <string name="action_credits">Credits</string>
     <string name="title_activity_credits">Credits</string>
 
+    <string name="facebook_application_id" translatable="false">1756160077988803</string>
+
+
 </resources>

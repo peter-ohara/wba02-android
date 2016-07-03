@@ -12,15 +12,11 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.firebasePojos.Question;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -162,13 +158,14 @@ public class McqFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.getInstance(getContext()).mcqTemplate
+        String htmlString = QuestionTemplates.mcqTemplate
                 .replace("{ question }", question);
         loadItemInWebView(webview, htmlString);
     }
 
     protected void loadItemInWebView(WebView w, String htmlString) {
         w.getSettings().setJavaScriptEnabled(true);
+        w.setBackgroundColor(Color.TRANSPARENT);
         // TODO: Change "http://bar" to something more apprioprate. See documentation for loadWithBaseUrl()
         w.loadDataWithBaseURL("http://bar", htmlString, "text/html", "utf-8", "");
     }

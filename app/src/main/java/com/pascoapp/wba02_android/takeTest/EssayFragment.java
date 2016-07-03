@@ -9,15 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.firebasePojos.Question;
-
-import java.io.Serializable;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -136,13 +131,14 @@ public class EssayFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.getInstance(getContext()).essayTemplate
+        String htmlString = QuestionTemplates.essayTemplate
                 .replace("{ question }", question);
         loadItemInWebView(webview, htmlString);
     }
 
     protected void loadItemInWebView(WebView w, String htmlString) {
         w.getSettings().setJavaScriptEnabled(true);
+        w.setBackgroundColor(Color.TRANSPARENT);
         // TODO: Change "http://bar" to something more apprioprate. See documentation for loadWithBaseUrl()
         w.loadDataWithBaseURL("http://bar", htmlString, "text/html", "utf-8", "");
     }
