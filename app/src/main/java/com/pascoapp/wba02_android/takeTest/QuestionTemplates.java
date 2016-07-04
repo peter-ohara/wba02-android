@@ -118,8 +118,9 @@ public class QuestionTemplates {
             "<html>\n" +
             "<head>\n" +
             "    <title>Question</title>\n" +
-            "   <meta name=\"viewport\" content=\"user-scalable=no, width=device-width, initial-scale=1.0\" />\n" +
-            "   <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" +
+            "    <meta name=\"viewport\" content=\"user-scalable=no, width=device-width, initial-scale=1.0\" />\n" +
+            "    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" +
+            "    <link rel=\"stylesheet\" href=\"file:///android_asset/katex/katex.min.css\">\n" +
             "    <style> {0} </style>\n" +
             "    <script type=\"text/javascript\"\n" +
             "            async src=\"file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full\"></script>\n" +
@@ -127,6 +128,9 @@ public class QuestionTemplates {
             "<body>\n" +
             "{1}" +
             "</body>\n" +
+            "<script src=\"file:///android_asset/ASCIIMathTeXKaTeX-2016-06-17.min.js\"></script> \n" +
+            "<script src=\"file:///android_asset/katex/katex.min.js\"></script> \n" +
+            "<script>if(typeof(katex)!=\"undefined\") AMfunc(true); </script> \n" +
             "</html>";
 
     private static String mcqDiv =
