@@ -1,12 +1,15 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,17 +19,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.TestOverviewFragment;
 import com.pascoapp.wba02_android.firebasePojos.Question;
+import com.pascoapp.wba02_android.firebasePojos.Test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class TakeTestActivity extends AppCompatActivity {
+public class TakeTestActivity extends AppCompatActivity
+        implements TestOverviewFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_TEST_KEY =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
     public static final String EXTRA_TEST_TITLE =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testTitle";
+    public static final String EXTRA_TEST_POJO =
+            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testPojo";
 
     private ViewPager mPager;
 
@@ -45,7 +54,6 @@ public class TakeTestActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getTestTitle());
 
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
@@ -53,7 +61,7 @@ public class TakeTestActivity extends AppCompatActivity {
         mPager.setOffscreenPageLimit(10);
 
         mQuestions = new ArrayList<>();
-        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), mQuestions);
+        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTest(), mQuestions);
         mPager.setAdapter(mPagerAdapter);
 
         String testId = getTestId();
@@ -65,9 +73,9 @@ public class TakeTestActivity extends AppCompatActivity {
         return intent.getStringExtra(EXTRA_TEST_KEY);
     }
 
-    public String getTestTitle() {
+    public Test getTest() {
         Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_TEST_TITLE);
+        return (Test) intent.getSerializableExtra(EXTRA_TEST_POJO);
     }
 
     private void getQuestions(final String testKey) {
@@ -113,4 +121,8 @@ public class TakeTestActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

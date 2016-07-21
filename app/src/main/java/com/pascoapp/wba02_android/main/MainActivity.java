@@ -37,6 +37,7 @@ import com.pascoapp.wba02_android.CheckCurrentUser;
 import com.pascoapp.wba02_android.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.TestOverviewActivity;
 import com.pascoapp.wba02_android.firebasePojos.Course;
 import com.pascoapp.wba02_android.firebasePojos.Lecturer;
 import com.pascoapp.wba02_android.firebasePojos.Test;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this, TakeTestActivity.class);
                                 intent.putExtra(TakeTestActivity.EXTRA_TEST_KEY, testKey);
                                 intent.putExtra(TakeTestActivity.EXTRA_TEST_TITLE, testTitle);
+                                intent.putExtra(TakeTestActivity.EXTRA_TEST_POJO, test);
                                 startActivity(intent);
                             }
                         });

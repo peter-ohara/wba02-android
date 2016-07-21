@@ -56,6 +56,7 @@ dependencies {
     // Firebase Crash Reporting
     compile 'com.google.firebase:firebase-crash:9.0.2'
 
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -2,13 +2,14 @@ package com.pascoapp.wba02_android.firebasePojos;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Handles Question logic
  */
 @IgnoreExtraProperties
-public class Question {
+public class Question implements Serializable {
 
     public String type;
 

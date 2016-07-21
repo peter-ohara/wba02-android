@@ -2,11 +2,13 @@ package com.pascoapp.wba02_android.firebasePojos;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Handles Test logic
  */
 @IgnoreExtraProperties
-public class Test {
+public class Test implements Serializable {
 
     public String type;
     public Long duration;

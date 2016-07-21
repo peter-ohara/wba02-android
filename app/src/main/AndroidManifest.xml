@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pascoapp.wba02_android" >
+    package="com.pascoapp.wba02_android">
 
     <!-- Parse Data permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="bbiWrAYIkXlZhvNDsnzAtUMABa90uhZYZYSiWA6O" />
@@ -25,9 +25,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".takeTest.TakeTestActivity"
-            android:label="@string/title_activity_take_test"
+            android:label=""
             android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
@@ -37,7 +37,7 @@
         <activity
             android:name=".CheckCurrentUser"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,26 +47,16 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".main.MainActivity" >
+            android:parentActivityName=".main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
         <activity
-            android:name="com.pascoapp.wba02_android.setup.SetupWizardActivity"
-            android:label="@string/title_activity_setup_wizard"
-            android:parentActivityName=".AuthenticateUserActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AuthenticateUserActivity" />
-        </activity>
-
-        <activity
             android:name=".Inbox.MessageListActivity"
             android:label="@string/title_message_list"
             android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
@@ -75,16 +65,15 @@
             android:name=".Inbox.MessageDetailActivity"
             android:label=""
             android:parentActivityName=".Inbox.MessageListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Inbox.MessageListActivity" />
         </activity>
-
         <activity
             android:name=".CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName=".HelpActivity" >
+            android:parentActivityName=".HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.HelpActivity" />
@@ -92,7 +81,16 @@
         <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".main.MainActivity" >
+            android:parentActivityName=".main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TestOverviewActivity"
+            android:label=""
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.main.MainActivity" />
