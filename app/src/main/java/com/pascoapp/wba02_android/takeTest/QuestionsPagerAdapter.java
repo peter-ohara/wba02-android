@@ -4,9 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.pascoapp.wba02_android.TestOverviewFragment;
+import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
 import com.pascoapp.wba02_android.firebasePojos.Question;
 import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.takeTest.TestSection.EssayFragment;
+import com.pascoapp.wba02_android.takeTest.TestSection.FillInFragment;
 
 import java.util.List;
 
@@ -30,7 +32,8 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0) {
             return TestOverviewFragment.newInstance(mTest);
         } else if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
-            return McqFragment.newInstance(currentQuestion);
+            return TestOverviewFragment.newInstance(mTest);
+            // return McqFragment.newInstance(currentQuestion);
         } else if (currentQuestion.getType().equalsIgnoreCase("fillIn")) {
             return FillInFragment.newInstance(currentQuestion);
         } else if (currentQuestion.getType().equalsIgnoreCase("essay")) {

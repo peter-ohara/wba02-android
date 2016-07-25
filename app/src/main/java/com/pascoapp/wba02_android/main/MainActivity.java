@@ -37,7 +37,6 @@ import com.pascoapp.wba02_android.CheckCurrentUser;
 import com.pascoapp.wba02_android.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.TestOverviewActivity;
 import com.pascoapp.wba02_android.firebasePojos.Course;
 import com.pascoapp.wba02_android.firebasePojos.Lecturer;
 import com.pascoapp.wba02_android.firebasePojos.Test;

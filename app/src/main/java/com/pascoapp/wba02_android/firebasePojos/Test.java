@@ -10,6 +10,7 @@ import java.io.Serializable;
 @IgnoreExtraProperties
 public class Test implements Serializable {
 
+    public static final String TESTS_KEY = "tests";
     public String type;
     public Long duration;
     public String instructions;

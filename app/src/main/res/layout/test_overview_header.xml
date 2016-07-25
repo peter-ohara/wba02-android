@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="test"
+            type="com.pascoapp.wba02_android.takeTest.TestViewModel" />
+    </data>
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/header_background"
     android:id="@+id/constraintLayout"
     tools:showIn="@layout/activity_take_test">
 
@@ -24,7 +31,7 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="ENGL 213"
+        android:text="@{test.courseCode, default=CSM2016}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/courseCode"
@@ -40,7 +47,7 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="Communication Skills"
+        android:text="@{test.courseName}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/courseName"
@@ -67,7 +74,7 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="March 2016 Midsem"
+        android:text="@{test.testName}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/testName"
@@ -80,7 +87,7 @@
         app:layout_constraintVertical_bias="0.63" />
 
     <TextView
-        android:text="2h 30m"
+        android:text="@{test.testDuration}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/testDuration"
@@ -95,5 +102,6 @@
 
 
 </android.support.constraint.ConstraintLayout>
+</layout>
 
             

@@ -1,15 +1,15 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,16 +19,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.TestOverviewFragment;
+import com.pascoapp.wba02_android.databinding.ActivityTakeTestBinding;
+import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
 import com.pascoapp.wba02_android.firebasePojos.Question;
 import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.takeTest.TestSection.QuestionComparator;
+import com.pascoapp.wba02_android.takeTest.TestSection.TestSectionFragment;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class TakeTestActivity extends AppCompatActivity
-        implements TestOverviewFragment.OnFragmentInteractionListener {
+        implements TestOverviewFragment.OnFragmentInteractionListener,
+        TestSectionFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_TEST_KEY =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
@@ -49,23 +52,70 @@ public class TakeTestActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_take_test);
+        ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
+        binding.setTest(new TestViewModel());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
-        coordinatorLayoutView = findViewById(R.id.snackbarPosition);
-        mPager = (ViewPager) findViewById(R.id.viewpager);
-        mPager.setOffscreenPageLimit(10);
+//        loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
+//        coordinatorLayoutView = findViewById(R.id.snackbarPosition);
+//        mPager = (ViewPager) findViewById(R.id.viewpager);
+//        mPager.setOffscreenPageLimit(10);
+//
+//        showTestOverview();
+//
+//        mQuestions = new ArrayList<>();
+//        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTest(), mQuestions);
+//        mPager.setAdapter(mPagerAdapter);
 
-        mQuestions = new ArrayList<>();
-        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTest(), mQuestions);
-        mPager.setAdapter(mPagerAdapter);
+        showTestOverview();
 
-        String testId = getTestId();
-        getQuestions(testId);
+//        String testId = getTestId();
+//        getQuestions(testId);
+    }
+
+    private void showTestOverview() {
+        // Create fragment and give it an argument specifying the article it should show
+        TestOverviewFragment newFragment = TestOverviewFragment.newInstance(new Test());
+        //Bundle args = new Bundle();
+        //args.putInt(TestOverviewFragment.ARG_POSITION, position);
+        //newFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void showSectionScreen() {
+
+    }
+
+    private void showMcqScreen() {
+
+    }
+
+    private void showEssayScreen() {
+
+    }
+
+    private void showFillInScreen() {
+
+    }
+
+    private void showEndScreen() {
+
+    }
+
+    private void showScoreScreen() {
+
     }
 
     public String getTestId() {
