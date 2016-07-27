@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/programmesTextView"
             android:layout_marginTop="8dp"
             app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="32dp"
             android:layout_marginEnd="16dp" />
 
         <TextView
@@ -90,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@+id/instructionsTextView"
             android:layout_marginTop="8dp"
             app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="32dp"
             android:layout_marginEnd="16dp" />
 
 

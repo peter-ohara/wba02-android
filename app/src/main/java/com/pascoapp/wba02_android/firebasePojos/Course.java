@@ -1,6 +1,9 @@
 package com.pascoapp.wba02_android.firebasePojos;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Handles Course logic
@@ -8,6 +11,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Course {
 
+    public static final String COURSES_KEY = "courses";
     public String code;
     public String name;
     public Long semester;
@@ -26,11 +30,6 @@ public class Course {
         this.level = level;
         this.programme = programme;
         this.school = school;
-    }
-
-    public Course(String code, String name) {
-        this.code = code;
-        this.name = name;
     }
 
     public String getCode() {
@@ -55,6 +54,12 @@ public class Course {
 
     public String getSchool() {
         return school;
+    }
+
+    public static void fetchCourse(String courseKey, ValueEventListener valueEventListener) {
+        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
+                .child(COURSES_KEY).child(courseKey);
+        testRef.addValueEventListener(valueEventListener);
     }
 
     @Override

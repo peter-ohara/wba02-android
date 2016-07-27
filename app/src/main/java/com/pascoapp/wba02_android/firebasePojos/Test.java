@@ -1,8 +1,14 @@
 package com.pascoapp.wba02_android.firebasePojos;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Handles Test logic
@@ -13,7 +19,7 @@ public class Test implements Serializable {
     public static final String TESTS_KEY = "tests";
     public String type;
     public Long duration;
-    public String instructions;
+    public List<String> instructions;
 
     public String lecturer;
     public String course;
@@ -26,7 +32,7 @@ public class Test implements Serializable {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Test(String type, Long duration, String instructions, String lecturer, String course, String programme, String school, Long year) {
+    public Test(String type, Long duration, List<String> instructions, String lecturer, String course, String programme, String school, Long year) {
         this.type = type;
         this.duration = duration;
         this.instructions = instructions;
@@ -45,7 +51,7 @@ public class Test implements Serializable {
         return duration;
     }
 
-    public String getInstructions() {
+    public List<String> getInstructions() {
         return instructions;
     }
 
@@ -67,6 +73,12 @@ public class Test implements Serializable {
 
     public Long getYear() {
         return year;
+    }
+
+    public static void fetchTest(String testKey, ValueEventListener valueEventListener) {
+        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
+                .child(TESTS_KEY).child(testKey);
+        testRef.addValueEventListener(valueEventListener);
     }
 
     @Override

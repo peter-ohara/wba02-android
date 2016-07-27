@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -47,17 +48,24 @@ public class TakeTestActivity extends AppCompatActivity
     private ProgressBar loadingIndicator;
     private View coordinatorLayoutView;
     private DatabaseReference mQuestionsRef;
+    private Button bottomButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
-        binding.setTest(new TestViewModel());
+        TestViewModel testViewModel = new TestViewModel(TakeTestActivity.this, getTestKey());
+        binding.setTest(testViewModel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        bottomButton = (Button) findViewById(R.id.bottomButton);
+
+        showTestOverview(getTestKey());
+
 
 //        loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
 //        coordinatorLayoutView = findViewById(R.id.snackbarPosition);
@@ -70,15 +78,13 @@ public class TakeTestActivity extends AppCompatActivity
 //        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTest(), mQuestions);
 //        mPager.setAdapter(mPagerAdapter);
 
-        showTestOverview();
-
-//        String testId = getTestId();
-//        getQuestions(testId);
+//        String testKey = getTestKey();
+//        getQuestions(testKey);
     }
 
-    private void showTestOverview() {
+    private void showTestOverview(String testKey) {
         // Create fragment and give it an argument specifying the article it should show
-        TestOverviewFragment newFragment = TestOverviewFragment.newInstance(new Test());
+        TestOverviewFragment newFragment = TestOverviewFragment.newInstance(testKey);
         //Bundle args = new Bundle();
         //args.putInt(TestOverviewFragment.ARG_POSITION, position);
         //newFragment.setArguments(args);
@@ -92,6 +98,8 @@ public class TakeTestActivity extends AppCompatActivity
 
         // Commit the transaction
         transaction.commit();
+        bottomButton.setText("Start &#10175;");
+        bottomButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_right, 0);
     }
 
     private void showSectionScreen() {
@@ -118,7 +126,7 @@ public class TakeTestActivity extends AppCompatActivity
 
     }
 
-    public String getTestId() {
+    public String getTestKey() {
         Intent intent = getIntent();
         return intent.getStringExtra(EXTRA_TEST_KEY);
     }

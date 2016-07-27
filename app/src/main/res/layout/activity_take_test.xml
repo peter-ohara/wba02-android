@@ -63,5 +63,13 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <Button
+        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:theme="@style/bottomButton"
+        android:id="@+id/bottomButton" />
+
 </android.support.design.widget.CoordinatorLayout>
 </layout>

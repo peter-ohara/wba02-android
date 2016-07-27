@@ -9,6 +9,7 @@ import com.pascoapp.wba02_android.BR;
 import com.pascoapp.wba02_android.BindingHolder;
 import com.pascoapp.wba02_android.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +18,11 @@ import java.util.List;
 
 public class InstructionsAdapter extends RecyclerView.Adapter<BindingHolder> {
 
-    private List<String> mInstructions;
+    private List<String> mInstructions = new ArrayList<>();
 
-    public InstructionsAdapter(List<String> mInstructions) {
-        this.mInstructions = mInstructions;
+    public void setInstructions(List<String> instructions) {
+        mInstructions.clear();
+        mInstructions.addAll(instructions);
     }
 
     @Override
@@ -42,5 +44,4 @@ public class InstructionsAdapter extends RecyclerView.Adapter<BindingHolder> {
     public int getItemCount() {
         return mInstructions.size();
     }
-
 }

@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android.takeTest.TestOverview;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.R;
@@ -31,9 +33,9 @@ import java.util.ArrayList;
 public class TestOverviewFragment extends Fragment {
 
     // the fragment initialization parameters
-    private static final String ARG_TEST = "test";
+    private static final String ARG_TEST_KEY = "test";
 
-    private Test mTest;
+    private String mTestKey;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,12 +48,13 @@ public class TestOverviewFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment TestOverviewFragment.
+     * @param testKey
      */
     // TODO: Rename and change types and number of parameters
-    public static TestOverviewFragment newInstance(Test test) {
+    public static TestOverviewFragment newInstance(String testKey) {
         TestOverviewFragment fragment = new TestOverviewFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TEST, test);
+        args.putSerializable(ARG_TEST_KEY, testKey);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +63,7 @@ public class TestOverviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mTest = (Test) getArguments().getSerializable(ARG_TEST);
+            mTestKey = getArguments().getString(ARG_TEST_KEY);
         }
     }
 
@@ -70,16 +73,17 @@ public class TestOverviewFragment extends Fragment {
 
         FragmentTestOverviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_overview, container, false);
         View view = binding.getRoot();
-        binding.setTest(new TestViewModel());
+        TestViewModel testViewModel = new TestViewModel(getContext(), mTestKey);
+        binding.setTest(testViewModel);
 
-        setProgrammes(view);
-        setInstructions(view);
+        setProgrammes(view, testViewModel);
+        setInstructions(view, testViewModel);
 
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void setProgrammes(View view) {
+    private void setProgrammes(View view, TestViewModel testViewModel) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.programmesList);
 
         // use this setting to improve performance if you know that changes
@@ -90,15 +94,13 @@ public class TestOverviewFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        TestViewModel test = new TestViewModel();
-        ArrayList<Programme> programmes = (ArrayList<Programme>) test.getProgrammes();
+        ArrayList<Programme> programmes = (ArrayList<Programme>) testViewModel.getProgrammes();
 
-        // specify an adapter (see also next example)
         ProgrammesAdapter adapter = new ProgrammesAdapter(programmes);
         recyclerView.setAdapter(adapter);
     }
 
-    private void setInstructions(View view) {
+    private void setInstructions(View view, final TestViewModel testViewModel) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.instructionsList);
 
         // use this setting to improve performance if you know that changes
@@ -109,11 +111,14 @@ public class TestOverviewFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        TestViewModel test = new TestViewModel();
-        ArrayList<String> instructions = (ArrayList<String>) test.getInstructions();
-
-        // specify an adapter (see also next example)
-        InstructionsAdapter adapter = new InstructionsAdapter(instructions);
+        final InstructionsAdapter adapter = new InstructionsAdapter();
+        testViewModel.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                adapter.setInstructions(testViewModel.getInstructions());
+                adapter.notifyDataSetChanged();
+            }
+        });
         recyclerView.setAdapter(adapter);
     }
 

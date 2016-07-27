@@ -28,24 +28,6 @@ public class Lecturer {
         this.lastName = lastName;
     }
 
-    public static void getLecturer(String key, final Lecturer.LecturerEventListener callback) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(LECTURERS_KEY).child(key);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
-                callback.onDataChange(lecturer);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -62,6 +44,12 @@ public class Lecturer {
         return lastName;
     }
 
+    public static void fetchLecturer(String lecturerKey, ValueEventListener valueEventListener) {
+        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
+                .child(LECTURERS_KEY).child(lecturerKey);
+        testRef.addValueEventListener(valueEventListener);
+    }
+
     @Override
     public String toString() {
         return "Lecturer{" +
@@ -69,8 +57,5 @@ public class Lecturer {
                 ", lastName='" + lastName + '\'' +
                 '}';
     }
-    
-    public interface LecturerEventListener {
-        void onDataChange(Lecturer lecturer);
-    }
+
 }

@@ -17,12 +17,12 @@ import java.util.List;
  */
 class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    private final Test mTest;
+    private final String mTestKey;
     private List<Question> mQuestions;
 
-    public QuestionsPagerAdapter(FragmentManager fm, Test test, List<Question> questions) {
+    public QuestionsPagerAdapter(FragmentManager fm, String test, List<Question> questions) {
         super(fm);
-        mTest = test;
+        mTestKey = test;
         mQuestions = questions;
     }
 
@@ -30,9 +30,9 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Question currentQuestion = mQuestions.get(position);
         if (position == 0) {
-            return TestOverviewFragment.newInstance(mTest);
+            return TestOverviewFragment.newInstance(mTestKey);
         } else if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
-            return TestOverviewFragment.newInstance(mTest);
+            return TestOverviewFragment.newInstance(mTestKey);
             // return McqFragment.newInstance(currentQuestion);
         } else if (currentQuestion.getType().equalsIgnoreCase("fillIn")) {
             return FillInFragment.newInstance(currentQuestion);
