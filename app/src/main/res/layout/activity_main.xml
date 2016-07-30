@@ -21,20 +21,28 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/select_department_button"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:titleTextAppearance="@style/Toolbar.TitleText" />
-
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            layout="@layout/content_main"/>
+    </android.support.v4.widget.NestedScrollView>
 
-    <include
-        layout="@layout/content_main"
-        android:paddingBottom="48dp" />
+    <Button
+        android:text="Change School"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:drawableStart="@drawable/ic_file_document_box_white_24dp"
+        android:theme="@style/greenButton"
+        android:background="@color/primary"
+        android:id="@+id/bottomBar"
+        android:drawableLeft="@drawable/ic_file_document_box_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,8 +1,6 @@
 package com.pascoapp.wba02_android.takeTest.TestOverview;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.databinding.FragmentTestOverviewBinding;
-import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
 import java.util.ArrayList;
@@ -71,16 +66,8 @@ public class TestOverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        FragmentTestOverviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_overview, container, false);
-        View view = binding.getRoot();
-        TestViewModel testViewModel = new TestViewModel(getContext(), mTestKey);
-        binding.setTest(testViewModel);
-
-        setProgrammes(view, testViewModel);
-        setInstructions(view, testViewModel);
-
         // Inflate the layout for this fragment
-        return view;
+        return null;
     }
 
     private void setProgrammes(View view, TestViewModel testViewModel) {
@@ -112,13 +99,6 @@ public class TestOverviewFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         final InstructionsAdapter adapter = new InstructionsAdapter();
-        testViewModel.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                adapter.setInstructions(testViewModel.getInstructions());
-                adapter.notifyDataSetChanged();
-            }
-        });
         recyclerView.setAdapter(adapter);
     }
 

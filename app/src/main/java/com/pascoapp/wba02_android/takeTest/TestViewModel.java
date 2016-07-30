@@ -1,15 +1,15 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.android.databinding.library.baseAdapters.BR;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -25,15 +25,18 @@ import java.util.List;
  * Created by peter on 7/23/16.
  */
 
-public class TestViewModel extends BaseObservable {
+public class TestViewModel {
 
     public String courseCode;
     public String courseName;
+    public Drawable icon;
     public String testName;
     public String testDuration;
     public Drawable lecturerIcon;
     public String lecturerName;
     public List<String> instructions = new ArrayList<>();
+
+    public int questionCount;
 
     private Context context;
     private String testKey;
@@ -44,27 +47,27 @@ public class TestViewModel extends BaseObservable {
         fetchTest(testKey);
     }
 
-    @Bindable
+
     public String getCourseCode() {
         return courseCode;
     }
 
     public void setCourseCode(Course course) {
         courseCode = course.getCode();
-        notifyPropertyChanged(BR.courseCode);
+
     }
 
-    @Bindable
+
     public String getCourseName() {
         return courseName;
     }
 
     private void setCourseName(Course course) {
         courseName = course.getName();
-        notifyPropertyChanged(BR.courseName);
+
     }
 
-    @Bindable
+
     public String getTestName() {
         return testName;
     }
@@ -84,20 +87,19 @@ public class TestViewModel extends BaseObservable {
             type = "Unknown";
         }
         testName = year + " " + type;
-        notifyPropertyChanged(BR.testName);
+
     }
 
-    @Bindable
     public String getTestDuration() {
         return testDuration;
     }
 
     private void setTestDuration(Test test) {
         testDuration = test.getDuration() + "hrs";
-        notifyPropertyChanged(BR.testDuration);
+
     }
 
-    @Bindable
+
     public Drawable getLecturerIcon() {
         return lecturerIcon;
     }
@@ -112,22 +114,57 @@ public class TestViewModel extends BaseObservable {
                         name.substring(0, 1).toUpperCase(),
                         color
                 );
-        notifyPropertyChanged(BR.lecturerIcon);
+
     }
 
-    @Bindable
+
     public String getLecturerName() {
         return lecturerName;
     }
 
     private void setLecturerName(Lecturer lecturer) {
         lecturerName = lecturer.getFirstName() + " " + lecturer.getLastName();
-        notifyPropertyChanged(BR.lecturerName);
+
     }
 
     public void setInstructions(Test test) {
         instructions.clear();
         instructions.addAll(test.getInstructions());
+    }
+
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
+
+    }
+
+
+    public Drawable getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String name) {
+        // generate color based on a key (same key returns the same color), useful for list/grid views
+        ColorGenerator generator = ColorGenerator.DEFAULT;
+        int color = generator.getColor(name);
+
+        int dp = (int) (13 * Resources.getSystem().getDisplayMetrics().density);
+
+        icon = TextDrawable.builder()
+                .beginConfig()
+                .fontSize(dp) /* size in px */
+                .toUpperCase()
+                .endConfig()
+                .buildRound(
+                        name.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0] +
+                                "\n" + name.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[1],
+                        color
+                );
+
     }
 
     private void fetchTest(String testKey) {
@@ -156,6 +193,7 @@ public class TestViewModel extends BaseObservable {
                 Course course = dataSnapshot.getValue(Course.class);
                 setCourseCode(course);
                 setCourseName(course);
+                setIcon(course.getCode());
             }
 
             @Override

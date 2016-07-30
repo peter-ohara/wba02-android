@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.databinding.ActivityTakeTestBinding;
 import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
 import com.pascoapp.wba02_android.firebasePojos.Question;
 import com.pascoapp.wba02_android.firebasePojos.Test;
@@ -54,15 +52,15 @@ public class TakeTestActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
+//        ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
         TestViewModel testViewModel = new TestViewModel(TakeTestActivity.this, getTestKey());
-        binding.setTest(testViewModel);
+//        binding.setTest(testViewModel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bottomButton = (Button) findViewById(R.id.bottomButton);
+        bottomButton = (Button) findViewById(R.id.bottomBar);
 
         showTestOverview(getTestKey());
 

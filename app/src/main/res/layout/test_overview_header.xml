@@ -31,7 +31,6 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="@{test.courseCode, default=CSM2016}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/courseCode"
@@ -47,7 +46,6 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="@{test.courseName}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/courseName"
@@ -74,7 +72,6 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:text="@{test.testName}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/testName"
@@ -87,7 +84,6 @@
         app:layout_constraintVertical_bias="0.63" />
 
     <TextView
-        android:text="@{test.testDuration}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/testDuration"

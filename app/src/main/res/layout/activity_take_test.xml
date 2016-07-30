@@ -39,12 +39,12 @@
                 app:layout_collapseMode="parallax"
                 android:id="@+id/headerBackground" />
 
-            <include layout="@layout/test_overview_header"
-                android:id="@+id/testHeader"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="?attr/actionBarSize"
-                bind:test="@{test}"/>
+            <!--<include layout="@layout/test_overview_header"-->
+                <!--android:id="@+id/testHeader"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginTop="?attr/actionBarSize"-->
+                <!--bind:test="@{test}"/>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -68,8 +68,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:theme="@style/bottomButton"
-        android:id="@+id/bottomButton" />
+        android:theme="@style/greenButton"
+        android:id="@+id/bottomBar" />
 
 </android.support.design.widget.CoordinatorLayout>
 </layout>

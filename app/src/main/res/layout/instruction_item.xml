@@ -23,7 +23,6 @@
         android:layout_marginTop="12dp" />
 
     <TextView
-        android:text="@{instruction}"
         tools:text="Circle the correct answer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -20,7 +20,6 @@
             android:id="@+id/programmeIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@{programmeIcon}"
             tools:src="@mipmap/ic_launcher"
             app:layout_constraintLeft_toLeftOf="@+id/constraintLayout3"
             android:layout_marginLeft="16dp"
@@ -28,7 +27,6 @@
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
         <TextView
-            android:text="@{programmeName}"
             tools:text="Computer Science [B.Sc.]"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
