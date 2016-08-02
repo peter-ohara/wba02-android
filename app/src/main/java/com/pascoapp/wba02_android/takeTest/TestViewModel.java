@@ -1,25 +1,19 @@
 package com.pascoapp.wba02_android.takeTest;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.pascoapp.wba02_android.firebasePojos.Course;
-import com.pascoapp.wba02_android.firebasePojos.Lecturer;
+import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.firebasePojos.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import trikita.jedux.Action;
+import trikita.jedux.Store;
 
 /**
  * Created by peter on 7/23/16.
@@ -27,52 +21,24 @@ import java.util.List;
 
 public class TestViewModel {
 
-    public String courseCode;
-    public String courseName;
-    public Drawable icon;
-    public String testName;
-    public String testDuration;
-    public Drawable lecturerIcon;
-    public String lecturerName;
-    public List<String> instructions = new ArrayList<>();
+    private Test test;
 
-    public int questionCount;
+    private Store<Action, State> store;
 
-    private Context context;
-    private String testKey;
-
-    public TestViewModel(Context context, String testKey) {
-        this.context = context;
-        this.testKey = testKey;
-        fetchTest(testKey);
+    public TestViewModel(Test test, Store<Action, State> store) {
+        this.test = test;
+        this.store = store;
     }
-
 
     public String getCourseCode() {
-        return courseCode;
+        return store.getState().courses().get(test.getCourse()).getCode();
     }
-
-    public void setCourseCode(Course course) {
-        courseCode = course.getCode();
-
-    }
-
 
     public String getCourseName() {
-        return courseName;
+        return store.getState().courses().get(test.getCourse()).getName();
     }
-
-    private void setCourseName(Course course) {
-        courseName = course.getName();
-
-    }
-
 
     public String getTestName() {
-        return testName;
-    }
-
-    private void setTestName(Test test) {
         Long year = test.getYear();
         String type;
         if (test.getType().equalsIgnoreCase("endOfSem")) {
@@ -86,75 +52,46 @@ public class TestViewModel {
         } else {
             type = "Unknown";
         }
-        testName = year + " " + type;
-
+        return year + " " + type;
     }
+
 
     public String getTestDuration() {
-        return testDuration;
+        return test.getDuration() + "hrs";
     }
-
-    private void setTestDuration(Test test) {
-        testDuration = test.getDuration() + "hrs";
-
-    }
-
 
     public Drawable getLecturerIcon() {
-        return lecturerIcon;
-    }
-
-    public void setLecturerIcon(String name) {
+        // TODO: Fetch Actual lecturer name
+        String name = getTestName();
         // generate color based on a key (same key returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getColor(name);
 
-        lecturerIcon = TextDrawable.builder()
+        return TextDrawable.builder()
                 .buildRound(
                         name.substring(0, 1).toUpperCase(),
                         color
                 );
-
     }
 
 
     public String getLecturerName() {
-        return lecturerName;
+        return "Prof. Sesi Gob3";
     }
-
-    private void setLecturerName(Lecturer lecturer) {
-        lecturerName = lecturer.getFirstName() + " " + lecturer.getLastName();
-
-    }
-
-    public void setInstructions(Test test) {
-        instructions.clear();
-        instructions.addAll(test.getInstructions());
-    }
-
 
     public int getQuestionCount() {
-        return questionCount;
+        return 42;
     }
-
-    public void setQuestionCount(int questionCount) {
-        this.questionCount = questionCount;
-
-    }
-
 
     public Drawable getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String name) {
+        String name = store.getState().courses().get(test.getCourse()).getCode();
         // generate color based on a key (same key returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(name);
 
         int dp = (int) (13 * Resources.getSystem().getDisplayMetrics().density);
 
-        icon = TextDrawable.builder()
+        return TextDrawable.builder()
                 .beginConfig()
                 .fontSize(dp) /* size in px */
                 .toUpperCase()
@@ -164,68 +101,6 @@ public class TestViewModel {
                                 "\n" + name.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[1],
                         color
                 );
-
-    }
-
-    private void fetchTest(String testKey) {
-        Test.fetchTest(testKey, new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Test test = dataSnapshot.getValue(Test.class);
-                setTestDuration(test);
-                setTestName(test);
-                setInstructions(test);
-                fetchCourse(test.getCourse());
-                fetchLecturer(test.getLecturer());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void fetchCourse(String courseKey) {
-        Course.fetchCourse(courseKey, new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Course course = dataSnapshot.getValue(Course.class);
-                setCourseCode(course);
-                setCourseName(course);
-                setIcon(course.getCode());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void fetchLecturer(String lecturerKey) {
-        Lecturer.fetchLecturer(lecturerKey, new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
-                setLecturerName(lecturer);
-                setLecturerIcon(lecturer.getFirstName());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public View.OnClickListener onClickStart() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Starting Test...", Toast.LENGTH_LONG).show();
-            }
-        };
     }
 
     public List<Programme> getProgrammes() {
@@ -237,6 +112,13 @@ public class TestViewModel {
     }
 
     public List<String> getInstructions() {
-        return instructions;
+        return test.getInstructions();
+    }
+
+    @Override
+    public String toString() {
+        return "TestViewModel{" +
+                "test=" + test +
+                '}';
     }
 }

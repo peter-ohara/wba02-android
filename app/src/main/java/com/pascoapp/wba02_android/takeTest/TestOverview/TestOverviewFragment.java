@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
 import java.util.ArrayList;
+
+import trikita.jedux.Action;
+import trikita.jedux.Store;
 
 
 /**
@@ -33,6 +37,8 @@ public class TestOverviewFragment extends Fragment {
     private String mTestKey;
 
     private OnFragmentInteractionListener mListener;
+
+    private Store<Action, State> store;
 
     public TestOverviewFragment() {
         // Required empty public constructor
@@ -83,7 +89,7 @@ public class TestOverviewFragment extends Fragment {
 
         ArrayList<Programme> programmes = (ArrayList<Programme>) testViewModel.getProgrammes();
 
-        ProgrammesAdapter adapter = new ProgrammesAdapter(programmes);
+        ProgrammesAdapter adapter = new ProgrammesAdapter(programmes, store);
         recyclerView.setAdapter(adapter);
     }
 
@@ -98,7 +104,7 @@ public class TestOverviewFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        final InstructionsAdapter adapter = new InstructionsAdapter();
+        final InstructionsAdapter adapter = new InstructionsAdapter(store);
         recyclerView.setAdapter(adapter);
     }
 

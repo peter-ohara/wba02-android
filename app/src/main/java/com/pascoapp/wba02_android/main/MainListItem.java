@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.main;
 
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
@@ -25,5 +25,13 @@ public class MainListItem {
 
     public TestViewModel getTestViewModel() {
         return testViewModel;
+    }
+
+    @Override
+    public String toString() {
+        return "MainListItem{" +
+                "courseViewModel=" + courseViewModel +
+                ", testViewModel=" + testViewModel +
+                '}';
     }
 }

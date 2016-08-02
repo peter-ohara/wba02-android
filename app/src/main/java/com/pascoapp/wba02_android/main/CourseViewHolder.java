@@ -1,9 +1,11 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.main;
 
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.pascoapp.wba02_android.R;
 
 /**
  * Created by peter on 7/25/16.

@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
-import com.pascoapp.wba02_android.TestViewHolder;
+import com.pascoapp.wba02_android.State;
+import com.pascoapp.wba02_android.main.TestViewHolder;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.firebasePojos.Programme;
 
 import java.util.List;
+
+import trikita.jedux.Action;
+import trikita.jedux.Store;
 
 /**
  * Created by peter on 7/24/16.
@@ -22,16 +26,18 @@ import java.util.List;
 public class ProgrammesAdapter extends RecyclerView.Adapter<TestViewHolder> {
 
     private List<Programme> mProgrammes;
+    private Store<Action, State> store;
 
-    public ProgrammesAdapter(List<Programme> mProgrammes) {
+    public ProgrammesAdapter(List<Programme> mProgrammes, Store<Action, State> store) {
         this.mProgrammes = mProgrammes;
+        this.store = store;
     }
 
     @Override
     public TestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.programme_item, parent, false);
-        TestViewHolder holder = new TestViewHolder(v);
+        TestViewHolder holder = new TestViewHolder(v, store);
         return holder;
     }
 

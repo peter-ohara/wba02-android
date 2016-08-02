@@ -1,7 +1,5 @@
 package com.pascoapp.wba02_android.firebasePojos;
 
-import android.os.NetworkOnMainThreadException;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -11,7 +9,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -23,6 +20,7 @@ import rx.Subscriber;
 public class Course {
 
     public static final String COURSES_KEY = "courses";
+    public String key;
     public String code;
     public String name;
     public Long semester;
@@ -41,6 +39,10 @@ public class Course {
         this.level = level;
         this.programme = programme;
         this.school = school;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getCode() {
@@ -115,10 +117,11 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-                "code='" + code + '\'' +
+                "key='" + key + '\'' +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
-                ", semester='" + semester + '\'' +
-                ", level='" + level + '\'' +
+                ", semester=" + semester +
+                ", level=" + level +
                 ", programme='" + programme + '\'' +
                 ", school='" + school + '\'' +
                 '}';

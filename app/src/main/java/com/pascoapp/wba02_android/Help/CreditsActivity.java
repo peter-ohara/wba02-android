@@ -1,7 +1,9 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.Help;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.pascoapp.wba02_android.R;
 
 public class CreditsActivity extends Activity {
 

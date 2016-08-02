@@ -17,6 +17,7 @@ import java.util.List;
 public class Test implements Serializable {
 
     public static final String TESTS_KEY = "tests";
+    public String key;
     public String type;
     public Long duration;
     public List<String> instructions;
@@ -41,6 +42,10 @@ public class Test implements Serializable {
         this.programme = programme;
         this.school = school;
         this.year = year;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getType() {
@@ -84,14 +89,15 @@ public class Test implements Serializable {
     @Override
     public String toString() {
         return "Test{" +
-                "type='" + type + '\'' +
-                ", duration='" + duration + '\'' +
-                ", instructions='" + instructions + '\'' +
+                "key='" + key + '\'' +
+                ", type='" + type + '\'' +
+                ", duration=" + duration +
+                ", instructions=" + instructions +
                 ", lecturer='" + lecturer + '\'' +
                 ", course='" + course + '\'' +
                 ", programme='" + programme + '\'' +
                 ", school='" + school + '\'' +
-                ", year='" + year + '\'' +
+                ", year=" + year +
                 '}';
     }
 }

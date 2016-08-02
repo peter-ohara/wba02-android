@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.main;
 
 import android.graphics.drawable.Drawable;
 
@@ -52,5 +52,14 @@ public class CourseViewModel {
                         name.toUpperCase(),
                         color
                 );
+    }
+
+    @Override
+    public String toString() {
+        return "CourseViewModel{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", icon=" + icon +
+                '}';
     }
 }

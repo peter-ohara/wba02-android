@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.pascoapp.wba02_android.main.MainActivity;
 
 import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
@@ -21,18 +20,11 @@ import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
  */
 public class CheckCurrentUser extends Activity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.branded_launch_screen);
-
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {

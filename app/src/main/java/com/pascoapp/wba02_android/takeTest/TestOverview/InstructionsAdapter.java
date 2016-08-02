@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pascoapp.wba02_android.TestViewHolder;
+import com.pascoapp.wba02_android.State;
+import com.pascoapp.wba02_android.main.TestViewHolder;
 import com.pascoapp.wba02_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import trikita.jedux.Action;
+import trikita.jedux.Store;
 
 /**
  * Created by peter on 7/24/16.
@@ -18,6 +22,12 @@ import java.util.List;
 public class InstructionsAdapter extends RecyclerView.Adapter<TestViewHolder> {
 
     private List<String> mInstructions = new ArrayList<>();
+
+    private Store<Action, State> store;
+
+    public InstructionsAdapter(Store<Action, State> store) {
+        this.store = store;
+    }
 
     public void setInstructions(List<String> instructions) {
         mInstructions.clear();
@@ -28,7 +38,7 @@ public class InstructionsAdapter extends RecyclerView.Adapter<TestViewHolder> {
     public TestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.instruction_item, parent, false);
-        TestViewHolder holder = new TestViewHolder(v);
+        TestViewHolder holder = new TestViewHolder(v, store);
         return holder;
     }
 

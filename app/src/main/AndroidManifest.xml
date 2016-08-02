@@ -20,17 +20,17 @@
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
 
         <activity
-            android:name=".main.MainActivity"
+            android:name=".MainActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".takeTest.TakeTestActivity"
             android:label=""
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
 
         <!-- Start here -->
@@ -47,19 +47,19 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".Inbox.MessageListActivity"
             android:label="@string/title_message_list"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".Inbox.MessageDetailActivity"
@@ -71,20 +71,20 @@
                 android:value=".Inbox.MessageListActivity" />
         </activity>
         <activity
-            android:name=".CreditsActivity"
+            android:name=".Help.CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName=".HelpActivity">
+            android:parentActivityName=".Help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.HelpActivity" />
+                android:value="com.pascoapp.wba02_android.Help.HelpActivity" />
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name=".Help.HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.main.MainActivity" />
+                android:value="com.pascoapp.wba02_android.MainActivity" />
         </activity>
     </application>
 

@@ -53,7 +53,7 @@ public class TakeTestActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
-        TestViewModel testViewModel = new TestViewModel(TakeTestActivity.this, getTestKey());
+//        TestViewModel testViewModel = new TestViewModel(TakeTestActivity.this, getTestKey());
 //        binding.setTest(testViewModel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
