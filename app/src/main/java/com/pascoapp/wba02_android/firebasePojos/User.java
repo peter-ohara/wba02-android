@@ -10,11 +10,16 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class User {
 
+    public static final String USERS_KEY = "users";
+
+
+    public String key;
+
     public String username;
     public String email;
 
-    public String school;
-    public String programme;
+    public String schoolKey;
+    public String programmeKey;
     public Long level;
 
     public Long semester;
@@ -32,6 +37,10 @@ public class User {
         this.email = email;
     }
 
+    public String getKey() {
+        return key;
+    }
+
     public static String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
@@ -44,20 +53,20 @@ public class User {
         return email;
     }
 
-    public String getSchool() {
-        return school;
+    public String getSchoolKey() {
+        return schoolKey;
     }
 
-    public void setSchool(String school) {
-        this.school = school;
+    public void setSchoolKey(String schoolKey) {
+        this.schoolKey = schoolKey;
     }
 
-    public String getProgramme() {
-        return programme;
+    public String getProgrammeKey() {
+        return programmeKey;
     }
 
-    public void setProgramme(String programme) {
-        this.programme = programme;
+    public void setProgrammeKey(String programmeKey) {
+        this.programmeKey = programmeKey;
     }
 
     public Long getLevel() {
@@ -97,8 +106,6 @@ public class User {
         return "User{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", school='" + school + '\'' +
-                ", programme='" + programme + '\'' +
                 ", level=" + level +
                 ", semester=" + semester +
                 ", quarter=" + quarter +

@@ -14,6 +14,8 @@ import com.google.firebase.database.ValueEventListener;
 public class Lecturer {
 
     public static final String LECTURERS_KEY = "lecturers";
+
+    public String key;
     public String firstName;
     public String middleInitials;
     public String middleNames;
@@ -26,6 +28,10 @@ public class Lecturer {
     public Lecturer(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getFirstName() {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="test"
+            name="testKey"
             type="com.pascoapp.wba02_android.takeTest.TestViewModel" />
     </data>
 <android.support.constraint.ConstraintLayout

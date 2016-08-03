@@ -8,6 +8,9 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Message {
 
+    public static final String MESSAGES_KEY = "messages";
+
+    public String key;
     public String title;
     public String content;
     public Long date;
@@ -15,13 +18,13 @@ public class Message {
     public Long semester;
     public Long quarter;
 
-    public String course;
-    public String lecturer;
-    public String programme;
-    public String question;
-    public String school;
-    public String test;
-    public String user;
+    public String courseKey;
+    public String lecturerKey;
+    public String programmeKey;
+    public String questionKey;
+    public String schoolKey;
+    public String testKey;
+    public String userKey;
 
     public Message() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -31,6 +34,10 @@ public class Message {
         this.title = title;
         this.content = content;
         this.date = date;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getTitle() {
@@ -53,32 +60,32 @@ public class Message {
         return quarter;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseKey() {
+        return courseKey;
     }
 
-    public String getLecturer() {
-        return lecturer;
+    public String getLecturerKey() {
+        return lecturerKey;
     }
 
-    public String getProgramme() {
-        return programme;
+    public String getProgrammeKey() {
+        return programmeKey;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getQuestionKey() {
+        return questionKey;
     }
 
-    public String getSchool() {
-        return school;
+    public String getSchoolKey() {
+        return schoolKey;
     }
 
-    public String getTest() {
-        return test;
+    public String getTestKey() {
+        return testKey;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserKey() {
+        return userKey;
     }
 
     @Override

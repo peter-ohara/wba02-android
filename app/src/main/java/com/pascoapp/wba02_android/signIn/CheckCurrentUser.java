@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.signIn;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,11 +10,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pascoapp.wba02_android.MainActivity;
+import com.pascoapp.wba02_android.R;
 
 import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
 /**
- * Checks if there's a current user
+ * Checks if there's a current userKey
  * If there is start AuthenticateActivity
  * If not start RegistrationActivity
  */
@@ -52,13 +54,13 @@ public class CheckCurrentUser extends Activity {
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                // user is signed in!
+                // userKey is signed in!
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
 
                 startMainActivity();
             } else {
-                // user is not signed in. Maybe just wait for the user to press
+                // userKey is not signed in. Maybe just wait for the userKey to press
                 // "sign in" again, or show a message
             }
         }

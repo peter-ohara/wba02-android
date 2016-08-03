@@ -73,7 +73,7 @@ public class TakeTestActivity extends AppCompatActivity
 //        showTestOverview();
 //
 //        mQuestions = new ArrayList<>();
-//        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTest(), mQuestions);
+//        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), getTestKey(), mQuestions);
 //        mPager.setAdapter(mPagerAdapter);
 
 //        String testKey = getTestKey();
@@ -90,7 +90,7 @@ public class TakeTestActivity extends AppCompatActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
+        // and add the transaction to the back stack so the userKey can navigate back
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.addToBackStack(null);
 
@@ -138,7 +138,7 @@ public class TakeTestActivity extends AppCompatActivity
         loadingIndicator.setVisibility(View.VISIBLE);
 
         mQuestionsRef = FirebaseDatabase.getInstance().getReference().child("questions");
-        Query questionsQuery = mQuestionsRef.orderByChild("test").equalTo(testKey);
+        Query questionsQuery = mQuestionsRef.orderByChild("testKey").equalTo(testKey);
         questionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -149,7 +149,7 @@ public class TakeTestActivity extends AppCompatActivity
                     mQuestions.add(question);
                 }
 
-                // Sort by ascending question number
+                // Sort by ascending questionKey number
                 Collections.sort(mQuestions, new QuestionComparator());
 
                 mPagerAdapter.notifyDataSetChanged();
@@ -168,7 +168,7 @@ public class TakeTestActivity extends AppCompatActivity
         if (mPager.getCurrentItem() == 0) {
             quit();
         } else {
-            // Show the previous question
+            // Show the previous questionKey
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }

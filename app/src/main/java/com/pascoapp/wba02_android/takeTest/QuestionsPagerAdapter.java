@@ -13,7 +13,7 @@ import com.pascoapp.wba02_android.takeTest.TestSection.FillInFragment;
 import java.util.List;
 
 /**
- * Allows the user to flip left and right through the questions of a test
+ * Allows the userKey to flip left and right through the questions of a testKey
  */
 class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 

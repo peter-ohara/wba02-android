@@ -19,12 +19,12 @@ public class QuestionTemplates {
                     "                box-sizing: border-box;"+
                     "}\n"+
                     "\n"+
-                    ".question-num{\n"+
+                    ".questionKey-num{\n"+
                     "    width:100%;\n"+
                     "    height:30px;\n"+
                     "    background:#eaeaea;\n"+
                     "}\n"+
-                    ".question-page{\n"+
+                    ".questionKey-page{\n"+
                     "    width:100%;\n"+
                     "}\n"+
                     ".card{\n"+
@@ -32,10 +32,10 @@ public class QuestionTemplates {
                     "    width:auto;\n"+
                     "    margin:10px 15px 0px;\n"+
                     "}\n"+
-                    ".question-container{\n"+
+                    ".questionKey-container{\n"+
                     "    height:auto;\n"+
                     "}\n"+
-                    ".question-container p{\n"+
+                    ".questionKey-container p{\n"+
                     "    font-size:20px;\n"+
                     "    color:#575757;\n"+
                     "    padding:20px;\n"+
@@ -85,7 +85,7 @@ public class QuestionTemplates {
                     ".fieldset:nth-last-of-type(1){\n"+
                     "    border:none;\n"+
                     "}\n"+
-                    ".answer-question{\n"+
+                    ".answer-questionKey{\n"+
                     "    height:50px;\n"+
                     "    width:auto;\n"+
                     "    margin:15px\n"+
@@ -93,7 +93,7 @@ public class QuestionTemplates {
                     ".answer{\n"+
                     "    color:#808080;\n"+
                     "}\n"+
-                    ".answer-question p{\n"+
+                    ".answer-questionKey p{\n"+
                     "    text-align:right;\n"+
                     "    color:#ff5800;\n"+
                     "    font-size:20px;\n"+
@@ -118,7 +118,7 @@ public class QuestionTemplates {
             "<html>\n" +
             "<head>\n" +
             "    <title>Question</title>\n" +
-            "    <meta name=\"viewport\" content=\"user-scalable=no, width=device-width, initial-scale=1.0\" />\n" +
+            "    <meta name=\"viewport\" content=\"userKey-scalable=no, width=device-width, initial-scale=1.0\" />\n" +
             "    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" +
             "    <link rel=\"stylesheet\" href=\"file:///android_asset/katex/katex.min.css\">\n" +
             "    <style> {0} </style>\n" +
@@ -134,28 +134,28 @@ public class QuestionTemplates {
             "</html>";
 
     private static String mcqDiv =
-            "<div class=\"question-page\">\n" +
-            "    <div class=\"question-container\">\n" +
+            "<div class=\"questionKey-page\">\n" +
+            "    <div class=\"questionKey-container\">\n" +
             "        <p>\n" +
-            "            { question }\n" +
+            "            { questionKey }\n" +
             "        </p>\n" +
             "    </div>\n" +
             "</div>\n";
 
     private static String fillInDiv =
-            "<div class=\"question-page\">\n" +
-            "    <div class=\"question-container\">\n" +
+            "<div class=\"questionKey-page\">\n" +
+            "    <div class=\"questionKey-container\">\n" +
             "        <p>\n" +
-            "            { question }\n" +
+            "            { questionKey }\n" +
             "        </p>\n" +
             "    </div>\n" +
             "</div>\n";
 
     private static String essayDiv =
-            "<div class=\"question-page\">\n" +
-            "    <div class=\"question-container\">\n" +
+            "<div class=\"questionKey-page\">\n" +
+            "    <div class=\"questionKey-container\">\n" +
             "        <p>\n" +
-            "            { question }\n" +
+            "            { questionKey }\n" +
             "        </p>\n" +
             "    </div>\n" +
             "</div>\n";

@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.Actions;
+import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.firebasePojos.Course;
@@ -26,6 +27,8 @@ import com.pascoapp.wba02_android.takeTest.TestViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import trikita.anvil.Anvil;
 import trikita.anvil.RenderableView;
@@ -47,14 +50,15 @@ public class MainScreenView extends RenderableView {
     private Context context;
     private AppCompatActivity appCompatActivity;
 
-    private Store<Action, State> store;
+    @Inject
+    Store<Action, State> store;
 
 
-    public MainScreenView(Context context, Store<Action, State> store) {
+    public MainScreenView(Context context) {
         super(context);
         this.context = context;
-        this.store = store;
         appCompatActivity = ((AppCompatActivity) context);
+        App.getStoreComponent().inject(this);
     }
 
     @Override
@@ -137,7 +141,7 @@ public class MainScreenView extends RenderableView {
     @NonNull
     private MainListItem getMainListItemFromTestKey(String testKey) {
         Test test = store.getState().tests().get(testKey);
-        TestViewModel testViewModel = new TestViewModel(test, store);
+        TestViewModel testViewModel = new TestViewModel(test);
         return new MainListItem(testViewModel);
     }
 
@@ -179,8 +183,8 @@ public class MainScreenView extends RenderableView {
         store.dispatch(Actions.requestTests(courseKey));
         DatabaseReference testsRef = FirebaseDatabase.getInstance().getReference().child("tests");
         // TODO: Uncomment the line below then fix the bug that ensues
-        // Query testQuery = testsRef.orderByChild("course").equalTo(courseKey);
-        Query testQuery = testsRef.orderByChild("course");
+        // Query testQuery = testsRef.orderByChild("courseKey").equalTo(courseKey);
+        Query testQuery = testsRef.orderByChild("courseKey");
         testQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

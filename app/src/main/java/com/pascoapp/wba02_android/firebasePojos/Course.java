@@ -25,20 +25,20 @@ public class Course {
     public String name;
     public Long semester;
     public Long level;
-    public String programme;
-    public String school;
+    public String programmeKey;
+    public String schoolKey;
 
     public Course() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Course(String code, String name, Long semester, Long level, String programme, String school) {
+    public Course(String code, String name, Long semester, Long level, String programme, String schoolKey) {
         this.code = code;
         this.name = name;
         this.semester = semester;
         this.level = level;
-        this.programme = programme;
-        this.school = school;
+        this.programmeKey = programme;
+        this.schoolKey = schoolKey;
     }
 
     public String getKey() {
@@ -61,58 +61,13 @@ public class Course {
         return level;
     }
 
-    public String getProgramme() {
-        return programme;
+    public String getProgrammeKey() {
+        return programmeKey;
     }
 
-    public String getSchool() {
-        return school;
+    public String getSchoolKey() {
+        return schoolKey;
     }
-
-    public static void fetchCourse(String courseKey, ValueEventListener valueEventListener) {
-        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
-                .child(COURSES_KEY).child(courseKey);
-        testRef.addValueEventListener(valueEventListener);
-    }
-
-    public static Observable<List<Course>> fetchCourses() {
-        return Observable.create(new Observable.OnSubscribe<List<Course>>() {
-            @Override
-            public void call(final Subscriber<? super List<Course>> subscriber) {
-                DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
-                        .child(COURSES_KEY);
-                testRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getChildren() == null) {
-                            if (!subscriber.isUnsubscribed()) {
-                                subscriber.onError(new NullPointerException());
-                            }
-                        } else {
-                            if (!subscriber.isUnsubscribed()) {
-
-                                List<Course> courses = new ArrayList<Course>();
-
-                                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                                    Course course = snapshot.getValue(Course.class);
-                                    courses.add(course);
-                                }
-
-                                subscriber.onNext(courses);
-                                subscriber.onCompleted();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
-    }
-
 
     @Override
     public String toString() {
@@ -122,8 +77,6 @@ public class Course {
                 ", name='" + name + '\'' +
                 ", semester=" + semester +
                 ", level=" + level +
-                ", programme='" + programme + '\'' +
-                ", school='" + school + '\'' +
                 '}';
     }
 }

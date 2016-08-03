@@ -1,11 +1,6 @@
 package com.pascoapp.wba02_android.firebasePojos;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,15 +12,17 @@ import java.util.List;
 public class Test implements Serializable {
 
     public static final String TESTS_KEY = "tests";
+
     public String key;
+
     public String type;
     public Long duration;
     public List<String> instructions;
 
-    public String lecturer;
-    public String course;
-    public String programme;
-    public String school;
+    public String lecturerKey;
+    public String courseKey;
+    public String programmeKey;
+    public String schoolKey;
 
     public Long year;
 
@@ -33,14 +30,14 @@ public class Test implements Serializable {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Test(String type, Long duration, List<String> instructions, String lecturer, String course, String programme, String school, Long year) {
+    public Test(String type, Long duration, List<String> instructions, String lecturerKey, String courseKey, String programmeKey, String schoolKey, Long year) {
         this.type = type;
         this.duration = duration;
         this.instructions = instructions;
-        this.lecturer = lecturer;
-        this.course = course;
-        this.programme = programme;
-        this.school = school;
+        this.lecturerKey = lecturerKey;
+        this.courseKey = courseKey;
+        this.programmeKey = programmeKey;
+        this.schoolKey = schoolKey;
         this.year = year;
     }
 
@@ -60,30 +57,24 @@ public class Test implements Serializable {
         return instructions;
     }
 
-    public String getLecturer() {
-        return lecturer;
+    public String getLecturerKey() {
+        return lecturerKey;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseKey() {
+        return courseKey;
     }
 
-    public String getProgramme() {
-        return programme;
+    public String getProgrammeKey() {
+        return programmeKey;
     }
 
-    public String getSchool() {
-        return school;
+    public String getSchoolKey() {
+        return schoolKey;
     }
 
     public Long getYear() {
         return year;
-    }
-
-    public static void fetchTest(String testKey, ValueEventListener valueEventListener) {
-        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
-                .child(TESTS_KEY).child(testKey);
-        testRef.addValueEventListener(valueEventListener);
     }
 
     @Override
@@ -92,11 +83,6 @@ public class Test implements Serializable {
                 "key='" + key + '\'' +
                 ", type='" + type + '\'' +
                 ", duration=" + duration +
-                ", instructions=" + instructions +
-                ", lecturer='" + lecturer + '\'' +
-                ", course='" + course + '\'' +
-                ", programme='" + programme + '\'' +
-                ", school='" + school + '\'' +
                 ", year=" + year +
                 '}';
     }

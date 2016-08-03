@@ -32,7 +32,7 @@ import trikita.jedux.Store;
 public class TestOverviewFragment extends Fragment {
 
     // the fragment initialization parameters
-    private static final String ARG_TEST_KEY = "test";
+    private static final String ARG_TEST_KEY = "testKey";
 
     private String mTestKey;
 

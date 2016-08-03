@@ -24,10 +24,10 @@ import com.pascoapp.wba02_android.firebasePojos.Question;
 public class EssayFragment extends Fragment {
 
     private static final String LOG_TAG = EssayFragment.class.getSimpleName();
-    public static final String QUESTION_ERROR = "Unknown Error! Please report this question";
+    public static final String QUESTION_ERROR = "Unknown Error! Please report this questionKey";
 
     // the fragment initialization parameters
-    public static final String ARG_QUESTION = "question";
+    public static final String ARG_QUESTION = "questionKey";
     public static final String ARG_ANSWER = "answer";
 
 
@@ -36,7 +36,7 @@ public class EssayFragment extends Fragment {
     private static final String STATE_ANSWERED_CORRECTLY = "answeredCorrectly";
     private static final String STATE_ANSWERED_WRONGLY = "answeredWrongly";
 
-    // Member Variables related to the question
+    // Member Variables related to the questionKey
     private String question;
     private String answer;
 
@@ -49,7 +49,7 @@ public class EssayFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param question id for fetching the question.
+     * @param question id for fetching the questionKey.
      * @return A new instance of fragment EssayFragment.
      */
     public static EssayFragment newInstance(Question question) {
@@ -132,7 +132,7 @@ public class EssayFragment extends Fragment {
 
     private void setQuestion(WebView webview, String question) {
         String htmlString = QuestionTemplates.essayTemplate
-                .replace("{ question }", question);
+                .replace("{ questionKey }", question);
         loadItemInWebView(webview, htmlString);
     }
 

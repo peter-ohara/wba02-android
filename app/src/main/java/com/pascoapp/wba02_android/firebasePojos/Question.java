@@ -2,14 +2,17 @@ package com.pascoapp.wba02_android.firebasePojos;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Handles Question logic
  */
 @IgnoreExtraProperties
-public class Question implements Serializable {
+public class Question {
+
+    private static final String QUESTIONS_KEY = "questions";
+
+    public String key;
 
     public String type;
 
@@ -24,20 +27,17 @@ public class Question implements Serializable {
     public Long semester;
     public Long quarter;
 
-    public String test;
-    public String lecturer;
-    public String course;
-    public String programme;
-    public String school;
-
-    public String key;
-
+    public String testKey;
+    public String lecturerKey;
+    public String courseKey;
+    public String programmeKey;
+    public String schoolKey;
 
     public Question() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Question(String type, String question, Map<String, String> choices, String answer, String explanation, String number, String section, Long semester, Long quarter, String test, String lecturer, String course, String programme, String school) {
+    public Question(String type, String question, Map<String, String> choices, String answer, String explanation, String number, String section, Long semester, Long quarter, String testKey, String lecturerKey, String courseKey, String programmeKey, String schoolKey) {
         this.type = type;
         this.question = question;
         this.choices = choices;
@@ -47,11 +47,15 @@ public class Question implements Serializable {
         this.section = section;
         this.semester = semester;
         this.quarter = quarter;
-        this.test = test;
-        this.lecturer = lecturer;
-        this.course = course;
-        this.programme = programme;
-        this.school = school;
+        this.testKey = testKey;
+        this.lecturerKey = lecturerKey;
+        this.courseKey = courseKey;
+        this.programmeKey = programmeKey;
+        this.schoolKey = schoolKey;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getType() {
@@ -90,43 +94,32 @@ public class Question implements Serializable {
         return quarter;
     }
 
-    public String getTest() {
-        return test;
+    public String getTestKey() {
+        return testKey;
     }
 
-    public String getLecturer() {
-        return lecturer;
+    public String getLecturerKey() {
+        return lecturerKey;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseKey() {
+        return courseKey;
     }
 
-    public String getProgramme() {
-        return programme;
+    public String getProgrammeKey() {
+        return programmeKey;
     }
 
-    public String getSchool() {
-        return school;
+    public String getSchoolKey() {
+        return schoolKey;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "type='" + type + '\'' +
+                "key='" + key + '\'' +
                 ", question='" + question + '\'' +
-                ", choices=" + choices +
                 ", answer='" + answer + '\'' +
-                ", explanation='" + explanation + '\'' +
-                ", number='" + number + '\'' +
-                ", section='" + section + '\'' +
-                ", semester=" + semester +
-                ", quarter=" + quarter +
-                ", test='" + test + '\'' +
-                ", lecturer='" + lecturer + '\'' +
-                ", course='" + course + '\'' +
-                ", programme='" + programme + '\'' +
-                ", school='" + school + '\'' +
                 '}';
     }
 }

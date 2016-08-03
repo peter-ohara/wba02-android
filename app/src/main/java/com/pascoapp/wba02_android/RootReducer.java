@@ -5,8 +5,6 @@ import com.annimon.stream.Stream;
 import com.pascoapp.wba02_android.firebasePojos.Course;
 import com.pascoapp.wba02_android.firebasePojos.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -111,7 +109,7 @@ public class RootReducer implements Store.Reducer<Action, State> {
 
         Map<String, List<String>> mainScreenItemsMap = Stream.of(tests)
                 .collect(Collectors.groupingBy(
-                        test -> test.getCourse(),
+                        test -> test.getCourseKey(),
                         Collectors.mapping(test -> test.getKey(), Collectors.toList())
                 ));
         Map<String, Test> testsMap = Stream.of(tests)

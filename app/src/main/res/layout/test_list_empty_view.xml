@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="16sp"
-            android:text="Oh Chale, we no get pasco  for this course  oo. If you get some aa, make you press the the  Upload button den take send we. Oya chop nuckle!"
+            android:text="Oh Chale, we no get pasco  for this courseKey  oo. If you get some aa, make you press the the  Upload button den take send we. Oya chop nuckle!"
             android:layout_below="@+id/imageView"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"

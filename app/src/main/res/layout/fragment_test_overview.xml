@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="test"
+            name="testKey"
             type="com.pascoapp.wba02_android.takeTest.TestViewModel" />
     </data>
 

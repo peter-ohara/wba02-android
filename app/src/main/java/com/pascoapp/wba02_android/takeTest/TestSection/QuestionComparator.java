@@ -12,13 +12,13 @@ public class QuestionComparator implements Comparator<Question> {
     @Override
     public int compare(Question lhs, Question rhs) {
         /**
-         * Sort by question number.
-         * Since question numbers are strings, sorting by lexicographical order
+         * Sort by questionKey number.
+         * Since questionKey numbers are strings, sorting by lexicographical order
          * straight away will make 10 appear before 2 because the comparison
          * is character by character and the first character of 10 is smaller than
          * the first character of 2.
          *
-         * To fix this, we first check the lengths of the question numbers to see if
+         * To fix this, we first check the lengths of the questionKey numbers to see if
          * they are equal. If they are then we sort lexicographically, if they are
          * not, then the number with the greater length is the bigger number
          */

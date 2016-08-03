@@ -9,7 +9,6 @@ import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.firebasePojos.Programme;
 import com.pascoapp.wba02_android.firebasePojos.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import trikita.jedux.Action;
@@ -25,17 +24,16 @@ public class TestViewModel {
 
     private Store<Action, State> store;
 
-    public TestViewModel(Test test, Store<Action, State> store) {
+    public TestViewModel(Test test) {
         this.test = test;
-        this.store = store;
     }
 
     public String getCourseCode() {
-        return store.getState().courses().get(test.getCourse()).getCode();
+        return test.getCourseKey().getCode();
     }
 
     public String getCourseName() {
-        return store.getState().courses().get(test.getCourse()).getName();
+        return test.getCourseKey().getName();
     }
 
     public String getTestName() {
@@ -55,36 +53,33 @@ public class TestViewModel {
         return year + " " + type;
     }
 
-
     public String getTestDuration() {
         return test.getDuration() + "hrs";
     }
 
     public Drawable getLecturerIcon() {
-        // TODO: Fetch Actual lecturer name
-        String name = getTestName();
-        // generate color based on a key (same key returns the same color), useful for list/grid views
+        String lecturerName = test.getLecturerKey().getFirstName();
+        // generate color based on a key (same key returns the same color)
         ColorGenerator generator = ColorGenerator.MATERIAL;
-        int color = generator.getColor(name);
+        int color = generator.getColor(lecturerName);
 
         return TextDrawable.builder()
                 .buildRound(
-                        name.substring(0, 1).toUpperCase(),
+                        lecturerName.substring(0, 1).toUpperCase(),
                         color
                 );
     }
 
-
     public String getLecturerName() {
-        return "Prof. Sesi Gob3";
+        return test.getLecturerKey().getFirstName() + " " + test.getLecturerKey().getLastName();
     }
 
     public int getQuestionCount() {
-        return 42;
+        return test.getNumQuestions();
     }
 
     public Drawable getIcon() {
-        String name = store.getState().courses().get(test.getCourse()).getCode();
+        String name = test.getCourseKey().getCode();
         // generate color based on a key (same key returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(name);
@@ -104,11 +99,7 @@ public class TestViewModel {
     }
 
     public List<Programme> getProgrammes() {
-        List<Programme> programmes = new ArrayList<>();
-        programmes.add(new Programme("Computer Science [B.Sc.]", "knust"));
-        programmes.add(new Programme("Computer Engineering [B.Sc.]", "knust"));
-        programmes.add(new Programme("Information Technology [B.Sc.]", "knust"));
-        return programmes;
+        return test.getProgrammes();
     }
 
     public List<String> getInstructions() {
@@ -118,7 +109,7 @@ public class TestViewModel {
     @Override
     public String toString() {
         return "TestViewModel{" +
-                "test=" + test +
+                "testKey=" + test +
                 '}';
     }
 }
