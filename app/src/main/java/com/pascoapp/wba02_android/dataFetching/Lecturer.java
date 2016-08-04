@@ -1,7 +1,5 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -12,8 +10,6 @@ import com.google.firebase.database.ValueEventListener;
  */
 @IgnoreExtraProperties
 public class Lecturer {
-
-    public static final String LECTURERS_KEY = "lecturers";
 
     public String key;
     public String firstName;
@@ -48,12 +44,6 @@ public class Lecturer {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public static void fetchLecturer(String lecturerKey, ValueEventListener valueEventListener) {
-        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference()
-                .child(LECTURERS_KEY).child(lecturerKey);
-        testRef.addValueEventListener(valueEventListener);
     }
 
     @Override

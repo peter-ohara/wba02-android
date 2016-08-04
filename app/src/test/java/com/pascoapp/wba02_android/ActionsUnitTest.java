@@ -26,4 +26,11 @@ public class ActionsUnitTest {
         store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
         assertEquals(store.getState().currentScreen(), Screens.MAIN_SCREEN);
     }
+
+    @Test
+    public void selectCourseAction() throws Exception {
+        store.dispatch(Actions.selectCourse("CSM151"));
+        assertEquals(store.getState().selectedCourse(), "CSM151");
+        assertEquals(store.getState().testOverviewComponent().test(), "CSM151");
+    }
 }

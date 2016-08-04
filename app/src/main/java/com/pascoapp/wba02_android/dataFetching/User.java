@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,9 +9,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
  */
 @IgnoreExtraProperties
 public class User {
-
-    public static final String USERS_KEY = "users";
-
 
     public String key;
 

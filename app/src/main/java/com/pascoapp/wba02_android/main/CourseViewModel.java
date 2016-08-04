@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.pascoapp.wba02_android.firebasePojos.Course;
+import com.pascoapp.wba02_android.dataFetching.Course;
 
 /**
  * Created by peter on 7/27/16.

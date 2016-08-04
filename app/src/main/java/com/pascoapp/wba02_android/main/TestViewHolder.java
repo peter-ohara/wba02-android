@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.pascoapp.wba02_android.Actions;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.Screens;
 import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
@@ -45,7 +46,8 @@ public class TestViewHolder extends RecyclerView.ViewHolder {
         questionCountView.setText(testViewModel.getQuestionCount() + " q");
 
         itemView.setOnClickListener(view -> {
-            store.dispatch(Actions.selectCourse(testViewModel));
+            store.dispatch(Actions.selectCourse(testViewModel.getTest().getKey()));
+            store.dispatch(Actions.showScreen(Screens.TEST_OVERVIEW_SCREEN));
         });
     }
 }

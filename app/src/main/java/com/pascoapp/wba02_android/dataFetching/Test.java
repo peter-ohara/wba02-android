@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -10,8 +10,6 @@ import java.util.List;
  */
 @IgnoreExtraProperties
 public class Test implements Serializable {
-
-    public static final String TESTS_KEY = "tests";
 
     public String key;
 

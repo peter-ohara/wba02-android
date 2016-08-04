@@ -1,17 +1,6 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Handles Course logic
@@ -19,7 +8,6 @@ import rx.Subscriber;
 @IgnoreExtraProperties
 public class Course {
 
-    public static final String COURSES_KEY = "courses";
     public String key;
     public String code;
     public String name;

@@ -5,8 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
-import com.pascoapp.wba02_android.firebasePojos.Question;
-import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.dataFetching.Question;
 import com.pascoapp.wba02_android.takeTest.TestSection.EssayFragment;
 import com.pascoapp.wba02_android.takeTest.TestSection.FillInFragment;
 

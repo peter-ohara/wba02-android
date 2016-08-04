@@ -28,6 +28,11 @@ public class CheckCurrentUser extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.branded_launch_screen);
 
+        // Online offline access of data stored in Firebase
+        // Must be done in the entry point of the app.
+        // Which happens to be here
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in

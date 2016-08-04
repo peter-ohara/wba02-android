@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.firebasePojos.Programme;
+import com.pascoapp.wba02_android.dataFetching.Programme;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
 import java.util.ArrayList;

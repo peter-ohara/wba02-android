@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,8 +19,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
-import com.pascoapp.wba02_android.firebasePojos.Question;
-import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.dataFetching.Question;
+import com.pascoapp.wba02_android.dataFetching.Test;
 import com.pascoapp.wba02_android.takeTest.TestSection.QuestionComparator;
 import com.pascoapp.wba02_android.takeTest.TestSection.TestSectionFragment;
 
@@ -52,17 +51,10 @@ public class TakeTestActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ActivityTakeTestBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_take_test);
-//        TestViewModel testViewModel = new TestViewModel(TakeTestActivity.this, getTestKey());
-//        binding.setTest(testViewModel);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(new TestOverviewComponent(TakeTestActivity.this));
 
-        bottomButton = (Button) findViewById(R.id.bottomBar);
-
-        showTestOverview(getTestKey());
+//        showTestOverview(getTestKey());
 
 
 //        loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
@@ -98,30 +90,6 @@ public class TakeTestActivity extends AppCompatActivity
         transaction.commit();
         bottomButton.setText("Start &#10175;");
         bottomButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_right, 0);
-    }
-
-    private void showSectionScreen() {
-
-    }
-
-    private void showMcqScreen() {
-
-    }
-
-    private void showEssayScreen() {
-
-    }
-
-    private void showFillInScreen() {
-
-    }
-
-    private void showEndScreen() {
-
-    }
-
-    private void showScoreScreen() {
-
     }
 
     public String getTestKey() {
@@ -163,15 +131,15 @@ public class TakeTestActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            quit();
-        } else {
-            // Show the previous questionKey
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (mPager.getCurrentItem() == 0) {
+//            quit();
+//        } else {
+//            // Show the previous questionKey
+//            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+//        }
+//    }
 
     private void quit() {
         super.onBackPressed();

@@ -1,25 +1,24 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+/**
+ * Handles Programme logic
+ */
 @IgnoreExtraProperties
-public class School {
-
-    public static final String SCHOOLS_KEY = "schools";
+public class Programme {
 
     public String key;
-
     public String name;
-    public String shortName;
+    public String schoolKey;
 
-
-    public School() {
+    public Programme() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public School(String name, String shortName) {
+    public Programme(String name, String school) {
         this.name = name;
-        this.shortName = shortName;
+        this.schoolKey = school;
     }
 
     public String getKey() {
@@ -30,15 +29,14 @@ public class School {
         return name;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getSchoolKey() {
+        return schoolKey;
     }
 
     @Override
     public String toString() {
-        return "School{" +
+        return "Programme{" +
                 "name='" + name + '\'' +
-                ", shortName='" + shortName + '\'' +
                 '}';
     }
 }

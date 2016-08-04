@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.firebasePojos;
+package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -9,8 +9,6 @@ import java.util.Map;
  */
 @IgnoreExtraProperties
 public class Question {
-
-    private static final String QUESTIONS_KEY = "questions";
 
     public String key;
 

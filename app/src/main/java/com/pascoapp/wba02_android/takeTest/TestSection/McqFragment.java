@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.firebasePojos.Question;
+import com.pascoapp.wba02_android.dataFetching.Question;
 
 import java.io.Serializable;
 import java.util.Map;

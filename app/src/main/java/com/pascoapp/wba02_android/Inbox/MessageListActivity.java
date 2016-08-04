@@ -20,7 +20,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.firebasePojos.Message;
+import com.pascoapp.wba02_android.dataFetching.Message;
 
 /**
  * An activity representing a list of messages. This activity

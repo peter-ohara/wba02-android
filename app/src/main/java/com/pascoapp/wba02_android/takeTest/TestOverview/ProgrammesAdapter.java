@@ -12,7 +12,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.main.TestViewHolder;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.firebasePojos.Programme;
+import com.pascoapp.wba02_android.dataFetching.Programme;
 
 import java.util.List;
 

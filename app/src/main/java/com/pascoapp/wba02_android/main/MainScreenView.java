@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.Actions;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.Screens;
 import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.firebasePojos.Course;
-import com.pascoapp.wba02_android.firebasePojos.Test;
+import com.pascoapp.wba02_android.dataFetching.Course;
+import com.pascoapp.wba02_android.dataFetching.Test;
+import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
 import java.util.ArrayList;
@@ -104,8 +107,15 @@ public class MainScreenView extends RenderableView {
                         boughtCoursesAdapter.clear();
                         boughtCoursesAdapter.addAll(getScreenItems());
                         boughtCoursesAdapter.notifyDataSetChanged();
+
+                        if (store.getState().currentScreen()
+                                .equals(Screens.TEST_OVERVIEW_SCREEN)) {
+                            appCompatActivity
+                                    .startActivity(new Intent(appCompatActivity,
+                                            TakeTestActivity.class));
+
+                        }
                     });
-                    fetchBoughtCourses();
 
                 });
                 visibility(store.getState().mainScreen().items().size() > 0 ? VISIBLE : INVISIBLE);
@@ -117,10 +127,22 @@ public class MainScreenView extends RenderableView {
         });
     }
 
+    // Equivalent of React componentDidMount()
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        fetchBoughtCourses(store);
+    }
+
     private List<MainListItem> getScreenItems() {
         return Stream.of(store.getState().mainScreen().items())
                 .flatMap(item -> Stream.of(getExpandableListSection(item)) )
                 .collect(Collectors.toList());
+
+//        Stream.of(store.getState().mainScreen().items())
+//                .map(item -> item.getValue().add(item.getKey()) )
+//                .collect(Collectors.toList());
+//        return null;
     }
 
     @NonNull
@@ -141,7 +163,7 @@ public class MainScreenView extends RenderableView {
     @NonNull
     private MainListItem getMainListItemFromTestKey(String testKey) {
         Test test = store.getState().tests().get(testKey);
-        TestViewModel testViewModel = new TestViewModel(test);
+        TestViewModel testViewModel = new TestViewModel(test, store);
         return new MainListItem(testViewModel);
     }
 
@@ -152,7 +174,7 @@ public class MainScreenView extends RenderableView {
         return new MainListItem(courseViewModel);
     }
 
-    public void fetchBoughtCourses() {
+    public static void fetchBoughtCourses(Store<Action, State> store) {
         store.dispatch(Actions.requestCourses(""));
 
         DatabaseReference coursesRef = FirebaseDatabase.getInstance().getReference().child("courses");
@@ -166,20 +188,20 @@ public class MainScreenView extends RenderableView {
                     course.key = courseSnapshot.getKey();
                     courses.add(course);
                 }
-                store.dispatch(Actions.receiveCourseWithSuccess(courses));
+                store.dispatch(Actions.receiveCoursesWithSuccess(courses));
                 for (Course course : courses) {
-                    fetchTestsForCourse(course.getKey());
+                    fetchTestsForCourse(store, course.getKey());
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(Actions.receiveCourseWithFailure(databaseError.getMessage()));
+                store.dispatch(Actions.receiveCoursesWithFailure(databaseError.getMessage()));
             }
         });
     }
 
-    private void fetchTestsForCourse(String courseKey) {
+    public static void fetchTestsForCourse(Store<Action, State> store, String courseKey) {
         store.dispatch(Actions.requestTests(courseKey));
         DatabaseReference testsRef = FirebaseDatabase.getInstance().getReference().child("tests");
         // TODO: Uncomment the line below then fix the bug that ensues
@@ -203,4 +225,5 @@ public class MainScreenView extends RenderableView {
             }
         });
     }
+
 }

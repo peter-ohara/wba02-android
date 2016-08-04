@@ -39,10 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:drawableStart="@drawable/ic_file_document_box_white_24dp"
         android:theme="@style/greenButton"
         android:background="@color/primary"
-        android:id="@+id/bottomBar"
-        android:drawableLeft="@drawable/ic_file_document_box_white_24dp" />
+        android:id="@+id/bottomBar" />
 
 </android.support.design.widget.CoordinatorLayout>

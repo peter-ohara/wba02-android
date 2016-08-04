@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.firebasePojos.Question;
+import com.pascoapp.wba02_android.dataFetching.Question;
 
 /**
  * A simple {@link Fragment} subclass.

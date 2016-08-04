@@ -11,12 +11,11 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Help.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
+import com.pascoapp.wba02_android.dataFetching.CourseDatabaseManager;
 import com.pascoapp.wba02_android.main.MainScreenView;
-import com.pascoapp.wba02_android.middleware.LoggerMiddleWare;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
 import com.pascoapp.wba02_android.signIn.CheckCurrentUser;
 
@@ -29,7 +28,6 @@ import trikita.jedux.Store;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Inject
     Store<Action, State> store;
@@ -37,15 +35,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupFirebaseStuff();
         App.getStoreComponent().inject(this);
 
-        // Re-render UI via anvil when the store state changes
-        store.subscribe(Anvil::render);
+//        // Re-render UI via anvil when the store state changes
+//        store.subscribe(Anvil::render);
+//
+//        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
+//        // TODO: Make the statement below a consequence of the statement above it.
+//        setContentView(new MainScreenView(MainActivity.this));
 
-        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
-        // TODO: Make the statement below a consequence of the statement above it.
-        setContentView(new MainScreenView(MainActivity.this));
+        CourseDatabaseManager.fetchCourse(store, "CSM151");
+        Query query = CourseDatabaseManager.COURSES_REF.orderByChild("semester").equalTo(2);
+        CourseDatabaseManager.fetchListOfCourses(store, query);
     }
 
     @Override
@@ -79,11 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupFirebaseStuff() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     private void logout() {
