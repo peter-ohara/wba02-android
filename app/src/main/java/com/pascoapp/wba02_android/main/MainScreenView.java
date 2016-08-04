@@ -11,18 +11,13 @@ import android.support.v7.widget.Toolbar;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.pascoapp.wba02_android.Actions;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.Screens;
 import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.dataFetching.Course;
+import com.pascoapp.wba02_android.dataFetching.DatabaseManager;
 import com.pascoapp.wba02_android.dataFetching.Test;
 import com.pascoapp.wba02_android.takeTest.TakeTestActivity;
 import com.pascoapp.wba02_android.takeTest.TestViewModel;
@@ -82,11 +77,11 @@ public class MainScreenView extends RenderableView {
             });
 
             withId(R.id.loading_indicator, () -> {
-                visibility(store.getState().mainScreen().isFetching() ? VISIBLE : INVISIBLE);
+                visibility(store.getState().isFetching() ? VISIBLE : INVISIBLE);
             });
 
             withId(R.id.empty_view, () -> {
-                visibility(store.getState().mainScreen().items().size() == 0 ? VISIBLE : INVISIBLE);
+                visibility(store.getState().mainScreen().boughtCourses().size() == 0 ? VISIBLE : INVISIBLE);
             });
 
             withId(R.id.coursesList, () -> {
@@ -105,7 +100,13 @@ public class MainScreenView extends RenderableView {
 
                     store.subscribe(() -> {
                         boughtCoursesAdapter.clear();
-                        boughtCoursesAdapter.addAll(getScreenItems());
+
+                        List<MainListItem> screenItems = Stream.of(store.getState().mainScreen().boughtCourses())
+                                .map(courseKey ->
+                                        new MainListItem(new CourseViewModel(store.getState().courses().get(courseKey))))
+                                .collect(Collectors.toList());
+
+                        boughtCoursesAdapter.addAll(screenItems);
                         boughtCoursesAdapter.notifyDataSetChanged();
 
                         if (store.getState().currentScreen()
@@ -118,7 +119,7 @@ public class MainScreenView extends RenderableView {
                     });
 
                 });
-                visibility(store.getState().mainScreen().items().size() > 0 ? VISIBLE : INVISIBLE);
+                visibility(store.getState().mainScreen().boughtCourses().size() > 0 ? VISIBLE : INVISIBLE);
             });
 
             withId(R.id.bottomBar, () -> {
@@ -131,19 +132,22 @@ public class MainScreenView extends RenderableView {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        fetchBoughtCourses(store);
+        DatabaseManager courseDatabaseManager = new DatabaseManager<Course>(Course.class);
+        Query query = courseDatabaseManager.nodeRef.limitToFirst(10);
+        courseDatabaseManager.fetchList(store, query);
+
+        DatabaseManager testDatabasemanager = new DatabaseManager(Test.class);
+        for (String courseKeys : store.getState().courses().keySet()) {
+            Query testQuery = courseDatabaseManager.nodeRef.orderByChild("course").equalTo(courseKeys);
+            testDatabasemanager.fetchList(store, query);
+        }
     }
 
-    private List<MainListItem> getScreenItems() {
-        return Stream.of(store.getState().mainScreen().items())
-                .flatMap(item -> Stream.of(getExpandableListSection(item)) )
-                .collect(Collectors.toList());
-
-//        Stream.of(store.getState().mainScreen().items())
-//                .map(item -> item.getValue().add(item.getKey()) )
+//    private List<MainListItem> getScreenItems() {
+//        return Stream.of(store.getState().mainScreen().boughtCourses())
+//                .flatMap(item -> Stream.of(getExpandableListSection(item)) )
 //                .collect(Collectors.toList());
-//        return null;
-    }
+//    }
 
     @NonNull
     private List<MainListItem> getExpandableListSection(Map.Entry<String, List<String>> item) {
@@ -173,57 +177,4 @@ public class MainScreenView extends RenderableView {
         CourseViewModel courseViewModel = new CourseViewModel(course);
         return new MainListItem(courseViewModel);
     }
-
-    public static void fetchBoughtCourses(Store<Action, State> store) {
-        store.dispatch(Actions.requestCourses(""));
-
-        DatabaseReference coursesRef = FirebaseDatabase.getInstance().getReference().child("courses");
-        Query coursesQuery = coursesRef.limitToFirst(9);
-        coursesQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Course> courses = new ArrayList<>();
-                for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
-                    Course course = courseSnapshot.getValue(Course.class);
-                    course.key = courseSnapshot.getKey();
-                    courses.add(course);
-                }
-                store.dispatch(Actions.receiveCoursesWithSuccess(courses));
-                for (Course course : courses) {
-                    fetchTestsForCourse(store, course.getKey());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(Actions.receiveCoursesWithFailure(databaseError.getMessage()));
-            }
-        });
-    }
-
-    public static void fetchTestsForCourse(Store<Action, State> store, String courseKey) {
-        store.dispatch(Actions.requestTests(courseKey));
-        DatabaseReference testsRef = FirebaseDatabase.getInstance().getReference().child("tests");
-        // TODO: Uncomment the line below then fix the bug that ensues
-        // Query testQuery = testsRef.orderByChild("courseKey").equalTo(courseKey);
-        Query testQuery = testsRef.orderByChild("courseKey");
-        testQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Test> tests = new ArrayList<>();
-                for (DataSnapshot testSnapshot: dataSnapshot.getChildren()) {
-                    Test test = testSnapshot.getValue(Test.class);
-                    test.key = testSnapshot.getKey();
-                    tests.add(test);
-                }
-                store.dispatch(Actions.receiveTestsWithSuccess(tests));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(Actions.receiveTestsWithFailure(databaseError.getMessage()));
-            }
-        });
-    }
-
 }

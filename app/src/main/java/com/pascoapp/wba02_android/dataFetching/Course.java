@@ -1,12 +1,13 @@
 package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.pascoapp.wba02_android.FirebaseItem;
 
 /**
  * Handles Course logic
  */
 @IgnoreExtraProperties
-public class Course {
+public class Course implements FirebaseItem {
 
     public String key;
     public String code;
@@ -31,6 +32,11 @@ public class Course {
 
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getCode() {
@@ -60,7 +66,7 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-                "key='" + key + '\'' +
+                "  Key='" + key + '\'' +
                 ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", semester=" + semester +

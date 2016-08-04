@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.Help;
+package com.pascoapp.wba02_android.help;
 
 import android.content.Intent;
 import android.net.Uri;

@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.pascoapp.wba02_android.FirebaseItem;
 
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  * Handles Question logic
  */
 @IgnoreExtraProperties
-public class Question {
+public class Question implements FirebaseItem {
 
     public String key;
 
@@ -54,6 +55,11 @@ public class Question {
 
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getType() {
@@ -115,7 +121,7 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "key='" + key + '\'' +
+                "nodeKey='" + key + '\'' +
                 ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +
                 '}';

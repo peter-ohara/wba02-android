@@ -3,12 +3,13 @@ package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.pascoapp.wba02_android.FirebaseItem;
 
 /**
  * Handles User logic
  */
 @IgnoreExtraProperties
-public class User {
+public class User implements FirebaseItem {
 
     public String key;
 
@@ -36,6 +37,11 @@ public class User {
 
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public static String getUid() {

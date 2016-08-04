@@ -7,10 +7,12 @@ import com.pascoapp.wba02_android.dataFetching.Programme;
 import com.pascoapp.wba02_android.dataFetching.Question;
 import com.pascoapp.wba02_android.dataFetching.School;
 import com.pascoapp.wba02_android.dataFetching.Test;
+import com.pascoapp.wba02_android.dataFetching.User;
 
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,21 +31,21 @@ public abstract class State {
     @Value.Immutable
     @Gson.TypeAdapters
     public static abstract class MainScreen {
-        public abstract boolean isFetching();
         public abstract boolean didInvalidate();
         public abstract Date lastUpdated();
-        public abstract Map<String, List<String>> items();;
+        public abstract List<String> boughtCourses();;
     }
 
     @Value.Immutable
     @Gson.TypeAdapters
     public static abstract class TestOverviewComponent {
-        public abstract boolean isFetching();
         public abstract boolean didInvalidate();
         public abstract Date lastUpdated();
         public abstract String test();
     }
 
+    public abstract boolean isFetching();
+    public abstract String displayErrorMessage();
     public abstract Screens currentScreen();
     public abstract String selectedCourse();
     public abstract MainScreen mainScreen();
@@ -56,24 +58,25 @@ public abstract class State {
     public abstract Map<String, Question> questions();
     public abstract Map<String, School> schools();
     public abstract Map<String, Test> tests();
+    public abstract Map<String, User> users();
 
 
     static class Default {
         public static State build() {
             ImmutableMainScreen mainScreen = ImmutableMainScreen.builder()
-                    .isFetching(false)
                     .didInvalidate(false)
                     .lastUpdated(new Date())
-                    .items(new HashMap<>())
+                    .boughtCourses(new ArrayList<>())
                     .build();
             ImmutableTestOverviewComponent testOverviewComponent
                     = ImmutableTestOverviewComponent.builder()
-                    .isFetching(false)
                     .didInvalidate(false)
                     .lastUpdated(new Date())
                     .test(NOT_SET)
                     .build();
             return ImmutableState.builder()
+                    .isFetching(false)
+                    .displayErrorMessage(NOT_SET)
                     .currentScreen(Screens.NOT_SET)
                     .selectedCourse(NOT_SET)
                     .mainScreen(mainScreen)
@@ -85,6 +88,7 @@ public abstract class State {
                     .questions(new HashMap<>())
                     .schools(new HashMap<>())
                     .tests(new HashMap<>())
+                    .users(new HashMap<>())
                     .build();
         }
     }

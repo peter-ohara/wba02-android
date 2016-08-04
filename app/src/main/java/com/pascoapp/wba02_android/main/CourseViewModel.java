@@ -43,7 +43,7 @@ public class CourseViewModel {
     }
 
     public void setIcon(String name) {
-        // generate color based on a key (same key returns the same color), useful for list/grid views
+        // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getColor(name);
 

@@ -1,25 +1,36 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.LinearLayout;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
+import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.dataFetching.Course;
+import com.pascoapp.wba02_android.dataFetching.CourseDatabaseManager;
 import com.pascoapp.wba02_android.dataFetching.Lecturer;
+import com.pascoapp.wba02_android.dataFetching.LecturerDatabaseManager;
 import com.pascoapp.wba02_android.dataFetching.Programme;
+import com.pascoapp.wba02_android.dataFetching.ProgrammeDatabaseManager;
 import com.pascoapp.wba02_android.dataFetching.School;
+import com.pascoapp.wba02_android.dataFetching.SchoolDatabaseManager;
 import com.pascoapp.wba02_android.dataFetching.Test;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import trikita.anvil.RenderableAdapter;
 import trikita.anvil.RenderableView;
 import trikita.anvil.Anvil;
 import trikita.jedux.Action;
@@ -31,7 +42,7 @@ import static trikita.anvil.BaseDSL.withId;
 import static trikita.anvil.BaseDSL.xml;
 import static trikita.anvil.DSL.imageView;
 import static trikita.anvil.DSL.linearLayout;
-import static trikita.anvil.DSL.orientation;
+import static trikita.anvil.DSL.*;
 import static trikita.anvil.DSL.textView;
 import static trikita.anvil.DSL.visibility;
 /**
@@ -48,8 +59,8 @@ public class TestOverviewComponent extends RenderableView {
     private Test test;
     private Lecturer lecturer;
     private Course course;
-    private Programme programme;
     private School school;
+    private List<Programme> programmes;
 
 
     public TestOverviewComponent(Context context) {
@@ -60,10 +71,13 @@ public class TestOverviewComponent extends RenderableView {
 
         String testKey = store.getState().testOverviewComponent().test();
         test = store.getState().tests().get(testKey);
-        lecturer = store.getState().lecturers().get(test.getCourseKey());
+        lecturer = store.getState().lecturers().get(test.getLecturerKey());
         course = store.getState().courses().get(test.getCourseKey());
-        programme = store.getState().programmes().get(test.getCourseKey());
-        school = store.getState().schools().get(test.getCourseKey());
+        Map<String, Programme> storedProgrammes = store.getState().programmes();
+        // Filter by programmeKeys in test
+        storedProgrammes.keySet().retainAll(test.getProgrammeKeys().keySet());
+        programmes = (List<Programme>) storedProgrammes.values();
+        school = store.getState().schools().get(test.getSchoolKey());
     }
 
     @Override
@@ -77,7 +91,6 @@ public class TestOverviewComponent extends RenderableView {
                     appCompatActivity.getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
                 });
             });
-
 
             withId(R.id.courseCode, () -> {
                 text(course.getCode());
@@ -102,7 +115,7 @@ public class TestOverviewComponent extends RenderableView {
             });
 
             withId(R.id.loading_indicator, () -> {
-                visibility(store.getState().testOverviewComponent().isFetching() ? VISIBLE : INVISIBLE);
+                visibility(store.getState().isFetching() ? VISIBLE : INVISIBLE);
             });
 
             withId(R.id.empty_view, () -> {
@@ -110,41 +123,23 @@ public class TestOverviewComponent extends RenderableView {
             });
 
             withId(R.id.programmesList, () -> {
-                init(() -> {
-                    RecyclerView recyclerView = Anvil.currentView();
-                    recyclerView.setHasFixedSize(true);
-
-//                    // Use a linear layout manager
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//
-//                    BoughtCoursesAdapter boughtCoursesAdapter =
-//                            new BoughtCoursesAdapter(context, store);
-//
-//                    // Set the adapter object to the RecyclerView
-//                    recyclerView.setAdapter(boughtCoursesAdapter);
-//
-//                    store.subscribe(() -> {
-//                        boughtCoursesAdapter.clear();
-//                        boughtCoursesAdapter.addAll(getScreenItems());
-//                        boughtCoursesAdapter.notifyDataSetChanged();
-//                    });
-
-                });
+                adapter(RenderableAdapter.withItems(programmes, (i, programme) -> {
+                    xml(R.layout.programme_item, () -> {
+                       withId(R.id.programmeName, () -> {
+                           text(programme.getName());
+                       });
+                    });
+                }));
             });
 
             withId(R.id.instructionsList, () -> {
-                init(() -> {
-                    for (String instruction : test.getInstructions()) {
-                        textView(() -> {
+                adapter(RenderableAdapter.withItems(test.getInstructions(), (i, instruction) -> {
+                    xml(R.layout.instruction_item, () -> {
+                        withId(R.id.instruction, () -> {
                             text(instruction);
                         });
-//                        xml(R.layout.instruction_item, () -> {
-//                            withId(R.id.instruction, () -> {
-//                                text(instruction);
-//                            });
-//                        });
-                    }
-                });
+                    });
+                }));
             });
 
             withId(R.id.bottomBar, () -> {
@@ -157,10 +152,11 @@ public class TestOverviewComponent extends RenderableView {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-//        fetchTest(test.getLecturerKey());
-//        fetchLecturer(test.getLecturerKey());
-//        fetchCourse(test.getLecturerKey());
-//        fetchProgramme(test.getLecturerKey());
-//        fetchSchool(test.getLecturerKey());
+        // fetchTest(test.getLecturerKey());
+        LecturerDatabaseManager.fetchLecturer(store, test.getLecturerKey());
+        CourseDatabaseManager.fetchCourse(store, test.getCourseKey());
+        Query query = ProgrammeDatabaseManager.PROGRAMMES_REF.limitToFirst(5);
+        ProgrammeDatabaseManager.fetchListOfProgrammes(store, query);
+        SchoolDatabaseManager.fetchSchool(store, test.getSchoolKey());
     }
 }

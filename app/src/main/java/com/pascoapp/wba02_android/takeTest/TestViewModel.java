@@ -67,7 +67,7 @@ public class TestViewModel {
     public Drawable getLecturerIcon() {
         // TODO: Fetch Actual lecturer name
         String name = getTestName();
-        // generate color based on a key (same key returns the same color), useful for list/grid views
+        // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getColor(name);
 
@@ -89,7 +89,7 @@ public class TestViewModel {
 
     public Drawable getIcon() {
         String name = store.getState().courses().get(test.getCourseKey()).getCode();
-        // generate color based on a key (same key returns the same color), useful for list/grid views
+        // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(name);
 

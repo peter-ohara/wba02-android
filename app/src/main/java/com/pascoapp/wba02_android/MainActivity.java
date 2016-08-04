@@ -11,10 +11,8 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.Query;
-import com.pascoapp.wba02_android.Help.HelpActivity;
+import com.pascoapp.wba02_android.help.HelpActivity;
 import com.pascoapp.wba02_android.Inbox.MessageListActivity;
-import com.pascoapp.wba02_android.dataFetching.CourseDatabaseManager;
 import com.pascoapp.wba02_android.main.MainScreenView;
 import com.pascoapp.wba02_android.settings.SettingsActivity;
 import com.pascoapp.wba02_android.signIn.CheckCurrentUser;
@@ -37,16 +35,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         App.getStoreComponent().inject(this);
 
-//        // Re-render UI via anvil when the store state changes
-//        store.subscribe(Anvil::render);
-//
-//        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
-//        // TODO: Make the statement below a consequence of the statement above it.
-//        setContentView(new MainScreenView(MainActivity.this));
+        // Re-render UI via anvil when the store state changes
+        store.subscribe(Anvil::render);
 
-        CourseDatabaseManager.fetchCourse(store, "CSM151");
-        Query query = CourseDatabaseManager.COURSES_REF.orderByChild("semester").equalTo(2);
-        CourseDatabaseManager.fetchListOfCourses(store, query);
+        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
+        // TODO: Make the statement below a consequence of the statement above it.
+        setContentView(new MainScreenView(MainActivity.this));
+
     }
 
     @Override

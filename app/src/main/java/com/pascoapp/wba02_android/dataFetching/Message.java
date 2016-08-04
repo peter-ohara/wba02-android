@@ -1,12 +1,13 @@
 package com.pascoapp.wba02_android.dataFetching;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.pascoapp.wba02_android.FirebaseItem;
 
 /**
  * Handles Message logic
  */
 @IgnoreExtraProperties
-public class Message {
+public class Message implements FirebaseItem {
 
     public String key;
     public String title;
@@ -34,8 +35,14 @@ public class Message {
         this.date = date;
     }
 
+
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getTitle() {

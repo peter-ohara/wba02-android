@@ -72,15 +72,15 @@
                 android:value=".Inbox.MessageListActivity" />
         </activity>
         <activity
-            android:name=".Help.CreditsActivity"
+            android:name=".help.CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName=".Help.HelpActivity">
+            android:parentActivityName=".help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.Help.HelpActivity" />
+                android:value="com.pascoapp.wba02_android.help.HelpActivity" />
         </activity>
         <activity
-            android:name=".Help.HelpActivity"
+            android:name=".help.HelpActivity"
             android:label="@string/title_activity_help"
             android:parentActivityName=".MainActivity">
             <meta-data

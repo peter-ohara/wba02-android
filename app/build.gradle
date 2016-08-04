@@ -49,23 +49,23 @@ dependencies {
     // Library for colored Square Icons with letter inside like in gmail
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
-    // Firebase
+    // Firebase Core
     compile 'com.google.firebase:firebase-core:9.4.0'
 
     // Firebase Realtime Database
     compile 'com.google.firebase:firebase-database:9.4.0'
-
-    // FirebaseUI Auth
-    compile 'com.firebaseui:firebase-ui-auth:0.4.1'
-
-    // FirebaseUI Database
-    compile 'com.firebaseui:firebase-ui-database:0.4.1'
 
     // Firebase Notifications
     compile 'com.google.firebase:firebase-messaging:9.4.0'
 
     // Firebase Crash Reporting
     compile 'com.google.firebase:firebase-crash:9.4.0'
+
+    // FirebaseUI Auth
+    compile 'com.firebaseui:firebase-ui-auth:0.4.4'
+
+    // FirebaseUI Database
+    compile 'com.firebaseui:firebase-ui-database:0.4.4'
 
     // RxAndroid and RxJava
     compile 'io.reactivex:rxandroid:1.2.1'

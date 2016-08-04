@@ -167,7 +167,7 @@ public class MessageListActivity extends AppCompatActivity {
         private void setIcon(ColorGenerator generator, Message message, String messageKey) {
             ImageView field = (ImageView) mView.findViewById(R.id.message_icon);
 
-            // generate color based on a key (same key returns the same color), useful for list/grid views
+            // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
             color = generator.getColor(messageKey);
 
             TextDrawable drawable = TextDrawable.builder()

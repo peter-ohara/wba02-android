@@ -1,5 +1,8 @@
 package com.pascoapp.wba02_android;
 
+import com.pascoapp.wba02_android.dataFetching.DatabaseActions;
+import com.pascoapp.wba02_android.dataFetching.DatabaseManager;
+
 import org.junit.Test;
 
 import trikita.jedux.Action;
@@ -22,15 +25,21 @@ public class ActionsUnitTest {
     }
 
     @Test
-    public void showScreenAction() throws Exception {
+    public void showScreen() throws Exception {
         store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
         assertEquals(store.getState().currentScreen(), Screens.MAIN_SCREEN);
     }
 
     @Test
-    public void selectCourseAction() throws Exception {
+    public void selectCourse() throws Exception {
         store.dispatch(Actions.selectCourse("CSM151"));
         assertEquals(store.getState().selectedCourse(), "CSM151");
         assertEquals(store.getState().testOverviewComponent().test(), "CSM151");
+    }
+
+    @Test
+    public void requestInitiated() throws Exception {
+        store.dispatch(DatabaseActions.requestInitiated("CSM151"));
+        assertEquals(store.getState().isFetching(), true);
     }
 }

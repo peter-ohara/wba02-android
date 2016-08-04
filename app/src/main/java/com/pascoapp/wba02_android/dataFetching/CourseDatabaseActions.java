@@ -12,13 +12,13 @@ import trikita.jedux.Action;
 
 public class CourseDatabaseActions {
 
-    private enum ActionType {
+    public enum ActionType {
         REQUEST_COURSE,
-        RECEIVE_COURSE_WITH_SUCCEESS,
+        RECEIVE_COURSE_WITH_SUCCESS,
         RECEIVE_COURSE_WITH_FAILURE,
 
         REQUEST_LIST_OF_COURSES,
-        RECEIVE_LIST_OF_COURSES_WITH_SUCCEESS,
+        RECEIVE_LIST_OF_COURSES_WITH_SUCCESS,
         RECEIVE_LIST_OF_COURSES_WITH_FAILURE
     }
 
@@ -28,7 +28,7 @@ public class CourseDatabaseActions {
     }
 
     public static Action receiveCourseWithSuccess(Course course) {
-        return new Action<>(ActionType.RECEIVE_COURSE_WITH_SUCCEESS,
+        return new Action<>(ActionType.RECEIVE_COURSE_WITH_SUCCESS,
                 course);
     }
 
@@ -44,7 +44,7 @@ public class CourseDatabaseActions {
     }
 
     public static Action receiveListOfCoursesWithSuccess(List<Course> courses) {
-        return new Action<>(ActionType.RECEIVE_LIST_OF_COURSES_WITH_SUCCEESS,
+        return new Action<>(ActionType.RECEIVE_LIST_OF_COURSES_WITH_SUCCESS,
                 courses);
     }
 
