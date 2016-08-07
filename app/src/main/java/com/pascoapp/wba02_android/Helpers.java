@@ -5,8 +5,8 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.FirebaseItem;
+import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.tests.Test;
 
 import java.util.HashMap;

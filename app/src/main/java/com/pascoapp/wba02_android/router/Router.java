@@ -10,18 +10,23 @@ import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Actions;
 import com.pascoapp.wba02_android.MainActivity;
 import com.pascoapp.wba02_android.State;
+import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.lecturers.Lecturers;
 import com.pascoapp.wba02_android.services.programmes.Programmes;
 import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.services.tests.Tests;
-import com.pascoapp.wba02_android.main.MainComponent;
-import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewComponent;
+import com.pascoapp.wba02_android.views.main.MainView;
+import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewComponent;
 
+import org.jdeferred.DonePipe;
 import org.jdeferred.Promise;
 import org.jdeferred.android.AndroidDeferredManager;
+import org.jdeferred.multiple.OneResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import trikita.jedux.Action;
@@ -76,7 +81,7 @@ public class Router implements Store.Middleware<Action, State> {
                     System.out.println("Router: " + resolutions);
                     store.dispatch(RouteActions.setRouteResolutions(resolutions));
                     System.out.println("Router: " + store.getState().currentResolvedData());
-                    backstack.navigate(new MainComponent(activity));
+                    backstack.navigate(new MainView(activity));
                     System.out.println("Router: " + "backstack navigated to MainComponent");
                 })
                 .fail(result -> {
@@ -116,8 +121,8 @@ public class Router implements Store.Middleware<Action, State> {
 
                 })
                 .fail(result -> {
-                    progress.dismiss();
                     Toast.makeText(activity, result.toString(), Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
                 });
     }
 

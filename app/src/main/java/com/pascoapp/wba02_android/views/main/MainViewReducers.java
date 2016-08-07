@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.main;
+package com.pascoapp.wba02_android.views.main;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -13,7 +13,7 @@ import trikita.jedux.Action;
 
 import static com.pascoapp.wba02_android.Actions.ActionType;
 
-public class MainComponentReducers {
+public class MainViewReducers {
 
     public static State boughtCoursesRequestInitiated(Action action, State oldState) {
         ActionType type = (ActionType) action.type;

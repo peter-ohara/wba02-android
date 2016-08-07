@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.takeTest.TestOverview;
+package com.pascoapp.wba02_android.views.takeTest.TestOverview;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,9 +19,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import trikita.anvil.Anvil;
 import trikita.anvil.RenderableAdapter;
 import trikita.anvil.RenderableView;
-import trikita.anvil.Anvil;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -29,11 +29,7 @@ import static trikita.anvil.BaseDSL.init;
 import static trikita.anvil.BaseDSL.text;
 import static trikita.anvil.BaseDSL.withId;
 import static trikita.anvil.BaseDSL.xml;
-import static trikita.anvil.DSL.imageView;
-import static trikita.anvil.DSL.linearLayout;
-import static trikita.anvil.DSL.*;
-import static trikita.anvil.DSL.textView;
-import static trikita.anvil.DSL.visibility;
+import static trikita.anvil.DSL.adapter;
 /**
  * Created by peter on 8/4/16.
  */
@@ -60,7 +56,7 @@ public class TestOverviewComponent extends RenderableView {
         Lecturer lecturer = (Lecturer) resolvedData.get("lecturer");
         List<Programme> programmes = (List<Programme>) resolvedData.get("programmes");
 
-        xml(R.layout.activity_take_test, () -> {
+        xml(R.layout.test_overview, () -> {
 
             withId(R.id.toolbar, () -> {
                 init(() -> {

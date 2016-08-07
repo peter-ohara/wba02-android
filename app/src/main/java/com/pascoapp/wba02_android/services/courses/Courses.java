@@ -9,9 +9,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.Actions;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.ImmutableState;
 import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.Helpers;
 
 import org.jdeferred.Deferred;
 import org.jdeferred.Promise;

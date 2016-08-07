@@ -1,20 +1,19 @@
-package com.pascoapp.wba02_android.main;
+package com.pascoapp.wba02_android.views.main;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.State;
+import com.pascoapp.wba02_android.router.Router;
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.tests.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ import static trikita.anvil.DSL.visibility;
  * Created by peter on 7/29/16.
  */
 
-public class MainComponent extends RenderableView {
+public class MainView extends RenderableView {
 
     private Context context;
     private AppCompatActivity appCompatActivity;
@@ -45,7 +44,7 @@ public class MainComponent extends RenderableView {
     Store<Action, State> store;
 
 
-    public MainComponent(Context context) {
+    public MainView(Context context) {
         super(context);
         this.context = context;
         appCompatActivity = ((AppCompatActivity) context);
@@ -54,14 +53,28 @@ public class MainComponent extends RenderableView {
 
     @Override
     public void view() {
+        if (store.getState().currentRoute().getScreen() != Router.Screens.MAIN_SCREEN) {
+            return;
+        }
 
         Map<String, Object> resolvedData = store.getState().currentResolvedData();
         List<Course> courses = (List<Course>) resolvedData.get("courses");
         List<Test> tests = (List<Test>) resolvedData.get("tests");
+
         System.out.println("Main Screen: " + courses);
         System.out.println("Main Screen: " + tests);
 
-        xml(R.layout.activity_main, () -> {
+        List<MainViewListItem> screenItems = new ArrayList<>();
+        for (Course course : courses) {
+            screenItems.add(new MainViewListItem(course));
+        }
+        for (Test test : tests) {
+            screenItems.add(new MainViewListItem(test));
+        }
+        System.out.println("Main Screen: " + screenItems);
+
+
+        xml(R.layout.main_view, () -> {
             withId(R.id.toolbar, () -> {
                 init(() -> {
                     Toolbar toolbar = Anvil.currentView();
@@ -82,37 +95,11 @@ public class MainComponent extends RenderableView {
 
 
             withId(R.id.coursesList, () -> {
-                init(() -> {
-                    RecyclerView recyclerView = Anvil.currentView();
-                    recyclerView.setHasFixedSize(true);
+                Recycler.layoutManager(new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.VERTICAL, false));
+                Recycler.hasFixedSize(true);
 
-                    // Use a linear layout manager
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-                    BoughtCoursesAdapter boughtCoursesAdapter =
-                            new BoughtCoursesAdapter(context);
-
-                    // Set the adapter object to the RecyclerView
-                    recyclerView.setAdapter(boughtCoursesAdapter);
-
-                    boughtCoursesAdapter.clear();
-
-                    List<MainListItem> screenItems = Stream.of(courses)
-                            .map(course ->
-                                    new MainListItem(course))
-                            .collect(Collectors.toList());
-
-                    boughtCoursesAdapter.addAll(screenItems);
-                    boughtCoursesAdapter.notifyDataSetChanged();
-
-                    screenItems = Stream.of(tests)
-                            .map(test -> new MainListItem(test))
-                            .collect(Collectors.toList());
-
-                    boughtCoursesAdapter.addAll(screenItems);
-                    boughtCoursesAdapter.notifyDataSetChanged();
-
-                });
+                Recycler.adapter(new MainViewListAdapter(context, screenItems));
             });
 
             withId(R.id.bottomBar, () -> {

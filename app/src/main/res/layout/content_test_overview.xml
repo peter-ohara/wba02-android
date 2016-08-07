@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_take_test">
+    tools:showIn="@layout/test_overview">
 
     <ImageView
         android:id="@+id/lecturerIcon"

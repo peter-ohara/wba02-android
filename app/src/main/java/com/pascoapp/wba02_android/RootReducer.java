@@ -9,7 +9,7 @@ import com.pascoapp.wba02_android.services.questions.Questions;
 import com.pascoapp.wba02_android.services.schools.Schools;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
-import com.pascoapp.wba02_android.main.MainComponentReducers;
+import com.pascoapp.wba02_android.views.main.MainViewReducers;
 
 import java.util.Map;
 
@@ -27,20 +27,20 @@ public class RootReducer implements Store.Reducer<Action, State> {
     public State reduce(Action action, State oldState) {
         State newState = oldState;
 
-        newState = showScreenReducer(action, oldState);
+        newState = showScreen(action, oldState);
         if (!newState.equals(oldState)) { return newState; }
 
         newState = setRouteResolutions(action, oldState);
         if (!newState.equals(oldState)) { return newState; }
 
         // MainComponent
-        newState = MainComponentReducers.boughtCoursesRequestInitiated(action, oldState);
+        newState = MainViewReducers.boughtCoursesRequestInitiated(action, oldState);
         if (!newState.equals(oldState)) { return newState; }
 
-        newState = MainComponentReducers.boughtCoursesRequestSuccessful(action, oldState);
+        newState = MainViewReducers.boughtCoursesRequestSuccessful(action, oldState);
         if (!newState.equals(oldState)) { return newState; }
 
-        newState = MainComponentReducers.boughtCoursesRequestFailed(action, oldState);
+        newState = MainViewReducers.boughtCoursesRequestFailed(action, oldState);
         if (!newState.equals(oldState)) { return newState; }
 
 
@@ -203,7 +203,7 @@ public class RootReducer implements Store.Reducer<Action, State> {
         return newState;
     }
 
-    private State showScreenReducer(Action action, State oldState) {
+    private State showScreen(Action action, State oldState) {
         Actions.ActionType type = (Actions.ActionType) action.type;
         switch (type) {
             case SHOW_SCREEN:

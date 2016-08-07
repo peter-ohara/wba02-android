@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.takeTest;
+package com.pascoapp.wba02_android.views.takeTest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewComponent;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.takeTest.TestSection.QuestionComparator;
+import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewComponent;
+import com.pascoapp.wba02_android.views.takeTest.TestSection.QuestionComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,11 +26,11 @@ import java.util.Collections;
 public class TakeTestActivity extends AppCompatActivity {
 
     public static final String EXTRA_TEST_KEY =
-            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
+            "com.pascoapp.wba02_android.views.takeTest.TakeTestActivity.testId";
     public static final String EXTRA_TEST_TITLE =
-            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testTitle";
+            "com.pascoapp.wba02_android.views.takeTest.TakeTestActivity.testTitle";
     public static final String EXTRA_TEST_POJO =
-            "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testPojo";
+            "com.pascoapp.wba02_android.views.takeTest.TakeTestActivity.testPojo";
 
     private ViewPager mPager;
 

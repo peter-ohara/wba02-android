@@ -6,6 +6,29 @@
     android:fitsSystemWindows="true"
     tools:context=".views.signIn.CheckCurrentUser">
 
-    <include layout="@layout/content_authenticate_user" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.signIn.CheckCurrentUser">
+
+        <ImageView
+            android:src="@drawable/pasco_logo_transparent"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/imageView4" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary"
+            android:indeterminateTintMode="src_in"/>
+    </RelativeLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

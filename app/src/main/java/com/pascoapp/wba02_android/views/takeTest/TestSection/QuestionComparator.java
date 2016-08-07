@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.takeTest.TestSection;
+package com.pascoapp.wba02_android.views.takeTest.TestSection;
 
 import com.pascoapp.wba02_android.services.questions.Question;
 

@@ -1,11 +1,11 @@
 package com.pascoapp.wba02_android;
 
-import com.pascoapp.wba02_android.main.CourseViewHolder;
-import com.pascoapp.wba02_android.main.MainComponent;
-import com.pascoapp.wba02_android.main.TestViewHolder;
-import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewComponent;
+import com.pascoapp.wba02_android.views.main.MainView;
+import com.pascoapp.wba02_android.views.main.MainViewListAdapter;
+import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewComponent;
 
 import javax.inject.Singleton;
+
 import dagger.Component;
 
 
@@ -14,9 +14,8 @@ import dagger.Component;
 public interface StoreComponent {
     void inject(MainActivity mainActivity);
 
-    void inject(MainComponent mainComponent);
+    void inject(MainView mainView);
     void inject(TestOverviewComponent testOverviewComponent);
 
-    void inject(CourseViewHolder courseViewHolder);
-    void inject(TestViewHolder testViewHolder);
+    void inject(MainViewListAdapter mainViewListAdapter);
 }

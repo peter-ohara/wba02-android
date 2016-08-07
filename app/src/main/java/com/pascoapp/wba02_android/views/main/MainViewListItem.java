@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.main;
+package com.pascoapp.wba02_android.views.main;
 
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.tests.Test;
@@ -7,16 +7,16 @@ import com.pascoapp.wba02_android.services.tests.Test;
  * Created by peter on 7/28/16.
  */
 
-public class MainListItem {
+public class MainViewListItem {
 
     private Course course;
     private Test test;
 
-    public MainListItem(Course course) {
+    public MainViewListItem(Course course) {
         this.course = course;
     }
 
-    public MainListItem(Test test) {
+    public MainViewListItem(Test test) {
         this.test = test;
     }
 
@@ -31,7 +31,7 @@ public class MainListItem {
 
     @Override
     public String toString() {
-        return "MainListItem{" +
+        return "MainViewListItem{" +
                 "course=" + course +
                 ", test=" + test +
                 '}';

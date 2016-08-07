@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.main;
+package com.pascoapp.wba02_android.views.main;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +22,7 @@ import static com.pascoapp.wba02_android.services.courses.Courses.COURSES_KEY;
  * Created by peter on 8/5/16.
  */
 
-public class MainComponentActions {
+public class MainViewActions {
 
 
     public static Action boughtCoursesRequestInitiated(String userId) {

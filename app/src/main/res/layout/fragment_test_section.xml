@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pascoapp.wba02_android.takeTest.TestSection.TestSectionFragment"
+    tools:context=".views.takeTest.TestSection.TestSectionFragment"
     android:id="@+id/constraintLayout2">
 
 
