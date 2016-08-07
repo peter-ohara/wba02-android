@@ -1,7 +1,8 @@
 package com.pascoapp.wba02_android;
 
-import com.pascoapp.wba02_android.dataFetching.DatabaseActions;
-import com.pascoapp.wba02_android.dataFetching.DatabaseManager;
+import com.pascoapp.wba02_android.router.Route;
+import com.pascoapp.wba02_android.router.RouteActions;
+import com.pascoapp.wba02_android.router.Router;
 
 import org.junit.Test;
 
@@ -26,20 +27,9 @@ public class ActionsUnitTest {
 
     @Test
     public void showScreen() throws Exception {
-        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
-        assertEquals(store.getState().currentScreen(), Screens.MAIN_SCREEN);
+        store.dispatch(RouteActions.showScreen(new Route(Router.Screens.MAIN_SCREEN)));
+        assertEquals(store.getState().currentRoute().getScreen(), Router.Screens.MAIN_SCREEN);
+        assertEquals(store.getState().currentRoute().getPayload(), null);
     }
 
-    @Test
-    public void selectCourse() throws Exception {
-        store.dispatch(Actions.selectCourse("CSM151"));
-        assertEquals(store.getState().selectedCourse(), "CSM151");
-        assertEquals(store.getState().testOverviewComponent().test(), "CSM151");
-    }
-
-    @Test
-    public void requestInitiated() throws Exception {
-        store.dispatch(DatabaseActions.requestInitiated("CSM151"));
-        assertEquals(store.getState().isFetching(), true);
-    }
 }

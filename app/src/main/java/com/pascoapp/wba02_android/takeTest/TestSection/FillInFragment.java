@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.dataFetching.Question;
+import com.pascoapp.wba02_android.services.questions.Question;
 
 /**
  * A simple {@link Fragment} subclass.

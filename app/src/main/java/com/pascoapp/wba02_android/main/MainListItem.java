@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.main;
 
-import com.pascoapp.wba02_android.takeTest.TestViewModel;
+import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.tests.Test;
 
 /**
  * Created by peter on 7/28/16.
@@ -8,30 +9,31 @@ import com.pascoapp.wba02_android.takeTest.TestViewModel;
 
 public class MainListItem {
 
-    private CourseViewModel courseViewModel;
-    private TestViewModel testViewModel;
+    private Course course;
+    private Test test;
 
-    public MainListItem(CourseViewModel courseViewModel) {
-        this.courseViewModel = courseViewModel;
+    public MainListItem(Course course) {
+        this.course = course;
     }
 
-    public MainListItem(TestViewModel testViewModel) {
-        this.testViewModel = testViewModel;
+    public MainListItem(Test test) {
+        this.test = test;
     }
 
-    public CourseViewModel getCourseViewModel() {
-        return courseViewModel;
+    public Course getCourse() {
+        return course;
     }
 
-    public TestViewModel getTestViewModel() {
-        return testViewModel;
+    public Test getTest() {
+        return test;
     }
+
 
     @Override
     public String toString() {
         return "MainListItem{" +
-                "courseViewModel=" + courseViewModel +
-                ", testViewModel=" + testViewModel +
+                "course=" + course +
+                ", test=" + test +
                 '}';
     }
 }

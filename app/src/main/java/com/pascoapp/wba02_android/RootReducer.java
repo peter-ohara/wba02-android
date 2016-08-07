@@ -1,10 +1,17 @@
 package com.pascoapp.wba02_android;
 
-import com.pascoapp.wba02_android.dataFetching.Course;
-import com.pascoapp.wba02_android.dataFetching.DatabaseManager;
+import com.pascoapp.wba02_android.router.Route;
+import com.pascoapp.wba02_android.services.courses.Courses;
+import com.pascoapp.wba02_android.services.lecturers.Lecturers;
+import com.pascoapp.wba02_android.services.messages.Messages;
+import com.pascoapp.wba02_android.services.programmes.Programmes;
+import com.pascoapp.wba02_android.services.questions.Questions;
+import com.pascoapp.wba02_android.services.schools.Schools;
+import com.pascoapp.wba02_android.services.tests.Tests;
+import com.pascoapp.wba02_android.services.users.Users;
+import com.pascoapp.wba02_android.main.MainComponentReducers;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.Map;
 
 import trikita.jedux.Action;
 import trikita.jedux.Store;
@@ -18,35 +25,182 @@ public class RootReducer implements Store.Reducer<Action, State> {
 
     @Override
     public State reduce(Action action, State oldState) {
-        State newSTate = oldState;
+        State newState = oldState;
 
-        newSTate = showScreenReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = showScreenReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = selectCourseReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = setRouteResolutions(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        DatabaseManager<Course> databaseManager = new DatabaseManager(Course.class);
+        // MainComponent
+        newState = MainComponentReducers.boughtCoursesRequestInitiated(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = databaseManager.requestInitiatedReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = MainComponentReducers.boughtCoursesRequestSuccessful(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = databaseManager.requestSuccessfulReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = MainComponentReducers.boughtCoursesRequestFailed(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = databaseManager.requestFailedReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
 
-        newSTate = databaseManager.listRequestInitiatedReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        // Courses
+        newState = Courses.courseRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = databaseManager.listRequestSuccessfulReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = Courses.courseRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        newSTate = databaseManager.listRequestFailedReducer(action, oldState);
-        if (!newSTate.equals(oldState)) { return newSTate; }
+        newState = Courses.courseRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
 
-        return newSTate;
+        newState = Courses.courseListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Courses.courseListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Courses.courseListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+
+        // Tests
+        newState = Tests.testRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Tests.testRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Tests.testRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Tests.testListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Tests.testListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Tests.testListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+
+        // Lecturers
+        newState = Lecturers.lecturerRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Lecturers.lecturerRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Lecturers.lecturerRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Lecturers.lecturerListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Lecturers.lecturerListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Lecturers.lecturerListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+
+        // Messages
+        newState = Messages.messageRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Messages.messageRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Messages.messageRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Messages.messageListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Messages.messageListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Messages.messageListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        // Programmes
+        newState = Programmes.programmeRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Programmes.programmeRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Programmes.programmeRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Programmes.programmeListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Programmes.programmeListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Programmes.programmeListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        // Questions
+        newState = Questions.questionRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Questions.questionRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Questions.questionRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Questions.questionListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Questions.questionListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Questions.questionListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        // Schools
+        newState = Schools.schoolRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Schools.schoolRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Schools.schoolRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Schools.schoolListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Schools.schoolListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Schools.schoolListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+
+        // Users
+        newState = Users.userRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Users.userRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Users.userRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Users.userListRequestInitiatedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Users.userListRequestSuccessfulReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        newState = Users.userListRequestFailedReducer(action, oldState);
+        if (!newState.equals(oldState)) { return newState; }
+
+        return newState;
     }
 
     private State showScreenReducer(Action action, State oldState) {
@@ -55,29 +209,23 @@ public class RootReducer implements Store.Reducer<Action, State> {
             case SHOW_SCREEN:
                 return ImmutableState.builder()
                         .from(oldState)
-                        .currentScreen((Screens) action.value)
+                        .currentRoute((Route) action.value)
                         .build();
             default:
                 return oldState;
         }
     }
 
-    private State selectCourseReducer(Action action, State oldState) {
+    private State setRouteResolutions(Action action, State oldState) {
         Actions.ActionType type = (Actions.ActionType) action.type;
         switch (type) {
-            case SELECT_COURSE:
-                ImmutableTestOverviewComponent testOverviewComponent = ImmutableTestOverviewComponent.builder()
-                        .from(oldState.testOverviewComponent())
-                        .test((String) action.value)
-                        .build();
+            case SET_ROUTE_RESOLUTIONS:
                 return ImmutableState.builder()
                         .from(oldState)
-                        .selectedCourse((String) action.value)
-                        .testOverviewComponent(testOverviewComponent)
+                        .currentResolvedData((Map<String, Object>) action.value)
                         .build();
             default:
                 return oldState;
         }
     }
-
 }

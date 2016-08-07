@@ -36,7 +36,7 @@
 
         <!-- Start here -->
         <activity
-            android:name=".signIn.CheckCurrentUser"
+            android:name=".views.signIn.CheckCurrentUser"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".views.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -54,7 +54,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".Inbox.MessageListActivity"
+            android:name=".views.Inbox.MessageListActivity"
             android:label="@string/title_message_list"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -63,24 +63,24 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".Inbox.MessageDetailActivity"
+            android:name=".views.Inbox.MessageDetailActivity"
             android:label=""
-            android:parentActivityName=".Inbox.MessageListActivity"
+            android:parentActivityName=".views.Inbox.MessageListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Inbox.MessageListActivity" />
+                android:value=".views.Inbox.MessageListActivity" />
         </activity>
         <activity
-            android:name=".help.CreditsActivity"
+            android:name=".views.help.CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName=".help.HelpActivity">
+            android:parentActivityName=".views.help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.help.HelpActivity" />
+                android:value=".views.help.HelpActivity" />
         </activity>
         <activity
-            android:name=".help.HelpActivity"
+            android:name=".views.help.HelpActivity"
             android:label="@string/title_activity_help"
             android:parentActivityName=".MainActivity">
             <meta-data

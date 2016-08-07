@@ -1,9 +1,7 @@
 package com.pascoapp.wba02_android.takeTest;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,19 +15,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
-import com.pascoapp.wba02_android.dataFetching.Question;
-import com.pascoapp.wba02_android.dataFetching.Test;
+import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewComponent;
+import com.pascoapp.wba02_android.services.questions.Question;
+import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.takeTest.TestSection.QuestionComparator;
-import com.pascoapp.wba02_android.takeTest.TestSection.TestSectionFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class TakeTestActivity extends AppCompatActivity
-        implements TestOverviewFragment.OnFragmentInteractionListener,
-        TestSectionFragment.OnFragmentInteractionListener {
+public class TakeTestActivity extends AppCompatActivity {
 
     public static final String EXTRA_TEST_KEY =
             "com.pascoapp.wba02_android.takeTest.TakeTestActivity.testId";
@@ -70,26 +64,6 @@ public class TakeTestActivity extends AppCompatActivity
 
 //        String testKey = getTestKey();
 //        getQuestions(testKey);
-    }
-
-    private void showTestOverview(String testKey) {
-        // Create fragment and give it an argument specifying the article it should show
-        TestOverviewFragment newFragment = TestOverviewFragment.newInstance(testKey);
-        //Bundle args = new Bundle();
-        //args.putInt(TestOverviewFragment.ARG_POSITION, position);
-        //newFragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the userKey can navigate back
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
-        bottomButton.setText("Start &#10175;");
-        bottomButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_right, 0);
     }
 
     public String getTestKey() {
@@ -145,8 +119,4 @@ public class TakeTestActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

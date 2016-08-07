@@ -1,6 +1,6 @@
 package com.pascoapp.wba02_android.takeTest.TestSection;
 
-import com.pascoapp.wba02_android.dataFetching.Question;
+import com.pascoapp.wba02_android.services.questions.Question;
 
 import java.util.Comparator;
 

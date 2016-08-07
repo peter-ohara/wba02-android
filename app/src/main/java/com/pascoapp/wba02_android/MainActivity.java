@@ -11,11 +11,13 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.pascoapp.wba02_android.help.HelpActivity;
-import com.pascoapp.wba02_android.Inbox.MessageListActivity;
-import com.pascoapp.wba02_android.main.MainScreenView;
-import com.pascoapp.wba02_android.settings.SettingsActivity;
-import com.pascoapp.wba02_android.signIn.CheckCurrentUser;
+import com.pascoapp.wba02_android.views.help.HelpActivity;
+import com.pascoapp.wba02_android.views.Inbox.MessageListActivity;
+import com.pascoapp.wba02_android.router.Route;
+import com.pascoapp.wba02_android.router.RouteActions;
+import com.pascoapp.wba02_android.router.Router;
+import com.pascoapp.wba02_android.views.settings.SettingsActivity;
+import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import javax.inject.Inject;
 
@@ -30,18 +32,35 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     Store<Action, State> store;
 
+    @Inject
+    Router router;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.branded_launch_screen);
+
         App.getStoreComponent().inject(this);
 
         // Re-render UI via anvil when the store state changes
         store.subscribe(Anvil::render);
 
-        store.dispatch(Actions.showScreen(Screens.MAIN_SCREEN));
-        // TODO: Make the statement below a consequence of the statement above it.
-        setContentView(new MainScreenView(MainActivity.this));
+        router.init(this);
+        if (savedInstanceState != null) {
+            router.load(savedInstanceState);
+        } else {
+            // TODO: Rehydrate state and use it to show screen
+            // Check what the current screen is and show that one
+            Route currentRoute = store.getState().currentRoute();
+            store.dispatch(RouteActions.showScreen(currentRoute));
+        }
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (!router.back()) {
+            finish();
+        }
     }
 
     @Override

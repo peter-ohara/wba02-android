@@ -5,8 +5,9 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.pascoapp.wba02_android.dataFetching.Course;
-import com.pascoapp.wba02_android.dataFetching.Test;
+import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.FirebaseItem;
+import com.pascoapp.wba02_android.services.tests.Test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class Helpers {
         return year + " " + type;
     }
 
-    public Drawable getIcon(Course course) {
+    public static Drawable getCourseIcon(Course course) {
         String text = course.getCode();
         // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.DEFAULT;
@@ -55,6 +56,11 @@ public class Helpers {
                 );
     }
 
-
-
+    public static <T extends FirebaseItem> Map<String, T> convertToMap(List<T> items) {
+        Map<String, T> map = new HashMap<>();
+        for (T item : items) {
+            map.put(item.getKey(), item);
+        }
+        return map;
+    }
 }

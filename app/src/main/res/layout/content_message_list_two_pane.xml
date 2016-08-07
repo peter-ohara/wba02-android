@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".Inbox.MessageListActivity">
+    tools:context=".views.Inbox.MessageListActivity">
 
     <!--
     This layout is a two-pane layout for the messages
@@ -32,7 +32,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".Inbox.MessageListActivity"
+        tools:context=".views.Inbox.MessageListActivity"
         tools:listitem="@layout/message_list_content" />
 
     <FrameLayout

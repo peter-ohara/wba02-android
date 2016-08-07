@@ -67,9 +67,8 @@ dependencies {
     // FirebaseUI Database
     compile 'com.firebaseui:firebase-ui-database:0.4.4'
 
-    // RxAndroid and RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
+    // JDefferred
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
 
     // Anvil for databinding
     compile 'co.trikita:anvil-sdk15:0.4.0'

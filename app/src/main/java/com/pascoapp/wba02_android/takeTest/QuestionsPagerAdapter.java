@@ -4,8 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.pascoapp.wba02_android.takeTest.TestOverview.TestOverviewFragment;
-import com.pascoapp.wba02_android.dataFetching.Question;
+import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.takeTest.TestSection.EssayFragment;
 import com.pascoapp.wba02_android.takeTest.TestSection.FillInFragment;
 
@@ -29,9 +28,9 @@ class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Question currentQuestion = mQuestions.get(position);
         if (position == 0) {
-            return TestOverviewFragment.newInstance(mTestKey);
+//            return TestOverviewFragment.newInstance(mTestKey);
         } else if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
-            return TestOverviewFragment.newInstance(mTestKey);
+//            return TestOverviewFragment.newInstance(mTestKey);
             // return McqFragment.newInstance(currentQuestion);
         } else if (currentQuestion.getType().equalsIgnoreCase("fillIn")) {
             return FillInFragment.newInstance(currentQuestion);
