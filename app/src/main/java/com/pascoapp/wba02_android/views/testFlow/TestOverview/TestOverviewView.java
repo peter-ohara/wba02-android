@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.takeTest.TestOverview;
+package com.pascoapp.wba02_android.views.testFlow.TestOverview;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
@@ -30,10 +30,13 @@ import static trikita.anvil.BaseDSL.text;
 import static trikita.anvil.BaseDSL.withId;
 import static trikita.anvil.BaseDSL.xml;
 import static trikita.anvil.DSL.adapter;
+import static trikita.anvil.DSL.*;
+import static trikita.anvil.DSL.imageDrawable;
+
 /**
  * Created by peter on 8/4/16.
  */
-public class TestOverviewComponent extends RenderableView {
+public class TestOverviewView extends RenderableView {
 
     private Context context;
     private AppCompatActivity appCompatActivity;
@@ -41,7 +44,7 @@ public class TestOverviewComponent extends RenderableView {
     @Inject
     Store<Action, State> store;
 
-    public TestOverviewComponent(Context context) {
+    public TestOverviewView(Context context) {
         super(context);
         this.context = context;
         appCompatActivity = ((AppCompatActivity) context);
@@ -56,13 +59,20 @@ public class TestOverviewComponent extends RenderableView {
         Lecturer lecturer = (Lecturer) resolvedData.get("lecturer");
         List<Programme> programmes = (List<Programme>) resolvedData.get("programmes");
 
+        System.out.println("TestOverview :" + test);
+        System.out.println("TestOverview :" + course);
+        System.out.println("TestOverview :" + lecturer);
+        System.out.println("TestOverview :" + programmes);
         xml(R.layout.test_overview, () -> {
 
             withId(R.id.toolbar, () -> {
                 init(() -> {
                     Toolbar toolbar = Anvil.currentView();
                     appCompatActivity.setSupportActionBar(toolbar);
-                    appCompatActivity.getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
+                    //appCompatActivity.getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
+                    appCompatActivity.setTitle("");
+                    appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
                 });
             });
 
@@ -88,11 +98,16 @@ public class TestOverviewComponent extends RenderableView {
                 });
             });
 
+//            withId(R.id.lecturerIcon, () -> {
+//                imageDrawable(Helpers.getIcon(lecturer.getKey(), lecturer.firstName));
+//            });
+
             withId(R.id.lecturerName, () -> {
                text(lecturer.getFirstName() + " " + lecturer.getLastName());
             });
 
             withId(R.id.programmesList, () -> {
+                size(MATCH, WRAP);
                 adapter(RenderableAdapter.withItems(programmes, (i, programme) -> {
                     xml(R.layout.programme_item, () -> {
                        withId(R.id.programmeName, () -> {
@@ -103,6 +118,7 @@ public class TestOverviewComponent extends RenderableView {
             });
 
             withId(R.id.instructionsList, () -> {
+                size(MATCH, WRAP);
                 adapter(RenderableAdapter.withItems(test.getInstructions(), (i, instruction) -> {
                     xml(R.layout.instruction_item, () -> {
                         withId(R.id.instruction, () -> {
@@ -114,6 +130,9 @@ public class TestOverviewComponent extends RenderableView {
 
             withId(R.id.bottomBar, () -> {
                 text("Start");
+                onClick(view -> {
+
+                });
             });
         });
     }

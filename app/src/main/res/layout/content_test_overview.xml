@@ -1,89 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_test_overview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/test_overview">
+    tools:context="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity">
 
-    <ImageView
-        android:id="@+id/lecturerIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        tools:src="@mipmap/ic_launcher"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="@+id/fragment_test_overview" />
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_test_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/test_overview">
 
-    <TextView
-        android:id="@+id/lecturerName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        tools:text="Prof. Isaac Gob3"
-        app:layout_constraintLeft_toRightOf="@+id/lecturerIcon"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintTop_toTopOf="@+id/lecturerIcon"
-        app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lecturerIcon"
-        app:layout_constraintVertical_bias="0.25" />
+        <ImageView
+            android:id="@+id/lecturerIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:src="@mipmap/ic_launcher"
+            app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/fragment_test_overview" />
 
-    <TextView
-        android:id="@+id/programmesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Programmes"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/lecturerIcon"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/lecturerName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            tools:text="Prof. Isaac Gob3"
+            app:layout_constraintLeft_toRightOf="@+id/lecturerIcon"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/lecturerIcon"
+            app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lecturerIcon"
+            app:layout_constraintVertical_bias="0.25" />
 
-    <ListView
-        android:id="@+id/programmesList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/programmesTextView"
-        android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp" />
+        <TextView
+            android:id="@+id/programmesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Programmes"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/lecturerIcon"
+            android:layout_marginTop="8dp" />
 
-    <TextView
-        android:id="@+id/instructionsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Instructions"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/programmesList"
-        android:layout_marginTop="8dp" />
+        <ListView
+            android:id="@+id/programmesList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/programmesTextView"
+            android:layout_marginTop="8dp"
+            app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <ListView
-        android:id="@+id/instructionsList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/instructionsTextView"
-        android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp" />
+        <TextView
+            android:id="@+id/instructionsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instructions"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/programmesList"
+            android:layout_marginTop="8dp" />
+
+        <ListView
+            android:id="@+id/instructionsList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@+id/fragment_test_overview"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/instructionsTextView"
+            android:layout_marginTop="8dp"
+            app:layout_constraintRight_toRightOf="@+id/fragment_test_overview"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

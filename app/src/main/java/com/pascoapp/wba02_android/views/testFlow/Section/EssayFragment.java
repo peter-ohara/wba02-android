@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.takeTest.TestSection;
+package com.pascoapp.wba02_android.views.testFlow.Section;
 
 import android.graphics.Color;
 import android.graphics.Picture;

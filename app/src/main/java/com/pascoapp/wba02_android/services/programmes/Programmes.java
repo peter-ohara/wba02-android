@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android.services.programmes;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,13 +14,10 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.ImmutableState;
 import com.pascoapp.wba02_android.State;
 
-import org.jdeferred.Deferred;
-import org.jdeferred.Promise;
-import org.jdeferred.impl.DeferredObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -33,75 +31,74 @@ public class Programmes {
     public static final DatabaseReference PROGRAMMES_REF
             = FirebaseDatabase.getInstance().getReference().child(PROGRAMMES_KEY);
 
-    public static Promise fetchProgramme(Store<Action, State> store, String key) {
-        store.dispatch(ProgrammeActions.programmeRequestInitiated(key));
-        Deferred deferred = new DeferredObject();
-        PROGRAMMES_REF.child(key)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            String errorMessage = "Item doesn't exist in the database";
-                            store.dispatch(ProgrammeActions
-                                    .programmeRequestFailed(errorMessage));
-                            deferred.reject(errorMessage);
-                            return;
+
+    public static Observable<Programme> fetchProgramme(Store<Action, State> store, String key) {
+        return Observable.create(subscriber -> {
+            store.dispatch(ProgrammeActions.programmeRequestInitiated(key));
+            PROGRAMMES_REF.child(key)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+                                String errorMessage = "Item doesn't exist in the database";
+                                store.dispatch(ProgrammeActions
+                                        .programmeRequestFailed(errorMessage));
+                                subscriber.onError(new FirebaseException(errorMessage));
+                                return;
+                            }
+
+                            Programme programme = dataSnapshot.getValue(Programme.class);
+                            programme.key = dataSnapshot.getKey();
+                            store.dispatch(ProgrammeActions.programmeRequestSucceeded(programme));
+                            subscriber.onNext(programme);
+                            subscriber.onCompleted();
                         }
 
-                        Programme programme = dataSnapshot.getValue(Programme.class);
-                        programme.key = dataSnapshot.getKey();
-                        store.dispatch(ProgrammeActions.programmeRequestSucceeded(programme));
-                        deferred.resolve(programme);
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            store.dispatch(ProgrammeActions
+                                    .programmeRequestFailed(databaseError.getMessage()));
+                            subscriber.onError(new FirebaseException(databaseError.getMessage()));
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        store.dispatch(ProgrammeActions
-                                .programmeRequestFailed(databaseError.getMessage()));
-                        deferred.reject(databaseError.getMessage());
-                    }
-                });
-        return deferred.promise();
-    }
-
-    public static Promise fetchListOfProgrammes(Store<Action, State> store, Query query) {
-        store.dispatch(ProgrammeActions.listProgrammeRequestInitiated(query));
-        Deferred deferred = new DeferredObject();
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) {
-                    String errorMessage = "Item doesn't exist in the database";
-                    store.dispatch(ProgrammeActions
-                            .programmeRequestFailed(errorMessage));
-                    deferred.reject(errorMessage);
-                    return;
-                }
-
-                List<Programme> programmes = new ArrayList<>();
-                for (DataSnapshot programmeSnapshot: dataSnapshot.getChildren()) {
-                    Programme programme = programmeSnapshot.getValue(Programme.class);
-                    programme.key = programmeSnapshot.getKey();
-                    programmes.add(programme);
-                }
-                store.dispatch(ProgrammeActions.listProgrammeRequestSucceeded(programmes));
-                deferred.resolve(programmes);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(ProgrammeActions
-                        .programmeRequestFailed(databaseError.getMessage()));
-                deferred.reject(databaseError.getMessage());
-            }
+                        }
+                    });
         });
-        return deferred.promise();
     }
 
+    public static Observable<List<Programme>> fetchListOfProgrammes(Store<Action, State> store, Query query) {
+        return Observable.create(subscriber -> {
+            store.dispatch(ProgrammeActions.listProgrammeRequestInitiated(query));
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        String errorMessage = "Item doesn't exist in the database";
+                        store.dispatch(ProgrammeActions
+                                .programmeRequestFailed(errorMessage));
+                        subscriber.onError(new FirebaseException(errorMessage));
+                        return;
+                    }
 
+                    List<Programme> programmes = new ArrayList<>();
+                    for (DataSnapshot programmeSnapshot: dataSnapshot.getChildren()) {
+                        Programme programme = programmeSnapshot.getValue(Programme.class);
+                        programme.key = programmeSnapshot.getKey();
+                        programmes.add(programme);
+                    }
+                    store.dispatch(ProgrammeActions.listProgrammeRequestSucceeded(programmes));
+                    subscriber.onNext(programmes);
+                    subscriber.onCompleted();
+                }
 
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    store.dispatch(ProgrammeActions
+                            .listProgrammeRequestFailed(databaseError.getMessage()));
+                    subscriber.onError(new FirebaseException(databaseError.getMessage()));
+                }
+            });
+        });
+    }
 
     public static State programmeRequestInitiatedReducer(Action action, State oldState) {
         Actions.ActionType type = (Actions.ActionType) action.type;

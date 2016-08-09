@@ -53,7 +53,7 @@ public class MainViewActions {
                 List<Course> courses = new ArrayList<>();
                 for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
                     Course course = courseSnapshot.getValue(Course.class);
-                    course.key = courseSnapshot.getKey();
+                    course.setKey(courseSnapshot.getKey());
                     courses.add(course);
                 }
                 store.dispatch(boughtCoursesRequestSuccessful(courses));

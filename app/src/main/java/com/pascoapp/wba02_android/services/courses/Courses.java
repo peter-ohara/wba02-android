@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android.services.courses;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,13 +14,10 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.ImmutableState;
 import com.pascoapp.wba02_android.State;
 
-import org.jdeferred.Deferred;
-import org.jdeferred.Promise;
-import org.jdeferred.impl.DeferredObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -33,69 +31,73 @@ public class Courses {
     public static final DatabaseReference COURSES_REF
             = FirebaseDatabase.getInstance().getReference().child(COURSES_KEY);
 
-    public static Promise fetchCourse(Store<Action, State> store, String key) {
-        store.dispatch(CourseActions.courseRequestInitiated(key));
-        Deferred deferred = new DeferredObject();
-        COURSES_REF.child(key)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            String errorMessage = "Item doesn't exist in the database";
-                            store.dispatch(CourseActions
-                                    .courseRequestFailed(errorMessage));
-                            deferred.reject(errorMessage);
-                            return;
+
+    public static Observable<Course> fetchCourse(Store<Action, State> store, String key) {
+        return Observable.create(subscriber -> {
+            store.dispatch(CourseActions.courseRequestInitiated(key));
+            COURSES_REF.child(key)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+                                String errorMessage = "Item doesn't exist in the database";
+                                store.dispatch(CourseActions
+                                        .courseRequestFailed(errorMessage));
+                                subscriber.onError(new FirebaseException(errorMessage));
+                                return;
+                            }
+
+                            Course course = dataSnapshot.getValue(Course.class);
+                            course.setKey(dataSnapshot.getKey());
+                            store.dispatch(CourseActions.courseRequestSucceeded(course));
+                            subscriber.onNext(course);
+                            subscriber.onCompleted();
                         }
 
-                        Course course = dataSnapshot.getValue(Course.class);
-                        course.key = dataSnapshot.getKey();
-                        store.dispatch(CourseActions.courseRequestSucceeded(course));
-                        deferred.resolve(course);
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            store.dispatch(CourseActions
+                                    .courseRequestFailed(databaseError.getMessage()));
+                            subscriber.onError(new FirebaseException(databaseError.getMessage()));
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        store.dispatch(CourseActions
-                                .courseRequestFailed(databaseError.getMessage()));
-                        deferred.reject(databaseError.getMessage());
-                    }
-                });
-        return deferred.promise();
+                        }
+                    });
+        });
     }
 
-    public static Promise fetchListOfCourses(Store<Action, State> store, Query query) {
-        store.dispatch(CourseActions.listCourseRequestInitiated(query));
-        Deferred deferred = new DeferredObject();
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) {
-                    String errorMessage = "Item doesn't exist in the database";
+    public static Observable<List<Course>> fetchListOfCourses(Store<Action, State> store, Query query) {
+        return Observable.create(subscriber -> {
+            store.dispatch(CourseActions.listCourseRequestInitiated(query));
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        String errorMessage = "Item doesn't exist in the database";
+                        store.dispatch(CourseActions
+                                .courseRequestFailed(errorMessage));
+                        subscriber.onError(new FirebaseException(errorMessage));
+                        return;
+                    }
+
+                    List<Course> courses = new ArrayList<>();
+                    for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
+                        Course course = courseSnapshot.getValue(Course.class);
+                        course.setKey(courseSnapshot.getKey());
+                        courses.add(course);
+                    }
+                    store.dispatch(CourseActions.listCourseRequestSucceeded(courses));
+                    subscriber.onNext(courses);
+                    subscriber.onCompleted();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
                     store.dispatch(CourseActions
-                            .courseRequestFailed(errorMessage));
-                    deferred.reject(errorMessage);
-                    return;
+                            .listCourseRequestFailed(databaseError.getMessage()));
+                    subscriber.onError(new FirebaseException(databaseError.getMessage()));
                 }
-
-                List<Course> courses = new ArrayList<>();
-                for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
-                    Course course = courseSnapshot.getValue(Course.class);
-                    course.key = courseSnapshot.getKey();
-                    courses.add(course);
-                }
-                store.dispatch(CourseActions.listCourseRequestSucceeded(courses));
-                deferred.resolve(courses);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(CourseActions
-                        .courseRequestFailed(databaseError.getMessage()));
-                deferred.reject(databaseError.getMessage());
-            }
+            });
         });
-        return deferred.promise();
     }
 
     public static State courseRequestInitiatedReducer(Action action, State oldState) {

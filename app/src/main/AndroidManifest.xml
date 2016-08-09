@@ -21,18 +21,9 @@
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".views.main.MainActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.takeTest.TakeTestActivity"
-            android:label=""
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
         <!-- Start here -->
         <activity
@@ -46,46 +37,63 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.settings.SettingsActivity"
+            android:name=".views.overflow.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".views.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".views.main.MainActivity" />
         </activity>
         <activity
-            android:name=".views.Inbox.MessageListActivity"
+            android:name=".views.overflow.Inbox.MessageListActivity"
             android:label="@string/title_message_list"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".views.main.MainActivity" />
         </activity>
         <activity
-            android:name=".views.Inbox.MessageDetailActivity"
+            android:name=".views.overflow.Inbox.MessageDetailActivity"
             android:label=""
-            android:parentActivityName=".views.Inbox.MessageListActivity"
+            android:parentActivityName=".views.overflow.Inbox.MessageListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.Inbox.MessageListActivity" />
+                android:value=".views.overflow.Inbox.MessageListActivity" />
         </activity>
         <activity
-            android:name=".views.help.CreditsActivity"
+            android:name=".views.overflow.help.CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName=".views.help.HelpActivity">
+            android:parentActivityName=".views.overflow.help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.help.HelpActivity" />
+                android:value=".views.overflow.help.HelpActivity" />
         </activity>
         <activity
-            android:name=".views.help.HelpActivity"
+            android:name=".views.overflow.help.HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".views.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.MainActivity" />
+                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".views.testFlow.TestOverview.TestOverviewActivity"
+            android:label="@string/title_activity_test_overview"
+            android:parentActivityName=".views.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".views.testFlow.Section.SectionActivity"
+            android:label="@string/title_activity_section"
+            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
         </activity>
     </application>
 

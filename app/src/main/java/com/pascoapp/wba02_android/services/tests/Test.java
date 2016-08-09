@@ -86,7 +86,7 @@ public class Test implements FirebaseItem {
     @Override
     public String toString() {
         return "Test{" +
-                "nodeKey='" + key + '\'' +
+                "key='" + key + '\'' +
                 ", type='" + type + '\'' +
                 ", duration=" + duration +
                 ", year=" + year +

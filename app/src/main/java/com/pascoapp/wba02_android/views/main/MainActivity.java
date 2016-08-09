@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.views.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,12 +11,15 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.pascoapp.wba02_android.App;
+import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.State;
 import com.pascoapp.wba02_android.router.Route;
 import com.pascoapp.wba02_android.router.RouteActions;
 import com.pascoapp.wba02_android.router.Router;
-import com.pascoapp.wba02_android.views.Inbox.MessageListActivity;
-import com.pascoapp.wba02_android.views.help.HelpActivity;
-import com.pascoapp.wba02_android.views.settings.SettingsActivity;
+import com.pascoapp.wba02_android.views.overflow.Inbox.MessageListActivity;
+import com.pascoapp.wba02_android.views.overflow.help.HelpActivity;
+import com.pascoapp.wba02_android.views.overflow.settings.SettingsActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import javax.inject.Inject;

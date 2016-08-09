@@ -9,13 +9,13 @@ import com.pascoapp.wba02_android.services.FirebaseItem;
 @IgnoreExtraProperties
 public class Course implements FirebaseItem {
 
-    public String key;
-    public String code;
-    public String name;
-    public Long semester;
-    public Long level;
-    public String programmeKey;
-    public String schoolKey;
+    private String key;
+    private String code;
+    private String name;
+    private Long semester;
+    private Long level;
+    private String programmeKey;
+    private String schoolKey;
 
     public Course() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

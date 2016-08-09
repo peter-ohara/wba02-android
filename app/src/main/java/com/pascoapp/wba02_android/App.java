@@ -2,6 +2,8 @@ package com.pascoapp.wba02_android;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Created by peter on 8/2/16.
  */
@@ -14,6 +16,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         System.out.println("INITIALIZING APP FROM PID: " + android.os.Process.myPid());
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         storeComponent = DaggerStoreComponent.builder()
                 .storeModule(new StoreModule())

@@ -1,12 +1,12 @@
-package com.pascoapp.wba02_android.views.takeTest;
+package com.pascoapp.wba02_android.views.testFlow.Section;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.views.takeTest.TestSection.EssayFragment;
-import com.pascoapp.wba02_android.views.takeTest.TestSection.FillInFragment;
+import com.pascoapp.wba02_android.views.testFlow.Section.EssayFragment;
+import com.pascoapp.wba02_android.views.testFlow.Section.FillInFragment;
 
 import java.util.List;
 

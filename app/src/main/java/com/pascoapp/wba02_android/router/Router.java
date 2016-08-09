@@ -1,6 +1,6 @@
 package com.pascoapp.wba02_android.router;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,27 +8,20 @@ import android.widget.Toast;
 
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Actions;
-import com.pascoapp.wba02_android.MainActivity;
+import com.pascoapp.wba02_android.views.main.MainActivity;
 import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.lecturers.Lecturers;
 import com.pascoapp.wba02_android.services.programmes.Programmes;
 import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.views.main.MainView;
-import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewComponent;
+import com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity;
 
-import org.jdeferred.DonePipe;
-import org.jdeferred.Promise;
-import org.jdeferred.android.AndroidDeferredManager;
-import org.jdeferred.multiple.OneResult;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -52,7 +45,8 @@ public class Router implements Store.Middleware<Action, State> {
 
         switch (route.getScreen()) {
             case MAIN_SCREEN: {
-                resolveMainScreenData(store);
+                //resolveMainScreenData(store);
+                backstack.navigate(new MainView(activity));
                 return;
             }
             case TEST_OVERVIEW_SCREEN: {
@@ -67,26 +61,26 @@ public class Router implements Store.Middleware<Action, State> {
 
         // Resolve dependencies for main screen
         // then show main Screen
-        AndroidDeferredManager dm = new AndroidDeferredManager();
-        Query coursesQuery = Courses.COURSES_REF.limitToFirst(5);
-        Promise coursesPromise = Courses.fetchListOfCourses(store, coursesQuery);
-        Query testsQuery = Tests.TESTS_REF.limitToFirst(5);
-        Promise testsPromise = Tests.fetchListOfTests(store, testsQuery);
-
-        dm.when(coursesPromise, testsPromise)
-                .done(results -> {
-                    Map<String, Object> resolutions = new HashMap<>();
-                    resolutions.put("courses", results.get(0).getResult());
-                    resolutions.put("tests", results.get(1).getResult());
-                    System.out.println("Router: " + resolutions);
-                    store.dispatch(RouteActions.setRouteResolutions(resolutions));
-                    System.out.println("Router: " + store.getState().currentResolvedData());
-                    backstack.navigate(new MainView(activity));
-                    System.out.println("Router: " + "backstack navigated to MainComponent");
+        Map<String, Object> resolvedData = new HashMap<>();
+        Query coursesQuery = Courses.COURSES_REF.limitToFirst(3);
+        Courses.fetchListOfCourses(store, coursesQuery)
+                .flatMap(courses -> {
+                    resolvedData.put("courses", courses);
+                    return Observable.from(courses);
                 })
-                .fail(result -> {
-                    Toast.makeText(activity, result.toString(), Toast.LENGTH_SHORT).show();
-                    System.out.println("Router: " + "Failed to resolve courses or tests");
+                .flatMap(course -> {
+                    Query testsQuery = Tests.TESTS_REF.orderByChild("courseKey").equalTo(course.getKey());
+                    return Tests.fetchListOfTests(store, testsQuery);
+                })
+                .flatMap(tests -> Observable.from(tests))
+                .toList()
+                .subscribe(tests -> {
+                    resolvedData.put("tests", tests);
+                    store.dispatch(RouteActions.setRouteResolutions(resolvedData));
+                    backstack.navigate(new MainView(activity));
+                }, firebaseException -> {
+                    Toast.makeText(activity, firebaseException.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -94,35 +88,27 @@ public class Router implements Store.Middleware<Action, State> {
         // Resolve dependencies for test overview screen
         // then show testoverview screen
         Test test = (Test) store.getState().currentRoute().getPayload();
-        ProgressDialog progress = new ProgressDialog(activity);
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setIndeterminate(true);
-        progress.setProgressNumberFormat(null);
-        progress.setProgressPercentFormat(null);
-        progress.show();
-
-        AndroidDeferredManager dm = new AndroidDeferredManager();
-        Promise coursePromise = Courses.fetchCourse(store, test.getCourseKey());
-        Promise lecturerPromise = Lecturers.fetchLecturer(store, test.getLecturerKey());
-        Query query = Programmes.PROGRAMMES_REF.limitToFirst(5);
-        Promise programmesPromise = Programmes.fetchListOfProgrammes(store, query);
-
-        dm.when(coursePromise, lecturerPromise, programmesPromise)
-                .done(results -> {
-                    Map<String, Object> resolutions = new HashMap<>();
-                    resolutions.put("test", test);
-                    resolutions.put("course", results.get(0).getResult());
-                    resolutions.put("lecturer", results.get(1).getResult());
-                    resolutions.put("programmes", results.get(2).getResult());
-                    store.dispatch(RouteActions.setRouteResolutions(resolutions));
-
-                    backstack.navigate(new TestOverviewComponent(activity));
-                    progress.dismiss();
-
+        Map<String, Object> resolvedData = new HashMap<>();
+        resolvedData.put("test", test);
+        Courses.fetchCourse(store, test.getCourseKey())
+                .flatMap(course -> {
+                    resolvedData.put("course", course);
+                    return Lecturers.fetchLecturer(store, test.getLecturerKey());
                 })
-                .fail(result -> {
-                    Toast.makeText(activity, result.toString(), Toast.LENGTH_SHORT).show();
-                    progress.dismiss();
+                .flatMap(lecturer -> {
+                    resolvedData.put("lecturer", lecturer);
+                    Query query = Programmes.PROGRAMMES_REF.limitToFirst(5);
+                    return Programmes.fetchListOfProgrammes(store, query);
+                })
+                .subscribe(programmes -> {
+                    resolvedData.put("programmes", programmes);
+                    store.dispatch(RouteActions.setRouteResolutions(resolvedData));
+
+                    activity.startActivity(new Intent(activity, TestOverviewActivity.class));
+                    //backstack.navigate(new TestOverviewView(activity));
+                }, firebaseException -> {
+                    Toast.makeText(activity, firebaseException.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 });
     }
 

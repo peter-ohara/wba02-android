@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android.services.tests;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,13 +14,10 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.ImmutableState;
 import com.pascoapp.wba02_android.State;
 
-import org.jdeferred.Deferred;
-import org.jdeferred.Promise;
-import org.jdeferred.impl.DeferredObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -33,75 +31,74 @@ public class Tests {
     public static final DatabaseReference TESTS_REF
             = FirebaseDatabase.getInstance().getReference().child(TESTS_KEY);
 
-    public static Promise fetchTest(Store<Action, State> store, String key) {
-        store.dispatch(TestActions.testRequestInitiated(key));
-        Deferred deferred = new DeferredObject();
-        TESTS_REF.child(key)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            String errorMessage = "Item doesn't exist in the database";
-                            store.dispatch(TestActions
-                                    .testRequestFailed(errorMessage));
-                            deferred.reject(errorMessage);
-                            return;
+
+    public static Observable<Test> fetchTest(Store<Action, State> store, String key) {
+        return Observable.create(subscriber -> {
+            store.dispatch(TestActions.testRequestInitiated(key));
+            TESTS_REF.child(key)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+                                String errorMessage = "Item doesn't exist in the database";
+                                store.dispatch(TestActions
+                                        .testRequestFailed(errorMessage));
+                                subscriber.onError(new FirebaseException(errorMessage));
+                                return;
+                            }
+
+                            Test test = dataSnapshot.getValue(Test.class);
+                            test.key = dataSnapshot.getKey();
+                            store.dispatch(TestActions.testRequestSucceeded(test));
+                            subscriber.onNext(test);
+                            subscriber.onCompleted();
                         }
 
-                        Test test = dataSnapshot.getValue(Test.class);
-                        test.key = dataSnapshot.getKey();
-                        store.dispatch(TestActions.testRequestSucceeded(test));
-                        deferred.resolve(test);
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            store.dispatch(TestActions
+                                    .testRequestFailed(databaseError.getMessage()));
+                            subscriber.onError(new FirebaseException(databaseError.getMessage()));
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        store.dispatch(TestActions
-                                .testRequestFailed(databaseError.getMessage()));
-                        deferred.reject(databaseError.getMessage());
-                    }
-                });
-        return deferred.promise();
-    }
-
-    public static Promise fetchListOfTests(Store<Action, State> store, Query query) {
-        store.dispatch(TestActions.listTestRequestInitiated(query));
-        Deferred deferred = new DeferredObject();
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) {
-                    String errorMessage = "Item doesn't exist in the database";
-                    store.dispatch(TestActions
-                            .testRequestFailed(errorMessage));
-                    deferred.reject(errorMessage);
-                    return;
-                }
-
-                List<Test> tests = new ArrayList<>();
-                for (DataSnapshot testSnapshot: dataSnapshot.getChildren()) {
-                    Test test = testSnapshot.getValue(Test.class);
-                    test.key = testSnapshot.getKey();
-                    tests.add(test);
-                }
-                store.dispatch(TestActions.listTestRequestSucceeded(tests));
-                deferred.resolve(tests);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(TestActions
-                        .testRequestFailed(databaseError.getMessage()));
-                deferred.reject(databaseError.getMessage());
-            }
+                        }
+                    });
         });
-        return deferred.promise();
     }
 
+    public static Observable<List<Test>> fetchListOfTests(Store<Action, State> store, Query query) {
+        return Observable.create(subscriber -> {
+            store.dispatch(TestActions.listTestRequestInitiated(query));
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        String errorMessage = "Item doesn't exist in the database";
+                        store.dispatch(TestActions
+                                .testRequestFailed(errorMessage));
+                        subscriber.onError(new FirebaseException(errorMessage));
+                        return;
+                    }
 
+                    List<Test> tests = new ArrayList<>();
+                    for (DataSnapshot testSnapshot: dataSnapshot.getChildren()) {
+                        Test test = testSnapshot.getValue(Test.class);
+                        test.key = testSnapshot.getKey();
+                        tests.add(test);
+                    }
+                    store.dispatch(TestActions.listTestRequestSucceeded(tests));
+                    subscriber.onNext(tests);
+                    subscriber.onCompleted();
+                }
 
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    store.dispatch(TestActions
+                            .listTestRequestFailed(databaseError.getMessage()));
+                    subscriber.onError(new FirebaseException(databaseError.getMessage()));
+                }
+            });
+        });
+    }
 
     public static State testRequestInitiatedReducer(Action action, State oldState) {
         Actions.ActionType type = (Actions.ActionType) action.type;

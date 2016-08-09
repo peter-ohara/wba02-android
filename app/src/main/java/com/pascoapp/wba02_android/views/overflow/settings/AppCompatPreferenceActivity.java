@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.settings;
+package com.pascoapp.wba02_android.views.overflow.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

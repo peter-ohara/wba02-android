@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.Inbox;
+package com.pascoapp.wba02_android.views.overflow.Inbox;
 
 import android.content.Intent;
 import android.os.Bundle;

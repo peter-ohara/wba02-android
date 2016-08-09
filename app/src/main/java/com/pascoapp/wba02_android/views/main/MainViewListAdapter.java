@@ -22,9 +22,12 @@ import trikita.anvil.recyclerview.Recycler;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
+import static trikita.anvil.BaseDSL.dip;
+import static trikita.anvil.BaseDSL.margin;
 import static trikita.anvil.BaseDSL.text;
 import static trikita.anvil.BaseDSL.withId;
 import static trikita.anvil.BaseDSL.xml;
+import static trikita.anvil.DSL.imageDrawable;
 import static trikita.anvil.DSL.onClick;
 
 /**
@@ -48,6 +51,8 @@ public class MainViewListAdapter extends Recycler.Adapter {
         this.mItems = mItems;
         App.getStoreComponent().inject(this);
     }
+
+
 
     @Override
     public int getItemViewType(int position) {
@@ -74,8 +79,20 @@ public class MainViewListAdapter extends Recycler.Adapter {
             case TYPE_TEST:
                 Test test = mItems.get(position).getTest();
                 xml(R.layout.test_item, () -> {
+                    margin(dip(16), dip(4));
+
                     withId(R.id.testName, () -> {
                         text(Helpers.getTestName(test));
+                    });
+                    withId(R.id.lecturerName, () -> {
+                        text(test.getLecturerKey());
+                    });
+                    withId(R.id.questionCount, () -> {
+                        text("42 q");
+                    });
+                    withId(R.id.testIcon, () -> {
+                        imageDrawable(Helpers.getIcon(test.getKey(),
+                                store.getState().courses().get(test.courseKey).getCode()));
                     });
                     onClick(view -> {
                         Route route = new Route(Router.Screens.TEST_OVERVIEW_SCREEN, test);
@@ -88,5 +105,17 @@ public class MainViewListAdapter extends Recycler.Adapter {
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public void add(MainViewListItem mainViewListItem) {
+        mItems.add(mainViewListItem);
+    }
+
+    public void clear() {
+        mItems.clear();
+    }
+
+    public void addAll(List<MainViewListItem> items) {
+        mItems.addAll(items);
     }
 }

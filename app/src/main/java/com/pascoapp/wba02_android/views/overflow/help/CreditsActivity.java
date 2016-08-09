@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.help;
+package com.pascoapp.wba02_android.views.overflow.help;
 
 import android.app.Activity;
 import android.os.Bundle;

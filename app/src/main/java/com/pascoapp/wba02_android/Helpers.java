@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static trikita.anvil.BaseDSL.dip;
+
 /**
  * Created by peter on 8/4/16.
  */
@@ -36,17 +38,14 @@ public class Helpers {
         return year + " " + type;
     }
 
-    public static Drawable getCourseIcon(Course course) {
-        String text = course.getCode();
+    public static Drawable getIcon(String colorKey, String text) {
         // generate color based on a nodeKey (same nodeKey returns the same color), useful for list/grid views
         ColorGenerator generator = ColorGenerator.DEFAULT;
-        int color = generator.getColor(text);
-
-        int dp = (int) (13 * Resources.getSystem().getDisplayMetrics().density);
+        int color = generator.getColor(colorKey);
 
         return TextDrawable.builder()
                 .beginConfig()
-                .fontSize(dp) /* size in px */
+                .fontSize(dip(13)) /* size in px */
                 .toUpperCase()
                 .endConfig()
                 .buildRound(
