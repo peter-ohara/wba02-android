@@ -175,6 +175,12 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_section">SectionActivity</string>
+    <string name="title_activity_discussion">DiscussionActivity</string>
+    <string name="title_activity_question_fillin">QuestionFillinActivity</string>
+    <string name="title_activity_question_mcq">QuestionMcqActivity</string>
+    <string name="title_activity_question_essay">QuestionEssayActivity</string>
+    <string name="title_activity_header">HeaderActivity</string>
+    <string name="title_activity_test_end">TestEndActivity</string>
 
 
 </resources>

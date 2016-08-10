@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.testFlow.Section;
+package com.pascoapp.wba02_android.views.testFlow.Section.question;
 
 import android.graphics.Color;
 import android.graphics.Picture;
@@ -18,12 +18,12 @@ import com.pascoapp.wba02_android.services.questions.Question;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link EssayFragment#newInstance} factory method to
+ * Use the {@link FillInFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EssayFragment extends Fragment {
+public class FillInFragment extends Fragment {
 
-    private static final String LOG_TAG = EssayFragment.class.getSimpleName();
+    private static final String LOG_TAG = FillInFragment.class.getSimpleName();
     public static final String QUESTION_ERROR = "Unknown Error! Please report this questionKey";
 
     // the fragment initialization parameters
@@ -50,10 +50,10 @@ public class EssayFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param question id for fetching the questionKey.
-     * @return A new instance of fragment EssayFragment.
+     * @return A new instance of fragment FillInFragment.
      */
-    public static EssayFragment newInstance(Question question) {
-        EssayFragment fragment = new EssayFragment();
+    public static FillInFragment newInstance(Question question) {
+        FillInFragment fragment = new FillInFragment();
         Bundle args = new Bundle();
 
         args.putString(ARG_QUESTION, question.getQuestion());
@@ -63,7 +63,7 @@ public class EssayFragment extends Fragment {
         return fragment;
     }
 
-    public EssayFragment() {
+    public FillInFragment() {
         // Required empty public constructor
     }
 
@@ -91,13 +91,11 @@ public class EssayFragment extends Fragment {
 
         super.onSaveInstanceState(outState);
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_essay, container, false);
+        View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
 
 
         final WebView webview = (WebView) view.findViewById(R.id.webview);
@@ -131,7 +129,7 @@ public class EssayFragment extends Fragment {
     }
 
     private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.essayTemplate
+        String htmlString = QuestionTemplates.fillInTemplate
                 .replace("{ questionKey }", question);
         loadItemInWebView(webview, htmlString);
     }
@@ -142,6 +140,5 @@ public class EssayFragment extends Fragment {
         // TODO: Change "http://bar" to something more apprioprate. See documentation for loadWithBaseUrl()
         w.loadDataWithBaseURL("http://bar", htmlString, "text/html", "utf-8", "");
     }
-
 
 }

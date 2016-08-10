@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.main.MainActivity"
-    tools:showIn="@layout/main_view">
+    tools:showIn="@layout/activity_main">
 
     <ProgressBar
         android:id="@+id/loading_indicator"

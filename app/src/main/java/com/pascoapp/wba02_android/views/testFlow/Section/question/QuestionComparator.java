@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.testFlow.Section;
+package com.pascoapp.wba02_android.views.testFlow.Section.question;
 
 import com.pascoapp.wba02_android.services.questions.Question;
 

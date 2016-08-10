@@ -45,43 +45,15 @@ public class Router implements Store.Middleware<Action, State> {
 
         switch (route.getScreen()) {
             case MAIN_SCREEN: {
-                //resolveMainScreenData(store);
-                backstack.navigate(new MainView(activity));
+                // resolveMainScreenData(store);
+                //backstack.navigate(new MainView(activity));
                 return;
             }
             case TEST_OVERVIEW_SCREEN: {
-                resolveTestOverviewData(store);
+                //resolveTestOverviewData(store);
                 return;
             }
         }
-    }
-
-    private void resolveMainScreenData(Store<Action, State> store) {
-        System.out.println("Router: " + "In MAIN_SCREEN");
-
-        // Resolve dependencies for main screen
-        // then show main Screen
-        Map<String, Object> resolvedData = new HashMap<>();
-        Query coursesQuery = Courses.COURSES_REF.limitToFirst(3);
-        Courses.fetchListOfCourses(store, coursesQuery)
-                .flatMap(courses -> {
-                    resolvedData.put("courses", courses);
-                    return Observable.from(courses);
-                })
-                .flatMap(course -> {
-                    Query testsQuery = Tests.TESTS_REF.orderByChild("courseKey").equalTo(course.getKey());
-                    return Tests.fetchListOfTests(store, testsQuery);
-                })
-                .flatMap(tests -> Observable.from(tests))
-                .toList()
-                .subscribe(tests -> {
-                    resolvedData.put("tests", tests);
-                    store.dispatch(RouteActions.setRouteResolutions(resolvedData));
-                    backstack.navigate(new MainView(activity));
-                }, firebaseException -> {
-                    Toast.makeText(activity, firebaseException.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
     }
 
     private void resolveTestOverviewData(Store<Action, State> store) {

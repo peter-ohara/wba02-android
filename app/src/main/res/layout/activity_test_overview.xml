@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity"
+    tools:context=".views.takeTest.TakeTestActivity"
     android:id="@+id/snackbarPosition" >
 
     <android.support.design.widget.AppBarLayout
@@ -19,7 +19,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="256dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -51,10 +51,15 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <include
-        android:layout_height="wrap_content"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        layout="@layout/content_test_overview" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            layout="@layout/content_test_overview" />
+    </android.support.v4.widget.NestedScrollView>
 
     <Button
         android:text="Change School"

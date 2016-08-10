@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".views.takeTest.TakeTestActivity"
+    tools:context="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity"
     android:id="@+id/snackbarPosition" >
 
     <android.support.design.widget.AppBarLayout
@@ -51,15 +51,10 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
+    <include
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <include
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            layout="@layout/content_test_overview" />
-    </android.support.v4.widget.NestedScrollView>
+        layout="@layout/content_test_overview" />
 
     <Button
         android:text="Change School"

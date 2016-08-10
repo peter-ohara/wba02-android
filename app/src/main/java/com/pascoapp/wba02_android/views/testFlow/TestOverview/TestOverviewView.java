@@ -31,7 +31,6 @@ import static trikita.anvil.BaseDSL.withId;
 import static trikita.anvil.BaseDSL.xml;
 import static trikita.anvil.DSL.adapter;
 import static trikita.anvil.DSL.*;
-import static trikita.anvil.DSL.imageDrawable;
 
 /**
  * Created by peter on 8/4/16.
@@ -63,7 +62,7 @@ public class TestOverviewView extends RenderableView {
         System.out.println("TestOverview :" + course);
         System.out.println("TestOverview :" + lecturer);
         System.out.println("TestOverview :" + programmes);
-        xml(R.layout.test_overview, () -> {
+        xml(R.layout.activity_test_overview, () -> {
 
             withId(R.id.toolbar, () -> {
                 init(() -> {

@@ -5,9 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
-import com.annimon.stream.Stream;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
@@ -75,7 +73,7 @@ public class MainView extends RenderableView {
             mainViewListAdapter.addAll(items);
         }
 
-        xml(R.layout.main_view, () -> {
+        xml(R.layout.activity_main, () -> {
             withId(R.id.toolbar, () -> {
                 init(() -> {
                     Toolbar toolbar = Anvil.currentView();

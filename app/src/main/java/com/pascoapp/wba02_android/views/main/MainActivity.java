@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.branded_launch_screen);
+        setContentView(new MainView(this));
 
         App.getStoreComponent().inject(this);
 
