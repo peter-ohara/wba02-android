@@ -46,9 +46,11 @@ public class MainView extends RenderableView {
     private Context context;
     private AppCompatActivity appCompatActivity;
 
+    private final MainViewListAdapter mainViewListAdapter;
+
+
     @Inject
     Store<Action, State> store;
-    private MainViewListAdapter mainViewListAdapter = new MainViewListAdapter(context, new ArrayList<>());
     ;
 
 
@@ -56,6 +58,7 @@ public class MainView extends RenderableView {
         super(context);
         this.context = context;
         appCompatActivity = ((AppCompatActivity) context);
+        mainViewListAdapter = new MainViewListAdapter(context, new ArrayList<>());
         App.getStoreComponent().inject(this);
         resolveMainScreenData(store);
     }

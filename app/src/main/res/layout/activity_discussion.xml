@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pascoapp.wba02_android.views.testFlow.discussion.DiscussionActivity">
+    tools:context=".views.discussion.DiscussionActivity">
 
     <TextView
         android:layout_width="wrap_content"

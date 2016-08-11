@@ -20,6 +20,7 @@ public class Question implements FirebaseItem {
 
     public String answer;
     public String explanation;
+    public String content;
 
     public String number;
     public String section;
@@ -82,6 +83,10 @@ public class Question implements FirebaseItem {
         return explanation;
     }
 
+    public String getContent() {
+        return content;
+    }
+
     public String getNumber() {
         return number;
     }
@@ -118,12 +123,15 @@ public class Question implements FirebaseItem {
         return schoolKey;
     }
 
+
     @Override
     public String toString() {
         return "Question{" +
                 "key='" + key + '\'' +
-                ", question='" + question + '\'' +
+                ", type='" + type + '\'' +
+                ", number='" + number + '\'' +
                 ", answer='" + answer + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

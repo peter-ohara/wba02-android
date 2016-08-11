@@ -14,14 +14,11 @@ import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.lecturers.Lecturers;
 import com.pascoapp.wba02_android.services.programmes.Programmes;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.services.tests.Tests;
-import com.pascoapp.wba02_android.views.main.MainView;
-import com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity;
+import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.Observable;
 import trikita.jedux.Action;
 import trikita.jedux.Store;
 
@@ -50,7 +47,7 @@ public class Router implements Store.Middleware<Action, State> {
                 return;
             }
             case TEST_OVERVIEW_SCREEN: {
-                //resolveTestOverviewData(store);
+                resolveTestOverviewData(store);
                 return;
             }
         }

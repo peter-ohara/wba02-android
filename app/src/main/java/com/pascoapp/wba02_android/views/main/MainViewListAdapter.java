@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.views.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 
 import com.pascoapp.wba02_android.App;
@@ -12,6 +13,8 @@ import com.pascoapp.wba02_android.router.RouteActions;
 import com.pascoapp.wba02_android.router.Router;
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.tests.Test;
+import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewActivity;
+import com.pascoapp.wba02_android.views.takeTest.question.TakeTestActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: "android-apt"
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
@@ -41,7 +41,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.1.0'
     compile 'com.android.support:recyclerview-v7:24.1.0'
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha6'
     compile 'com.android.support:cardview-v7:24.1.0'
 
     compile 'com.android.support:preference-v7:24.1.0'
@@ -78,11 +78,6 @@ dependencies {
     // Jedux
     compile 'com.github.trikita:jedux:-SNAPSHOT'
 
-    // Immutables library for creating the immutable state
-    apt "org.immutables:value:2.2.10" // <-- for annotation processor
-    provided "org.immutables:value:2.2.10" // <-- for annotation API
-    provided "org.immutables:gson:2.2.10" // for annotations
-
     // Google Gson for Gson Builder
     compile 'com.google.code.gson:gson:2.7'
 
@@ -93,6 +88,15 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.5'
     compile 'com.google.dagger:dagger:2.5'
     provided 'javax.annotation:jsr250-api:1.0'
+
+    // Butterknife
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    // Immutables library for creating the immutable state
+    apt "org.immutables:value:2.2.10" // <-- for annotation processor
+    provided "org.immutables:value:2.2.10" // <-- for annotation API
+    provided "org.immutables:gson:2.2.10" // for annotations
 }
 
 apply plugin: 'com.google.gms.google-services'

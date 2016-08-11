@@ -21,6 +21,22 @@
             android:value="CUDo0XrVZza3h2H9X706DuViTNZVz4vCrCDzU69j" />
 
         <activity
+            android:name=".views.takeTest.question.TakeTestActivity"
+            android:label="@string/title_activity_take_test"
+            android:parentActivityName=".views.takeTest.TestOverview.TestOverviewActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".views.main.MainActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
@@ -79,7 +95,7 @@
                 android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
         </activity>
         <activity
-            android:name=".views.testFlow.TestOverview.TestOverviewActivity"
+            android:name=".views.takeTest.TestOverview.TestOverviewActivity"
             android:label="@string/title_activity_test_overview"
             android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -88,97 +104,13 @@
                 android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
         </activity>
         <activity
-            android:name=".views.testFlow.Section.SectionActivity"
-            android:label="@string/title_activity_section"
-            android:parentActivityName=".views.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
-        </activity>
-        <activity
-            android:name=".views.testFlow.discussion.DiscussionActivity"
+            android:name=".views.discussion.DiscussionActivity"
             android:label="@string/title_activity_discussion"
-            android:parentActivityName=".views.testFlow.Section.SectionActivity"
+            android:parentActivityName=".views.takeTest.Section.SectionActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.Section.SectionActivity" />
-        </activity>
-        <activity
-            android:name=".QuestionFillInActivity"
-            android:label="@string/title_activity_question_fillin"
-            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".QuestionMcqActivity"
-            android:label="@string/title_activity_question_mcq"
-            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".QuestionEssayActivity"
-            android:label="@string/title_activity_question_essay"
-            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".HeaderActivity"
-            android:label="@string/title_activity_header"
-            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".TestEndActivity"
-            android:label="@string/title_activity_test_end"
-            android:parentActivityName=".views.testFlow.TestOverview.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.testFlow.TestOverview.TestOverviewActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                android:value="com.pascoapp.wba02_android.views.takeTest.Section.SectionActivity" />
         </activity>
     </application>
 

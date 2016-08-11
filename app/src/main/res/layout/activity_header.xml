@@ -25,7 +25,7 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment"
-        android:name="com.pascoapp.wba02_android.HeaderActivityFragment"
+        android:name="com.pascoapp.wba02_android.views.takeTest.question.HeaderFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_header" />

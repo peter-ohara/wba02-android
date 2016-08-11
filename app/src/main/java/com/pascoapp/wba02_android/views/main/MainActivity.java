@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.State;
@@ -41,30 +42,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new MainView(this));
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         App.getStoreComponent().inject(this);
-
         // Re-render UI via anvil when the store state changes
         store.subscribe(Anvil::render);
-
         router.init(this);
-        if (savedInstanceState != null) {
-            router.load(savedInstanceState);
-        } else {
-            // TODO: Rehydrate state and use it to show screen
-            // Check what the current screen is and show that one
-            Route currentRoute = store.getState().currentRoute();
-            store.dispatch(RouteActions.showScreen(currentRoute));
-        }
+
+        setContentView(new MainView(this));
     }
 
-    @Override
-    public void onBackPressed() {
-        if (!router.back()) {
-            finish();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
