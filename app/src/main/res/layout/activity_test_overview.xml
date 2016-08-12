@@ -51,18 +51,19 @@
     </android.support.design.widget.AppBarLayout>
 
 
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <include
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            layout="@layout/content_test_overview" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="?attr/actionBarSize">
+
+        <include layout="@layout/content_test_overview" />
+
     </android.support.v4.widget.NestedScrollView>
 
     <Button
-        android:text="Change School"
+        android:text="Start Test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -70,5 +71,12 @@
         android:theme="@style/greenButton"
         android:background="@color/primary"
         android:id="@+id/bottomBar" />
+
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </android.support.design.widget.CoordinatorLayout>

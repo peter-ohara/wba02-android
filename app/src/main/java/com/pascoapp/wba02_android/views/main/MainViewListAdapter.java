@@ -4,26 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 
-import com.pascoapp.wba02_android.App;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.router.Route;
-import com.pascoapp.wba02_android.router.RouteActions;
-import com.pascoapp.wba02_android.router.Router;
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.views.takeTest.TestOverview.TestOverviewActivity;
-import com.pascoapp.wba02_android.views.takeTest.question.TakeTestActivity;
+import com.pascoapp.wba02_android.views.takeTest.TestOverviewActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import trikita.anvil.recyclerview.Recycler;
-import trikita.jedux.Action;
-import trikita.jedux.Store;
 
 import static trikita.anvil.BaseDSL.dip;
 import static trikita.anvil.BaseDSL.margin;
@@ -42,20 +31,14 @@ public class MainViewListAdapter extends Recycler.Adapter {
     public static final int TYPE_TEST = 1;
     public static final int TYPE_COURSE = 2;
 
-    private List<MainViewListItem> mItems = new ArrayList<>();
-
-    @Inject
-    Store<Action, State> store;
+    private List<MainViewListItem> mItems;
 
     private Context context;
 
     public MainViewListAdapter(Context context, List<MainViewListItem> mItems) {
         this.context = context;
         this.mItems = mItems;
-        App.getStoreComponent().inject(this);
     }
-
-
 
     @Override
     public int getItemViewType(int position) {
@@ -94,12 +77,21 @@ public class MainViewListAdapter extends Recycler.Adapter {
                         text("42 q");
                     });
                     withId(R.id.testIcon, () -> {
-                        imageDrawable(Helpers.getIcon(test.getKey(),
-                                store.getState().courses().get(test.courseKey).getCode()));
+                        // TODO: Fetch Course, then fetch course code instead of
+                        // using test.courseKey as the text for the image
+                        // it works for now cos in the sample data,
+                        // courseCode and courseKey are the same thing
+                        imageDrawable(
+                                Helpers.getIcon(
+                                        test.getKey(),
+                                        test.courseKey,
+                                        13 // fontsize in dp
+                                )
+                        );
                     });
                     onClick(view -> {
-                        Route route = new Route(Router.Screens.TEST_OVERVIEW_SCREEN, test);
-                        store.dispatch(RouteActions.showScreen(route));
+                        Intent intent = new Intent(context, TestOverviewActivity.class);
+                        context.startActivity(intent);
                     });
                 });
         }
@@ -112,13 +104,16 @@ public class MainViewListAdapter extends Recycler.Adapter {
 
     public void add(MainViewListItem mainViewListItem) {
         mItems.add(mainViewListItem);
+        notifyDataSetChanged();
     }
 
     public void clear() {
         mItems.clear();
+        notifyDataSetChanged();
     }
 
     public void addAll(List<MainViewListItem> items) {
         mItems.addAll(items);
+        notifyDataSetChanged();
     }
 }

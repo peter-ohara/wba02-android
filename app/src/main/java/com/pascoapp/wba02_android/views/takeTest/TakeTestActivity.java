@@ -1,7 +1,8 @@
-package com.pascoapp.wba02_android.views.takeTest.question;
+package com.pascoapp.wba02_android.views.takeTest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
+import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ public class TakeTestActivity extends AppCompatActivity {
     private DatabaseReference mQuestionsRef;
 
     @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
-    @BindView(R.id.snackbarPosition) private View coordinatorLayoutView;
+    @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayoutView;
     @BindView(R.id.viewpager) ViewPager mPager;
     @BindView(R.id.previousButton) Button previousButton;
     @BindView(R.id.nextButton) Button nextButton;
@@ -56,6 +58,7 @@ public class TakeTestActivity extends AppCompatActivity {
         setupViewPager();
 
         disableAndHideButton(previousButton);
+        disableAndHideButton(nextButton);
 
         getQuestions(getTestId());
     }
@@ -64,7 +67,7 @@ public class TakeTestActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_close_white_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         setTitle(getTestTitle());
     }
 
@@ -113,7 +116,8 @@ public class TakeTestActivity extends AppCompatActivity {
 
     public String getTestId() {
         Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_TEST_KEY);
+        return "test1";
+//        return intent.getStringExtra(EXTRA_TEST_KEY);
     }
 
     public String getTestTitle() {
@@ -142,6 +146,7 @@ public class TakeTestActivity extends AppCompatActivity {
                 mPagerAdapter.notifyDataSetChanged();
                 Log.d("TakeTestActivity", "onDataChange: " + mQuestions);
                 loadingIndicator.setVisibility(View.GONE);
+                enableAndUnHideButton(nextButton);
             }
 
             @Override
@@ -179,6 +184,11 @@ public class TakeTestActivity extends AppCompatActivity {
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
+    }
+
+    public void openDiscussionActivity() {
+        Intent intent = new Intent(this, DiscussionActivity.class);
+        startActivity(intent);
     }
 
     public void quit() {

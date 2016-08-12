@@ -4,53 +4,67 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
-import com.pascoapp.wba02_android.App;
+import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.State;
-import com.pascoapp.wba02_android.router.Route;
-import com.pascoapp.wba02_android.router.RouteActions;
-import com.pascoapp.wba02_android.router.Router;
+import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.courses.Courses;
+import com.pascoapp.wba02_android.services.tests.Test;
+import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.views.overflow.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.views.overflow.help.HelpActivity;
 import com.pascoapp.wba02_android.views.overflow.settings.SettingsActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 
-import trikita.anvil.Anvil;
-import trikita.jedux.Action;
-import trikita.jedux.Store;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Inject
-    Store<Action, State> store;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
+    @BindView(R.id.coursesList) RecyclerView coursesRecyclerView;
+    @BindView(R.id.bottomBar) View bottomBar;
 
-    @Inject
-    Router router;
+    private MainViewListAdapter mainViewListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
 
-        App.getStoreComponent().inject(this);
-        // Re-render UI via anvil when the store state changes
-        store.subscribe(Anvil::render);
-        router.init(this);
+        coursesRecyclerView.setHasFixedSize(true);
 
-        setContentView(new MainView(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        coursesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mainViewListAdapter = new MainViewListAdapter(this, new ArrayList<>());
+        coursesRecyclerView.setAdapter(mainViewListAdapter);
+
+        refreshData();
     }
 
 
@@ -96,6 +110,32 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, CheckCurrentUser.class));
                         finish();
                     }
+                });
+    }
+
+    private void refreshData() {
+        loadingIndicator.setVisibility(View.VISIBLE);
+
+        Query coursesQuery = Courses.COURSES_REF.limitToFirst(3);
+        Courses.fetchListOfCourses(coursesQuery)
+                .concatMap(courses -> Observable.from(courses))
+                .concatMap(course -> {
+                    MainViewListItem mainViewListItem = new MainViewListItem(course);
+                    mainViewListAdapter.add(mainViewListItem);
+
+                    Query testsQuery = Tests.TESTS_REF.orderByChild("courseKey").equalTo(course.getKey());
+                    return Tests.fetchListOfTests(testsQuery);
+                })
+                .concatMap(tests -> Observable.from(tests))
+                .subscribe(test -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    MainViewListItem mainViewListItem = new MainViewListItem(test);
+                    mainViewListAdapter.add(mainViewListItem);
+                }, firebaseException -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
+                            .setAction("Retry", view -> refreshData())
+                            .show();
                 });
     }
 

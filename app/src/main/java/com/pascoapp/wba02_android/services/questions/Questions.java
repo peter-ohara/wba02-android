@@ -1,23 +1,17 @@
 package com.pascoapp.wba02_android.services.questions;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.pascoapp.wba02_android.Actions;
-import com.pascoapp.wba02_android.Helpers;
-import com.pascoapp.wba02_android.ImmutableState;
-import com.pascoapp.wba02_android.State;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import trikita.jedux.Action;
-import trikita.jedux.Store;
+import rx.Observable;
 
 /**
  * Created by peter on 8/4/16.
@@ -29,147 +23,61 @@ public class Questions {
     public static final DatabaseReference QUESTIONS_REF
             = FirebaseDatabase.getInstance().getReference().child(QUESTIONS_KEY);
 
-    public static void fetchQuestion(Store<Action, State> store, String key) {
-        store.dispatch(QuestionActions.questionRequestInitiated(key));
 
-        QUESTIONS_REF.child(key)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Question question = dataSnapshot.getValue(Question.class);
-                        question.key = dataSnapshot.getKey();
-                        store.dispatch(QuestionActions.questionRequestSucceeded(question));
-                    }
+    public static Observable<Question> fetchQuestion(String key) {
+        return Observable.create(subscriber -> {
+            QUESTIONS_REF.child(key)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+                                String errorMessage = "Item doesn't exist in the database";
+                                subscriber.onError(new FirebaseException(errorMessage));
+                                return;
+                            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        store.dispatch(QuestionActions
-                                .questionRequestFailed(databaseError.getMessage()));
-                    }
-                });
-    }
+                            Question question = dataSnapshot.getValue(Question.class);
+                            question.setKey(dataSnapshot.getKey());
+                            subscriber.onNext(question);
+                            subscriber.onCompleted();
+                        }
 
-    public static void fetchListOfQuestions(Store<Action, State> store, Query query) {
-        store.dispatch(QuestionActions.listQuestionRequestInitiated(query));
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Question> questions = new ArrayList<>();
-                for (DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
-                    Question question = questionSnapshot.getValue(Question.class);
-                    question.key = questionSnapshot.getKey();
-                    questions.add(question);
-                }
-                store.dispatch(QuestionActions.listQuestionRequestSucceeded(questions));
-            }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            subscriber.onError(new FirebaseException(databaseError.getMessage()));
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                store.dispatch(QuestionActions
-                        .listQuestionRequestFailed(databaseError.getMessage()));
-            }
+                        }
+                    });
         });
     }
 
+    public static Observable<List<Question>> fetchListOfQuestions(Query query) {
+        return Observable.create(subscriber -> {
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        String errorMessage = "Item doesn't exist in the database";
+                        subscriber.onError(new FirebaseException(errorMessage));
+                        return;
+                    }
 
+                    List<Question> questions = new ArrayList<>();
+                    for (DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
+                        Question question = questionSnapshot.getValue(Question.class);
+                        question.setKey(questionSnapshot.getKey());
+                        questions.add(question);
+                    }
+                    subscriber.onNext(questions);
+                    subscriber.onCompleted();
+                }
 
-
-
-
-    public static State questionRequestInitiatedReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case QUESTION_REQUEST_INITIATED:
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Set isFetching Flag to true
-                        .isFetching(true)
-                        .build();
-            default:
-                return oldState;
-        }
-    }
-
-    public static State questionRequestSuccessfulReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case QUESTION_REQUEST_SUCCESSFUL:
-                Question question = (Question) action.value;
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Merge new Question Data
-                        .putQuestions(question.getKey(), question)
-                        // Set isFetching Flag to false
-                        .isFetching(false)
-                        .build();
-            default:
-                return oldState;
-        }
-    }
-
-    public static State questionRequestFailedReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case QUESTION_REQUEST_FAILED:
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Set isFetching Flag to true
-                        .isFetching(false)
-                        .displayErrorMessage((String) action.value)
-                        .build();
-            default:
-                return oldState;
-        }
-    }
-
-
-    public static State questionListRequestInitiatedReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case LIST_QUESTION_REQUEST_INITIATED:
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Set isFetching Flag to true
-                        .isFetching(true)
-                        .build();
-            default:
-                return oldState;
-        }
-    }
-
-    public static State questionListRequestSuccessfulReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case LIST_QUESTION_REQUEST_SUCCESSFUL:
-                List<Question> questions = (List<Question>) action.value;
-                List<String> questionKeys = Stream.of(questions)
-                        .map(question -> question.getKey())
-                        .collect(Collectors.toList());
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Merge new Question Data
-                        .putAllQuestions(Helpers.convertToMap(questions))
-                        // Set isFetching Flag to false
-                        .isFetching(false)
-                        .build();
-            default:
-                return oldState;
-        }
-    }
-
-    public static State questionListRequestFailedReducer(Action action, State oldState) {
-        Actions.ActionType type = (Actions.ActionType) action.type;
-        switch(type) {
-            case LIST_QUESTION_REQUEST_FAILED:
-                return ImmutableState.builder()
-                        .from(oldState)
-                        // Set isFetching Flag to true
-                        .isFetching(false)
-                        .displayErrorMessage((String) action.value)
-                        .build();
-            default:
-                return oldState;
-        }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    subscriber.onError(new FirebaseException(databaseError.getMessage()));
+                }
+            });
+        });
     }
 
 }

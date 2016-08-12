@@ -10,19 +10,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class App extends Application {
 
-    private static StoreComponent storeComponent;
-
     @Override
     public void onCreate() {
         super.onCreate();
         System.out.println("INITIALIZING APP FROM PID: " + android.os.Process.myPid());
-
-        storeComponent = DaggerStoreComponent.builder()
-                .storeModule(new StoreModule())
-                .build();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
-    public static StoreComponent getStoreComponent() {
-        return storeComponent;
-    }
 }

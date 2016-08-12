@@ -97,6 +97,8 @@ dependencies {
     apt "org.immutables:value:2.2.10" // <-- for annotation processor
     provided "org.immutables:value:2.2.10" // <-- for annotation API
     provided "org.immutables:gson:2.2.10" // for annotations
+
+    provided "org.projectlombok:lombok:1.16.10"
 }
 
 apply plugin: 'com.google.gms.google-services'

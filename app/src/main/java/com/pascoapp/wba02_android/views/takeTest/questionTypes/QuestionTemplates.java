@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.takeTest.question;
+package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import java.text.MessageFormat;
 

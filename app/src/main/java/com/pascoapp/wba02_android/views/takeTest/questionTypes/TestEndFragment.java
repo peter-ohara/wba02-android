@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.takeTest.question;
+package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,22 +1,20 @@
-package com.pascoapp.wba02_android.views.takeTest.question;
+package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Picture;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
+import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,7 +120,7 @@ public class FillInFragment extends Fragment {
 
         @JavascriptInterface
         public void openDiscussionScreen() {
-            Toast.makeText(mContext, "Discussion Screen Opened", Toast.LENGTH_SHORT).show();
+            ((TakeTestActivity) getActivity()).openDiscussionActivity();
         }
     }
 
