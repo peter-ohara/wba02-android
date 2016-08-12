@@ -5,14 +5,8 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.pascoapp.wba02_android.services.FirebaseItem;
 import com.pascoapp.wba02_android.services.tests.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static trikita.anvil.BaseDSL.dip;
 
 /**
  * Created by peter on 8/4/16.
@@ -53,13 +47,5 @@ public class Helpers {
 
     public static int dip(int pixels) {
         return (int) (pixels * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    public static <T extends FirebaseItem> Map<String, T> convertToMap(List<T> items) {
-        Map<String, T> map = new HashMap<>();
-        for (T item : items) {
-            map.put(item.getKey(), item);
-        }
-        return map;
     }
 }

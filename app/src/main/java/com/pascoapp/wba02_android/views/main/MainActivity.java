@@ -37,7 +37,6 @@ import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
-
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
+        setTitle("");
 
         coursesRecyclerView.setHasFixedSize(true);
 

@@ -58,7 +58,7 @@ public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
         Question currentQuestion = mQuestions.get(position);
         if (currentQuestion.getType().equalsIgnoreCase("header")) {
-            return "hd";
+            return "Header";
         } else {
             return mQuestions.get(position).getNumber();
         }

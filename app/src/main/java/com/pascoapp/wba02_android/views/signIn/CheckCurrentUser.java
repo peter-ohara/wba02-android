@@ -30,7 +30,7 @@ public class CheckCurrentUser extends Activity {
         // Online offline access of data stored in Firebase
         // Must be done in the entry point of the app.
         // Which happens to be here
-        // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
