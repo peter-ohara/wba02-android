@@ -22,7 +22,8 @@ android:id="@+id/constraintLayout4">
 
 <Button
     android:text="@string/more"
-    android:theme="@style/greenButton"
+    style="@style/tealWithWhiteText"
+    android:backgroundTint="@color/primary"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/moreButton"

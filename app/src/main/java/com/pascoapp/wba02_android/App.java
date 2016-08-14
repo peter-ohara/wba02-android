@@ -2,8 +2,6 @@ package com.pascoapp.wba02_android;
 
 import android.app.Application;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 /**
  * Created by peter on 8/2/16.
  */

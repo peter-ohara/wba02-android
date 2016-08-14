@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
@@ -42,7 +41,8 @@ public class FillInFragment extends Fragment {
     private boolean answeredCorrectly;
     private boolean answeredWrongly;
 
-    @BindView(R.id.webview) WebView webview;
+    @BindView(R.id.webview)
+    WebView webview;
 
     public static FillInFragment newInstance(Question question) {
         FillInFragment fragment = new FillInFragment();
@@ -94,7 +94,7 @@ public class FillInFragment extends Fragment {
     }
 
     private void setAnswer(TextView answerView, String answer) {
-        answerView.setText( answer );
+        answerView.setText(answer);
     }
 
     private void setQuestion(WebView webview, String question) {

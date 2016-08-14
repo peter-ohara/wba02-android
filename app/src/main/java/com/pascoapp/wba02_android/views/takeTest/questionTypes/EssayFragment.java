@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.views.main.MainActivity;
 import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
 
 import butterknife.BindView;
@@ -42,7 +40,8 @@ public class EssayFragment extends Fragment {
     private boolean answeredCorrectly;
     private boolean answeredWrongly;
 
-    @BindView(R.id.webview) WebView webview;
+    @BindView(R.id.webview)
+    WebView webview;
 
     public static EssayFragment newInstance(Question question) {
         EssayFragment fragment = new EssayFragment();

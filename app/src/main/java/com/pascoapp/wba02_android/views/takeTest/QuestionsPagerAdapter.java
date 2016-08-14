@@ -15,6 +15,7 @@ import java.util.List;
 
 public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
+    public static final String TYPE_END_PAGE = "com.pascoapp.wba02_android.endPageKey";
     private List<Question> mQuestions;
 
     public QuestionsPagerAdapter(FragmentManager fm, List<Question> questions) {
@@ -24,10 +25,6 @@ public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == mQuestions.size()) {
-            return TestEndFragment.newInstance();
-        }
-
         Question currentQuestion = mQuestions.get(position);
         if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
             return McqFragment.newInstance(currentQuestion);
@@ -37,28 +34,24 @@ public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
             return EssayFragment.newInstance(currentQuestion);
         } else if (currentQuestion.getType().equalsIgnoreCase("header")) {
             return HeaderFragment.newInstance(currentQuestion);
+        } else if (currentQuestion.getType().equalsIgnoreCase(TYPE_END_PAGE)) {
+            return TestEndFragment.newInstance();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        if (mQuestions.size() == 0) {
-            return 0;
-        } else {
-            return mQuestions.size() + 1;
-        }
+        return mQuestions.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == mQuestions.size()) {
-            return "End";
-        }
-
         Question currentQuestion = mQuestions.get(position);
         if (currentQuestion.getType().equalsIgnoreCase("header")) {
-            return "Header";
+            return currentQuestion.getTitle();
+        } else if (currentQuestion.getType().equalsIgnoreCase(TYPE_END_PAGE)) {
+            return currentQuestion.getTitle();
         } else {
             return mQuestions.get(position).getNumber();
         }

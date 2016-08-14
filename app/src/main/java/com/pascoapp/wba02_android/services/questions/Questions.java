@@ -63,7 +63,7 @@ public class Questions {
                     }
 
                     List<Question> questions = new ArrayList<>();
-                    for (DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot questionSnapshot : dataSnapshot.getChildren()) {
                         Question question = questionSnapshot.getValue(Question.class);
                         question.setKey(questionSnapshot.getKey());
                         questions.add(question);

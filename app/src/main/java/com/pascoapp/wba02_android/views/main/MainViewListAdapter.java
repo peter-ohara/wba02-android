@@ -104,10 +104,17 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         )
                 );
                 ((TestViewHolder) holder).testName.setText(Helpers.getTestName(test));
-                ((TestViewHolder) holder).lecturerName.setText(test.getLecturerKey());
-                ((TestViewHolder) holder).questionCount.setText("42 q");
+                ((TestViewHolder) holder).lecturerName.setText("lecturer1");
+
+                int questionCount = 0;
+                if (test.getQuestionKeys() != null) {
+                    questionCount = test.getQuestionKeys().size();
+                }
+                ((TestViewHolder) holder).questionCount.setText(questionCount + " q");
+
                 ((TestViewHolder) holder).itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(context, TestOverviewActivity.class);
+                    intent.putExtra(TestOverviewActivity.EXTRA_TEST_KEY, test.getKey());
                     context.startActivity(intent);
                 });
 

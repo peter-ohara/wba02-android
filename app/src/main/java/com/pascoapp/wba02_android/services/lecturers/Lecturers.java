@@ -63,7 +63,7 @@ public class Lecturers {
                     }
 
                     List<Lecturer> lecturers = new ArrayList<>();
-                    for (DataSnapshot lecturerSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot lecturerSnapshot : dataSnapshot.getChildren()) {
                         Lecturer lecturer = lecturerSnapshot.getValue(Lecturer.class);
                         lecturer.setKey(lecturerSnapshot.getKey());
                         lecturers.add(lecturer);

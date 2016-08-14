@@ -42,7 +42,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-            android:drawableLeft="@drawable/ic_arrow_left_white_24dp"/>
+            android:drawableLeft="@drawable/ic_arrow_left_white_24dp"
+            android:textColor="@color/white" />
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -54,7 +55,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-            android:drawableRight="@drawable/ic_arrow_right_white_24dp" />
+            android:drawableRight="@drawable/ic_arrow_right_white_24dp"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 

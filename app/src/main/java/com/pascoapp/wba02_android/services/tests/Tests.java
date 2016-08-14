@@ -63,7 +63,7 @@ public class Tests {
                     }
 
                     List<Test> tests = new ArrayList<>();
-                    for (DataSnapshot testSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot testSnapshot : dataSnapshot.getChildren()) {
                         Test test = testSnapshot.getValue(Test.class);
                         test.setKey(testSnapshot.getKey());
                         tests.add(test);

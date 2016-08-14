@@ -20,9 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.views.overflow.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.views.overflow.help.HelpActivity;
@@ -37,11 +35,16 @@ import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
-    @BindView(R.id.coursesList) RecyclerView coursesRecyclerView;
-    @BindView(R.id.bottomBar) View bottomBar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.snackbarPosition)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
+    @BindView(R.id.coursesList)
+    RecyclerView coursesRecyclerView;
+    @BindView(R.id.bottomBar)
+    View bottomBar;
 
     private MainViewListAdapter mainViewListAdapter;
 
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_feedback:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","pascoapp.wb@gmail.com", null));
+                        "mailto", "pascoapp.wb@gmail.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Write your feedback here");
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));

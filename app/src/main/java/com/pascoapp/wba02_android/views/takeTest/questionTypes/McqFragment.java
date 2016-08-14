@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
@@ -39,7 +38,7 @@ public class McqFragment extends Fragment {
 
     // Member Variables related to the questionKey
     private String question;
-    private Map<String, String>choices;
+    private Map<String, String> choices;
     private String answer;
 
     // Question State Variables
@@ -47,7 +46,8 @@ public class McqFragment extends Fragment {
     private boolean answeredCorrectly;
     private boolean answeredWrongly;
 
-    @BindView(R.id.webview) WebView webview;
+    @BindView(R.id.webview)
+    WebView webview;
 
     public static McqFragment newInstance(Question question) {
         McqFragment fragment = new McqFragment();

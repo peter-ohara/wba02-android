@@ -32,15 +32,26 @@
         android:dividerHeight="1dp"
         android:paddingBottom="?attr/actionBarSize" />
 
-    <Button
-        android:text="Change School"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:id="@+id/bottomBar"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:theme="@style/greenButton"
-        android:background="@color/primary"
-        android:id="@+id/bottomBar" />
+        android:background="@color/primary">
+
+        <TextView
+            android:text="Store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_shopping_white_24dp"
+            android:drawablePadding="4dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+
 
     <ProgressBar
         android:id="@+id/loading_indicator"

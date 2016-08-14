@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Helpers;
@@ -36,19 +37,34 @@ import butterknife.OnClick;
 
 public class TestOverviewActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
-    @BindView(R.id.courseCode) TextView courseCode;
-    @BindView(R.id.courseName) TextView courseName;
-    @BindView(R.id.testName) TextView testName;
-    @BindView(R.id.testDuration) TextView testDuration;
-    @BindView(R.id.lecturerName) TextView lecturerName;
-    @BindView(R.id.lecturerIcon) ImageView lecturerIcon;
-    @BindView(R.id.programmesList) RecyclerView programmesRecyclerView;
-    @BindView(R.id.instructionsList) RecyclerView instructionsRecyclerView;
-    @BindView(R.id.bottomBar) View bottomBar;
+    public static final String EXTRA_TEST_KEY =
+            "com.pascoapp.wba02_android.testKey";
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.snackbarPosition)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
+    @BindView(R.id.courseCode)
+    TextView courseCode;
+    @BindView(R.id.courseName)
+    TextView courseName;
+    @BindView(R.id.testName)
+    TextView testName;
+    @BindView(R.id.testDuration)
+    TextView testDuration;
+    @BindView(R.id.lecturerName)
+    TextView lecturerName;
+    @BindView(R.id.lecturerIcon)
+    ImageView lecturerIcon;
+    @BindView(R.id.programmesList)
+    RecyclerView programmesRecyclerView;
+    @BindView(R.id.instructionsList)
+    RecyclerView instructionsRecyclerView;
+    @BindView(R.id.bottomBar)
+    View bottomBar;
+
+    private String testKey;
     private Test test;
     private Lecturer lecturer;
     private Course course;
@@ -60,24 +76,25 @@ public class TestOverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            testKey = savedInstanceState.getString(EXTRA_TEST_KEY);
+        } else {
+            setTestKeyFromIntentExtras();
+        }
+
         setContentView(R.layout.activity_test_overview);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("");
+        setupToolbar();
+        setupProgrammesRecyclerView();
+        setUpInstructionsRecyclerView();
 
+        refreshData(testKey);
+    }
 
-
-        programmesRecyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        programmesRecyclerView.setLayoutManager(layoutManager);
-
-        programmesAdapter = new ProgrammeAdapter(programmes);
-        programmesRecyclerView.setAdapter(programmesAdapter);
-
-
+    private void setUpInstructionsRecyclerView() {
         instructionsRecyclerView.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
@@ -85,17 +102,41 @@ public class TestOverviewActivity extends AppCompatActivity {
 
         instructionsAdapter = new InstructionAdapter(instructions);
         instructionsRecyclerView.setAdapter(instructionsAdapter);
+    }
 
-        refreshData("test1");
+    private void setupProgrammesRecyclerView() {
+        programmesRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        programmesRecyclerView.setLayoutManager(layoutManager);
+
+        programmesAdapter = new ProgrammeAdapter(programmes);
+        programmesRecyclerView.setAdapter(programmesAdapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_TEST_KEY, testKey);
+    }
+
+    public void setTestKeyFromIntentExtras() {
+        Intent intent = getIntent();
+        testKey = intent.getStringExtra(EXTRA_TEST_KEY);
     }
 
     @OnClick(R.id.bottomBar)
     public void startTakeTestActivity(View view) {
         Intent intent = new Intent(this, TakeTestActivity.class);
+        intent.putExtra(TakeTestActivity.EXTRA_TEST_KEY, testKey);
         startActivity(intent);
     }
 
-
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
 
     private void refreshData(String testKey) {
         loadingIndicator.setVisibility(View.VISIBLE);
@@ -106,7 +147,8 @@ public class TestOverviewActivity extends AppCompatActivity {
                 })
                 .flatMap(course -> {
                     this.course = course;
-                    return Lecturers.fetchLecturer(test.getLecturerKey());
+                    Object[] lecturerKeys = test.getLecturerKeys().keySet().toArray();
+                    return Lecturers.fetchLecturer((String) lecturerKeys[0]);
                 })
                 .flatMap(lecturer -> {
                     this.lecturer = lecturer;
@@ -126,7 +168,7 @@ public class TestOverviewActivity extends AppCompatActivity {
                     lecturerIcon.setImageDrawable(
                             Helpers.getIcon(
                                     lecturer.getKey(),
-                                    lecturer.getFirstName().substring(0,1), 24
+                                    lecturer.getFirstName().substring(0, 1), 24
                             )
                     );
 
@@ -169,7 +211,7 @@ public class TestOverviewActivity extends AppCompatActivity {
             holder.iconView.setImageDrawable(
                     Helpers.getIcon(
                             programme.getKey(),
-                            programme.getName().substring(0,1),
+                            programme.getName().substring(0, 1),
                             24 // fontSize in sp
                     )
             );
@@ -182,8 +224,10 @@ public class TestOverviewActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.programmeIcon) ImageView iconView;
-            @BindView(R.id.programmeName) TextView programmeName;
+            @BindView(R.id.programmeIcon)
+            ImageView iconView;
+            @BindView(R.id.programmeName)
+            TextView programmeName;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -220,7 +264,8 @@ public class TestOverviewActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.instruction) TextView instructionView;
+            @BindView(R.id.instruction)
+            TextView instructionView;
 
             public ViewHolder(View itemView) {
                 super(itemView);

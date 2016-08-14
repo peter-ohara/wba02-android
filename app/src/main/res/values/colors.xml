@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#009688</color>
+    <color name="primary">@color/teal</color>
     <color name="primary_dark">#00796B</color>
     <color name="accent">#448AFF</color>
 
-    <color name="check_button">#21c3f3</color>
+    <color name="teal">#009688</color>
+    <color name="orange">#F24B11</color>
+    <color name="blue">#65BAFC</color>
+    <color name="green">#08A357</color>
+    <color name="gray_screen_background">#e6e6e6</color>
+    <color name="gray_headings">#4D4D4D</color>
+    <color name="gray_small_text">#E6E6E6</color>
     <color name="white">#ffffff</color>
-    <color name="olive">#08A357</color>
-    <color name="gray_background">#e6e6e6</color>
-    <color name="gray_headings">#4d4d4d</color>
-    <color name="orange">#f24b11</color>
 
 </resources>

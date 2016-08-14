@@ -63,7 +63,7 @@ public class Courses {
                     }
 
                     List<Course> courses = new ArrayList<>();
-                    for (DataSnapshot courseSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                         Course course = courseSnapshot.getValue(Course.class);
                         course.setKey(courseSnapshot.getKey());
                         courses.add(course);

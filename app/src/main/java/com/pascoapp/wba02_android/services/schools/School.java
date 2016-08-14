@@ -1,48 +1,20 @@
 package com.pascoapp.wba02_android.services.schools;
 
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.pascoapp.wba02_android.services.FirebaseItem;
+
+import java.util.Map;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @IgnoreExtraProperties
-public class School implements FirebaseItem {
+@Data
+@NoArgsConstructor
+public class School {
+    private String key;
 
-    public String key;
+    private String name;
+    private String shortName;
 
-    public String name;
-    public String shortName;
-
-
-    public School() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
-    }
-
-    public School(String name, String shortName) {
-        this.name = name;
-        this.shortName = shortName;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    @Override
-    public String toString() {
-        return "School{" +
-                "name='" + name + '\'' +
-                ", shortName='" + shortName + '\'' +
-                '}';
-    }
+    private Map<String, Boolean> programmeKeys;
 }

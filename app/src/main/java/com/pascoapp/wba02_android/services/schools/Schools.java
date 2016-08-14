@@ -63,7 +63,7 @@ public class Schools {
                     }
 
                     List<School> schools = new ArrayList<>();
-                    for (DataSnapshot schoolSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot schoolSnapshot : dataSnapshot.getChildren()) {
                         School school = schoolSnapshot.getValue(School.class);
                         school.setKey(schoolSnapshot.getKey());
                         schools.add(school);

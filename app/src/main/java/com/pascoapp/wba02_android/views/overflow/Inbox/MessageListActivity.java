@@ -140,7 +140,7 @@ public class MessageListActivity extends AppCompatActivity {
         mAdapter.cleanup();
     }
 
-    public static class MessageHolder extends RecyclerView.ViewHolder{
+    public static class MessageHolder extends RecyclerView.ViewHolder {
 
         public View mView;
 
@@ -172,11 +172,11 @@ public class MessageListActivity extends AppCompatActivity {
 
             TextDrawable drawable = TextDrawable.builder()
                     .buildRect(
-                            ((String) message.getTitle()).substring(0,1).toUpperCase(),
+                            ((String) message.getTitle()).substring(0, 1).toUpperCase(),
                             color
                     );
 
-           field.setImageDrawable(drawable);
+            field.setImageDrawable(drawable);
         }
     }
 }

@@ -42,7 +42,7 @@ public class MessageDetailActivity extends AppCompatActivity {
 
         coordinatorLayoutView = findViewById(R.id.snackbarPosition);
         mProgressView = findViewById(R.id.login_progress);
-        webview = (WebView)this.findViewById(R.id.webview);
+        webview = (WebView) this.findViewById(R.id.webview);
 
         webview.getSettings().setJavaScriptEnabled(true);
 
@@ -78,34 +78,34 @@ public class MessageDetailActivity extends AppCompatActivity {
 
         String HTMLString = String.format(
                 "<!DOCTYPE html>" +
-                "<html>" +
-                "<head>" +
-                "<title>%s</title>" +
-                "<style>"                           +
-                "    h3 {"                          +
-                "        text-align:center;"        +
-                "        font-weight:100;"          +
-                "    }"                             +
-                "    a {"                           +
-                "        text-decoration: none;"    +
-                "        color: #ff0093;"           +
-                "    }"                             +
-                "    hr {"                          +
-                "        border: 0;"                +
-                "        height: 0;"                +
-                "        border-top: 1px solid rgba(0, 0, 0, 0.1);"             +
-                "        border-bottom: 1px solid rgba(255, 255, 255, 0.3);"    +
-                "    }"                             +
-                "</style>"                          +
-                "<script type=\"text/javascript\" async " +
-                "  src=\"file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full\"></script>" +
-                "</head>" +
-                "<body>" +
-                "<h3>%s</h3>" +
-                "<hr>" +
-                "<p>%s</p>" +
-                "</body>" +
-                "</html>", title, title, content);
+                        "<html>" +
+                        "<head>" +
+                        "<title>%s</title>" +
+                        "<style>" +
+                        "    h3 {" +
+                        "        text-align:center;" +
+                        "        font-weight:100;" +
+                        "    }" +
+                        "    a {" +
+                        "        text-decoration: none;" +
+                        "        color: #ff0093;" +
+                        "    }" +
+                        "    hr {" +
+                        "        border: 0;" +
+                        "        height: 0;" +
+                        "        border-top: 1px solid rgba(0, 0, 0, 0.1);" +
+                        "        border-bottom: 1px solid rgba(255, 255, 255, 0.3);" +
+                        "    }" +
+                        "</style>" +
+                        "<script type=\"text/javascript\" async " +
+                        "  src=\"file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full\"></script>" +
+                        "</head>" +
+                        "<body>" +
+                        "<h3>%s</h3>" +
+                        "<hr>" +
+                        "<p>%s</p>" +
+                        "</body>" +
+                        "</html>", title, title, content);
 
         w.getSettings().setJavaScriptEnabled(true);
         w.loadDataWithBaseURL("http://bar", HTMLString, "text/html", "utf-8", "");

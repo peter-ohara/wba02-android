@@ -66,8 +66,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:theme="@style/greenButton"
+        android:theme="@style/tealWithWhiteText"
         android:background="@color/primary"
+        style="@style/tealWithWhiteText"
         android:id="@+id/bottomBar" />
 
     <ProgressBar

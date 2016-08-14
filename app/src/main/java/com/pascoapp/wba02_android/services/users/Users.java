@@ -63,7 +63,7 @@ public class Users {
                     }
 
                     List<User> users = new ArrayList<>();
-                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         User user = userSnapshot.getValue(User.class);
                         user.setKey(userSnapshot.getKey());
                         users.add(user);

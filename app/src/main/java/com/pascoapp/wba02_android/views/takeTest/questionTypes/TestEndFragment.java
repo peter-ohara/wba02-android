@@ -16,7 +16,8 @@ import butterknife.OnClick;
 
 public class TestEndFragment extends Fragment {
 
-    @BindView(R.id.endTestButton) Button endTestButton;
+    @BindView(R.id.endTestButton)
+    Button endTestButton;
 
     public static TestEndFragment newInstance() {
         TestEndFragment fragment = new TestEndFragment();

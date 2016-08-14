@@ -21,7 +21,8 @@ public class HeaderFragment extends Fragment {
 
     private String content;
 
-    @BindView(R.id.webview) WebView webview;
+    @BindView(R.id.webview)
+    WebView webview;
 
     public static HeaderFragment newInstance(Question question) {
         HeaderFragment fragment = new HeaderFragment();

@@ -3,6 +3,8 @@ package com.pascoapp.wba02_android.views.takeTest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +15,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.questions.Question;
+import com.pascoapp.wba02_android.services.questions.Questions;
+import com.pascoapp.wba02_android.services.tests.Test;
+import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
 
 import java.util.ArrayList;
@@ -28,23 +31,34 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 
 public class TakeTestActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TEST_KEY =
-            "com.pascoapp.wba02_android.views.testFlow.Section.question.TakeTestActivity.testId";
-    public static final String EXTRA_TEST_TITLE =
-            "com.pascoapp.wba02_android.views.testFlow.Section.question.TakeTestActivity.testTitle";
+    public static final String EXTRA_TEST_KEY = "com.pascoapp.wba02_android.testKey";
+
+    public static String POSITION = "POSITION";
 
     private ArrayList<Question> mQuestions = new ArrayList<>();
     private PagerAdapter mPagerAdapter;
-    private DatabaseReference mQuestionsRef;
 
-    @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
-    @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayoutView;
-    @BindView(R.id.viewpager) ViewPager mPager;
-    @BindView(R.id.previousButton) Button previousButton;
-    @BindView(R.id.nextButton) Button nextButton;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
+    @BindView(R.id.snackbarPosition)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.sliding_tabs)
+    TabLayout tabLayout;
+    @BindView(R.id.viewpager)
+    ViewPager mPager;
+    @BindView(R.id.previousButton)
+    Button previousButton;
+    @BindView(R.id.nextButton)
+    Button nextButton;
+
+    private Test test;
+    private Course course;
 
 
     @Override
@@ -60,21 +74,38 @@ public class TakeTestActivity extends AppCompatActivity {
         disableAndHideButton(previousButton);
         disableAndHideButton(nextButton);
 
-        getQuestions(getTestId());
+        refreshData(getTestKey());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // TODO: Figure out why this call doesn't work and as a consequence
+        // changing screen orientation does not preserve the users position
+        Log.d("TakeTestActivity", "onRestoreInstanceState: " + mPager.getCurrentItem());
+        Log.d("TakeTestActivity", "onRestoreInstanceState: " + savedInstanceState.getInt(POSITION));
+        mPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-        setTitle(getTestTitle());
+        setTitle("");
     }
 
     private void setupViewPager() {
         mPager.setOffscreenPageLimit(10);
         mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), mQuestions);
         mPager.setAdapter(mPagerAdapter);
+        // Give the TabLayout the ViewPager
+        tabLayout.setupWithViewPager(mPager);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -114,46 +145,47 @@ public class TakeTestActivity extends AppCompatActivity {
         button.setEnabled(true);
     }
 
-    public String getTestId() {
+    public String getTestKey() {
         Intent intent = getIntent();
-        return "test1";
-//        return intent.getStringExtra(EXTRA_TEST_KEY);
+        return intent.getStringExtra(EXTRA_TEST_KEY);
     }
 
-    public String getTestTitle() {
-        Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_TEST_TITLE);
-    }
 
-    private void getQuestions(final String testKey) {
+    private void refreshData(String testKey) {
         loadingIndicator.setVisibility(View.VISIBLE);
+        Tests.fetchTest(testKey)
+                .concatMap(test -> {
+                    this.test = test;
+                    return Courses.fetchCourse(test.getCourseKey());
+                })
+                .concatMap(course -> {
+                    this.course = course;
+                    return Observable.from(
+                            Helpers.sortMapByValue(test.getQuestionKeys()).keySet()
+                    );
+                })
+                .concatMap(questionKey -> Questions.fetchQuestion(questionKey) )
+                .toList()
+                .subscribe(questions -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    setTitle(course.getCode() + " " + Helpers.getTestName(test));
 
-        mQuestionsRef = FirebaseDatabase.getInstance().getReference().child("questions");
-        Query questionsQuery = mQuestionsRef.orderByChild("testKey").equalTo(testKey);
-        questionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mQuestions.clear();
-                for (DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
-                    Question question = questionSnapshot.getValue(Question.class);
-                    question.setKey(questionSnapshot.getKey());
-                    mQuestions.add(question);
-                }
+                    Question endPageQuestion = new Question();
+                    endPageQuestion.setType(QuestionsPagerAdapter.TYPE_END_PAGE);
+                    endPageQuestion.setTitle("END");
+                    questions.add(endPageQuestion);
 
-                // Sort by ascending question number
-                //Collections.sort(mQuestions, new QuestionComparator());
-
-                mPagerAdapter.notifyDataSetChanged();
-                Log.d("TakeTestActivity", "onDataChange: " + mQuestions);
-                loadingIndicator.setVisibility(View.GONE);
-                enableAndUnHideButton(nextButton);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                    mQuestions.clear();
+                    mQuestions.addAll(questions);
+                    mPagerAdapter.notifyDataSetChanged();
+                    enableAndUnHideButton(nextButton);
+                }, firebaseException -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    System.out.println("TestOverviewActivity: " + firebaseException);
+                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
+                            .setAction("Retry", view -> refreshData(testKey))
+                            .show();
+                });
     }
 
     @OnClick(R.id.previousButton)

@@ -63,7 +63,7 @@ public class Messages {
                     }
 
                     List<Message> messages = new ArrayList<>();
-                    for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                         Message message = messageSnapshot.getValue(Message.class);
                         message.setKey(messageSnapshot.getKey());
                         messages.add(message);
