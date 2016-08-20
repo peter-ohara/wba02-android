@@ -1,21 +1,22 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
+import com.x5.template.Chunk;
+import com.x5.template.Theme;
+import com.x5.template.providers.AndroidTemplates;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.pascoapp.wba02_android.views.takeTest.questionTypes.QuestionHelpers.loadItemInWebView;
 
 public class EssayFragment extends Fragment {
 
@@ -89,35 +90,15 @@ public class EssayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_essay, container, false);
         ButterKnife.bind(this, view);
-        setQuestion(webview, question);
+        loadItemInWebView(getActivity(), webview, getHtml(question));
         return view;
     }
 
-    private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.essayTemplate
-                .replace("{ questionKey }", question);
-        loadItemInWebView(webview, htmlString);
+    private String getHtml(String question) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+        Chunk chunk = theme.makeChunk("essay");
+        chunk.set("question", question);
+        return chunk.toString();
     }
-
-    protected void loadItemInWebView(WebView w, String htmlString) {
-        w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new WebAppInterface(getContext()), "Android");
-        w.setBackgroundColor(Color.TRANSPARENT);
-        // TODO: Change "http://bar" to something more apprioprate. See documentation for loadWithBaseUrl()
-        w.loadDataWithBaseURL("http://bar", htmlString, "text/html", "utf-8", "");
-    }
-
-    public class WebAppInterface {
-        Context mContext;
-
-        WebAppInterface(Context c) {
-            mContext = c;
-        }
-
-        @JavascriptInterface
-        public void openDiscussionScreen() {
-            ((TakeTestActivity) getActivity()).openDiscussionActivity();
-        }
-    }
-
 }

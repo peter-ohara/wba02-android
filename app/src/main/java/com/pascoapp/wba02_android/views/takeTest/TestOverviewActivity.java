@@ -41,6 +41,7 @@ public class TestOverviewActivity extends AppCompatActivity {
             "com.pascoapp.wba02_android.testKey";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.lowerContent) View lowerContent;
     @BindView(R.id.snackbarPosition)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.loading_indicator)
@@ -140,6 +141,7 @@ public class TestOverviewActivity extends AppCompatActivity {
 
     private void refreshData(String testKey) {
         loadingIndicator.setVisibility(View.VISIBLE);
+        lowerContent.setVisibility(View.GONE);
         Tests.fetchTest(testKey)
                 .flatMap(test -> {
                     this.test = test;
@@ -157,6 +159,7 @@ public class TestOverviewActivity extends AppCompatActivity {
                 })
                 .subscribe(newProgrammes -> {
                     loadingIndicator.setVisibility(View.GONE);
+                    lowerContent.setVisibility(View.VISIBLE);
 
                     testName.setText(Helpers.getTestName(test));
                     testDuration.setText(test.getDuration() + "hrs");

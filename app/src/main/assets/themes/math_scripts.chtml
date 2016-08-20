@@ -1,0 +1,6 @@
+<link rel="stylesheet" href="file:///android_asset/katex/katex.min.css">
+<script type="text/javascript"
+        async src="file:///android_asset/MathJax/MathJax.js?config=AM_CHTML-full"></script>
+<script src="file:///android_asset/ASCIIMathTeXKaTeX-2016-06-17.min.js"></script>
+<script src="file:///android_asset/katex/katex.min.js"></script>
+<script>if(typeof(katex)!="undefined") AMfunc(true); </script>

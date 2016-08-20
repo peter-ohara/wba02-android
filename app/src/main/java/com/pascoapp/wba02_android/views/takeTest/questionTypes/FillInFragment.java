@@ -11,12 +11,18 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
+import com.x5.template.Chunk;
+import com.x5.template.Theme;
+import com.x5.template.providers.AndroidTemplates;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.pascoapp.wba02_android.views.takeTest.questionTypes.QuestionHelpers.loadItemInWebView;
 
 public class FillInFragment extends Fragment {
 
@@ -89,39 +95,30 @@ public class FillInFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
         ButterKnife.bind(this, view);
-        setQuestion(webview, question);
+        loadItemInWebView(getActivity(), webview, getHtml(question));
         return view;
     }
 
-    private void setAnswer(TextView answerView, String answer) {
-        answerView.setText(answer);
+    private void setWebviewContent(WebView webview, String question) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+
+        // Fetch template from this file: themes/examples/hello.chtml
+        // Inside that file there is a template "snippet" named #example_1
+        Chunk chunk = theme.makeChunk("essay");
+
+        chunk.set("question", question);
+        String html = chunk.toString();
+        loadItemInWebView(getActivity(), webview, html);
     }
 
-    private void setQuestion(WebView webview, String question) {
-        String htmlString = QuestionTemplates.fillInTemplate
-                .replace("{ questionKey }", question);
-        loadItemInWebView(webview, htmlString);
-    }
-
-    protected void loadItemInWebView(WebView w, String htmlString) {
-        w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new WebAppInterface(getContext()), "Android");
-        w.setBackgroundColor(Color.TRANSPARENT);
-        // TODO: Change "http://bar" to something more apprioprate. See documentation for loadWithBaseUrl()
-        w.loadDataWithBaseURL("http://bar", htmlString, "text/html", "utf-8", "");
-    }
-
-    public class WebAppInterface {
-        Context mContext;
-
-        WebAppInterface(Context c) {
-            mContext = c;
-        }
-
-        @JavascriptInterface
-        public void openDiscussionScreen() {
-            ((TakeTestActivity) getActivity()).openDiscussionActivity();
-        }
+    private String getHtml(String question) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+        Chunk chunk = theme.makeChunk("fillin");
+        chunk.set("question", question);
+        chunk.set("a", "<input type=\"text\" class=\"cloze\">");
+        return chunk.toString();
     }
 
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$questionNumber}</title>
+    <meta name="viewport" content="userKey-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    {% include css %}
+</head>
+<body>
+
+<div class="questionKey-page">
+    <div class="questionKey-container">
+        <p>
+            {$question}
+        </p>
+    </div>
+</div>
+<input type="button" value="Discussion" onClick="openDiscussionScreen()" />
+<input type="button" value="Check" onClick="checkFillIn()" />
+
+{% include android_interface %}
+{% include math_scripts %}
+</body>
+</html>

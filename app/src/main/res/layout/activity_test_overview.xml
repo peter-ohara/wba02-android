@@ -56,9 +56,20 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:paddingBottom="?attr/actionBarSize">
 
-        <include layout="@layout/content_test_overview" />
+        <include layout="@layout/content_test_overview"
+            android:id="@+id/lowerContent" />
 
     </android.support.v4.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginRight="16dp" />
 
     <Button
         android:text="Start Test"
@@ -70,12 +81,5 @@
         android:background="@color/primary"
         style="@style/tealWithWhiteText"
         android:id="@+id/bottomBar" />
-
-    <ProgressBar
-        android:id="@+id/loading_indicator"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
 
 </android.support.design.widget.CoordinatorLayout>
