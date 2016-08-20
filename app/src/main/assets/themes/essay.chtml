@@ -8,14 +8,20 @@
 </head>
 <body>
 
-    <div class="questionKey-page">
-        <div class="questionKey-container">
-            <p>
-                {$question}
-            </p>
+    <div class="page">
+        <div class="row">
+            <div class="mcq-question"> 
+                <span>{$question}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="button-div">
+                <div class="col-xs-6 pull-left">
+                    <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+                </div>
+            </div>
         </div>
     </div>
-    <input type="button" value="Discussion" onClick="openDiscussionScreen()" />
 
     {% include android_interface %}
     {% include math_scripts %}

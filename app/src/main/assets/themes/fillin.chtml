@@ -15,8 +15,17 @@
         </p>
     </div>
 </div>
-<input type="button" value="Discussion" onClick="openDiscussionScreen()" />
-<input type="button" value="Check" onClick="checkFillIn()" />
+
+<div class="row">
+    <div class="button-div">
+        <div class="col-xs-6 pull-left">
+            <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+        </div>
+        <div class="col-xs-6 pull-right">
+            <button type="button" id="checkButton" class="btn btn-info" onClick="checkFillIn()">Check</button>
+        </div>
+    </div>
+</div>
 
 {% include android_interface %}
 {% include math_scripts %}

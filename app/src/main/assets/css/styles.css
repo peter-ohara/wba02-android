@@ -1,0 +1,85 @@
+body{
+	background: #e8e8e8;
+	padding:25px 20px;
+	color: #666;
+	font-family: 'Roboto', sans-serif;
+	font-weight:300;
+}
+
+.page{
+	margin: 0 auto !important;
+}
+
+
+
+/*======================
+    SECTION HEADER
+========================*/
+.header-heading{
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 18px;
+	font-weight:bold;
+	padding:10px 0px;
+}
+
+.header-heading .first-word{
+	color: #666666;
+}
+
+.header-heading .second-word{
+	color: #f24b11;
+}
+
+.header-image{
+	padding: 15px 0px;
+}
+.header-icon{
+	display:table-cell;
+	margin:0 auto;
+	align:center;
+}
+
+.header-content{
+	padding:10px 10px;
+	font-weight:300;
+	font-size: 14px;
+}
+
+.header-content li{
+	padding:7px 0px;
+}
+
+/*======================
+    MCQ TYPE
+========================*/
+
+.mcq-question{
+	font-size: 18px;
+	text-align: justify;
+	padding: 10px 15px;
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width: 480px) {
+    .page {
+        width: 100% !important;
+    }
+}
+@media screen and (min-width: 1150px) {
+    .page {
+        width: 50% !important;
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    .page {
+        width: 90%;
+    }
+}

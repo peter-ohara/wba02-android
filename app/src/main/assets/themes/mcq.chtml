@@ -8,20 +8,44 @@
 </head>
 <body>
 
-<div class="questionKey-page">
-    <div class="questionKey-container">
-        <p>
-            {$question}
-        </p>
+<div class="page">
+    <div class="row">
+        <div class="mcq-question"> 
+            <span>{$question}</span>
+        </div>
     </div>
-    <form id="options">
-        {% loop in $choices as $key:$choice %}
-        <input type="radio" name="choices" value="{$choice}">{$key}. {$choice}<br>
-        {% endloop %}
-    </form>
+    <div class="row">
+        <form id="options">
+            <div class="mcq-answer-box">
+
+                <ul>
+                    {% loop in $choices as $key:$choice %}
+                    <li>
+                        <span class="choice">{$key}</span>
+                        <input type="radio" name="choices" value="{$choice}" id="{$key}">
+                        <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
+                        <hr>
+                    </li>
+                    {% endloop %}
+                </ul>
+
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="button-div">
+            <div class="col-xs-6 pull-left">
+                <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+            </div>
+            <div class="col-xs-6 pull-right">
+                <button type="button" id="checkButton" class="btn btn-info" onClick="checkMcq()">Check</button>
+            </div>
+        </div>
+    </div>
 </div>
-<input type="button" value="Discussion" onClick="openDiscussionScreen()" />
-<input type="button" value="Check" onClick="checkMcq()" />
+
+
+
 
 {% include android_interface %}
 {% include math_scripts %}

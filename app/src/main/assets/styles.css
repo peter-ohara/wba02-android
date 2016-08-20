@@ -1,0 +1,260 @@
+@font-face {
+    font-family: roboto;
+    src: url(fonts/roboto-light.ttf);
+}
+
+@font-face {
+    font-family: roboto;
+    src: url(fonts/roboto-medium.ttf);
+    font-weight:bold;
+}
+
+
+body{
+	background: #e8e8e8;
+	padding:25px 20px;
+	color: #666;
+	font-family: 'roboto', sans-serif;
+
+}
+
+.page{
+	margin: 0 auto !important;
+	padding: 10px 25px;
+}
+
+
+
+/*======================
+    SECTION HEADER
+========================*/
+.header-heading{
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 18px;
+	font-weight:bold;
+	padding:10px 0px;
+}
+
+.header-heading .first-word{
+	color: #666666;
+}
+
+.header-heading .second-word{
+	color: #f24b11;
+}
+
+.header-image{
+	padding: 15px 0px;
+}
+.header-icon{
+	display:table-cell;
+	margin:0 auto;
+	align:center;
+}
+
+.header-content{
+	padding:10px 10px;
+	font-size: 14px;
+	font-weight:300;
+}
+
+.header-content li{
+	padding:7px 0px;
+}
+
+/*======================
+    MCQ TYPE
+========================*/
+
+.mcq-question{
+	font-size: 16px;
+	text-align: justify;
+	padding-bottom:20px;
+	font-weight:300;
+}
+
+.mcq-answer-box{
+min-height:100px;
+height: auto;
+padding:10px 20px !important;
+background:#fff;
+border-radius: 2px;
+-webkit-box-shadow: 0px 0px 5px 0px rgba(204,204,204,1);
+-moz-box-shadow: 0px 0px 5px 0px rgba(204,204,204,1);
+box-shadow: 0px 0px 5px 0px rgba(204,204,204,1);
+word-wrap: break-word;
+font-weight: 300;
+
+}
+
+
+.mcq-answer-box label{
+font-size:14px;
+font-weight:300;
+width: 90%;
+}
+
+
+.mcq-answer-box li:last-child hr {
+	display: none;
+}
+
+.mcq-answer-box .choice{
+font-size:14px;
+
+color:#65bafc;
+}
+
+.mcq-answer-box hr{
+	margin:10px 0px !important;
+	border-color: #f1f1f1;
+}
+
+.mcq-answer-box ul{
+  list-style: none;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+@media screen and (max-width: 480px) {
+    .page {
+        width: 100% !important;
+    }
+}
+@media screen and (min-width: 1150px) {
+    .page {
+        width: 50% !important;
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    .page {
+        width: 90%;
+    }
+}
+
+
+.button-div{
+   bottom:0;
+    margin-top:100px;
+   height:30px;   /* Height of the footer */
+   background:transparent;
+}
+
+.btn{
+	width:120px;
+	height:40px;
+	margin:0 !important;
+	border-radius: 0px !important;
+	border:1px solid #ccc;
+	-webkit-box-shadow: 0px 0px 3px 0px rgba(204,204,204,1);
+	-moz-box-shadow: 0px 0px 3px 0px rgba(204,204,204,1);
+	box-shadow: 0px 0px 3px 0px rgba(204,204,204,1);
+	font-size:18px;
+		font-weight:300;
+}
+
+.col-xs-6{
+	margin:0px !important;
+	padding:0px !important;
+}
+
+.btn-success{
+	background: #08A357 !important;
+}
+
+.btn-info{
+	background: #65BAFC !important;
+	float: right !important;
+}
+
+
+
+input[type="radio"] {
+  display: none;
+}
+label {
+  cursor: pointer;
+}
+input[type="radio"] + label > span {
+  height: 16px;
+  width:16px;
+  border: 2px solid #65bafc;
+  border-radius:8px;
+  content: "\00a0";
+  display: inline-block;
+  font-size: 16px/1em;
+
+   margin:0px 5px;
+  padding:0;
+  vertical-align: middle;
+  width: 16px;
+}
+input[type="radio"]:checked + label > span {
+  border: 2px solid #f24b11;
+}
+input[type="radio"]:checked + label > span > span {
+	display:block;
+  height:6px;
+  width:6px;
+  border-radius:3px;
+  background-color: #f24b11;
+
+        margin-top: 3px;
+        margin-left: 3px;
+
+}
+input[type="radio"]:checked + label > span > span {
+  font-weight: 400;
+}
+
+
+/*=========================
+     PROGRESS BARS
+==========================*/
+
+.progress {
+	display:none;
+	margin-top:10px;
+	background: rgba(255, 255, 0, 0) !important; 
+	border: 0px solid rgba(255, 255, 255, 0) !important; 
+	border-radius: 0px; 
+	height: 2px;
+	max-width: 70%;
+}
+
+.progress-bar-custom {
+	background: rgba(101, 186, 252, 1);
+	height:2px;
+}
+
+.progress-answer {
+	background: rgba(242, 75, 17, 1) !important;
+}
+
+.percentage{
+	display:none;
+	width:35px;
+	height:25px;
+	background: #65bafc;
+	color:#fff;
+	font-size:14px;
+	margin: 0 auto;
+	text-align: center;
+	max-width: 80%;
+}
+
+.showProgress{
+	display: block !important;
+}
+
+.showPercentage{
+	display: flex !important; 
+    justify-content: center;
+    align-items: center;
+}
