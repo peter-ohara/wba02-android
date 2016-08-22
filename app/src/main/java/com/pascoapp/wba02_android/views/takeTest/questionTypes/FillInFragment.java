@@ -117,7 +117,10 @@ public class FillInFragment extends Fragment {
         Theme theme = new Theme(loader);
         Chunk chunk = theme.makeChunk("fillin");
         chunk.set("question", question);
-        chunk.set("a", "<input type=\"text\" class=\"cloze\">");
+
+
+        Chunk inputField = theme.makeChunk("fillin#input_field");
+        chunk.set("a", inputField.toString());
         return chunk.toString();
     }
 

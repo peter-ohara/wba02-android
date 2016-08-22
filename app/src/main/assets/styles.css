@@ -31,7 +31,7 @@ body{
 .header-heading{
 	text-align: center;
 	text-transform: uppercase;
-	font-size: 18px;
+	font-size: 22px;
 	font-weight:bold;
 	padding:10px 0px;
 }
@@ -55,7 +55,7 @@ body{
 
 .header-content{
 	padding:10px 10px;
-	font-size: 14px;
+	font-size: 18px;
 	font-weight:300;
 }
 
@@ -68,7 +68,7 @@ body{
 ========================*/
 
 .mcq-question{
-	font-size: 16px;
+	font-size: 18px;
 	text-align: justify;
 	padding-bottom:20px;
 	font-weight:300;
@@ -90,18 +90,12 @@ font-weight: 300;
 
 
 .mcq-answer-box label{
-font-size:14px;
+font-size:16px;
 font-weight:300;
-width: 90%;
-}
-
-
-.mcq-answer-box li:last-child hr {
-	display: none;
 }
 
 .mcq-answer-box .choice{
-font-size:14px;
+font-size:16px;
 
 color:#65bafc;
 }
@@ -141,7 +135,7 @@ color:#65bafc;
 
 .button-div{
    bottom:0;
-    margin-top:100px;
+    margin:100px 0px 40px 0px;
    height:30px;   /* Height of the footer */
    background:transparent;
 }
@@ -221,9 +215,9 @@ input[type="radio"]:checked + label > span > span {
 .progress {
 	display:none;
 	margin-top:10px;
-	background: rgba(255, 255, 0, 0) !important; 
-	border: 0px solid rgba(255, 255, 255, 0) !important; 
-	border-radius: 0px; 
+	background: rgba(255, 255, 0, 0) !important;
+	border: 0px solid rgba(255, 255, 255, 0) !important;
+	border-radius: 0px;
 	height: 2px;
 	max-width: 70%;
 }
@@ -254,7 +248,23 @@ input[type="radio"]:checked + label > span > span {
 }
 
 .showPercentage{
-	display: flex !important; 
+	display: flex !important;
     justify-content: center;
     align-items: center;
+}
+
+input[type="text"], input[type="text"]:active{
+	width:180px;
+	padding:0px 5px;
+	margin:2px 0;
+	font-size:16px;
+	box-sizing: content-box;
+	border:none;
+	background:none !important;
+	border-bottom: 1px solid #666;
+
+}
+
+input:focus, textarea:focus{
+	outline:none !important;
 }
