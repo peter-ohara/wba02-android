@@ -4,12 +4,6 @@
     tools:context=".views.main.MainActivity">
 
     <item
-        android:id="@+id/action_inbox"
-        android:icon="@drawable/ic_bell_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="Filter" />
-
-    <item
         android:icon="@drawable/ic_account_box_white_24dp"
         app:showAsAction="ifRoom"
         android:title="Profile" />

@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_inbox:
-                startActivity(new Intent(MainActivity.this, MessageListActivity.class));
-                break;
             case R.id.action_logout:
                 logout();
                 break;
