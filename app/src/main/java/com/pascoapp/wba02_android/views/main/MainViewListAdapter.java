@@ -91,6 +91,11 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_COURSE: {
                 Course course = mItems.get(position).getCourse();
                 ((CourseViewHolder) holder).courseCode.setText(course.getCode());
+                ((CourseViewHolder) holder).moreButton.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, CourseActivity.class);
+                    intent.putExtra(CourseActivity.EXTRA_COURSE_KEY, course.getKey());
+                    context.startActivity(intent);
+                });
                 break;
             }
             case TYPE_TEST: {

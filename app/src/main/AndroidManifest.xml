@@ -14,10 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-
-
-
         <!-- Start here -->
         <activity
             android:name=".views.signIn.CheckCurrentUser"
@@ -29,34 +25,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".views.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.takeTest.TestOverviewActivity"
             android:label="@string/title_activity_test_overview"
+            android:launchMode="singleTop"
             android:parentActivityName=".views.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTop">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
         </activity>
-
         <activity
             android:name=".views.takeTest.TakeTestActivity"
             android:label="@string/title_activity_take_test"
+            android:launchMode="singleTop"
             android:parentActivityName=".views.takeTest.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTop">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.views.takeTest.TestOverviewActivity" />
         </activity>
-
         <activity
             android:name=".views.discussion.DiscussionActivity"
             android:label="@string/title_activity_discussion"
@@ -66,14 +58,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.takeTest.TakeTestActivity" />
         </activity>
-
-
-
-
-
-
-
-
         <activity
             android:name=".views.overflow.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -116,7 +100,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
         </activity>
-
+        <activity android:name=".views.main.CourseActivity"></activity>
     </application>
 
 </manifest>

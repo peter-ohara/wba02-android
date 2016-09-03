@@ -155,6 +155,7 @@ public class TestOverviewActivity extends AppCompatActivity {
                 .flatMap(lecturer -> {
                     this.lecturer = lecturer;
                     Query query = Programmes.PROGRAMMES_REF.limitToFirst(5);
+//                    Query query = Programmes.PROGRAMMES_REF.(5);
                     return Programmes.fetchListOfProgrammes(query);
                 })
                 .subscribe(newProgrammes -> {
