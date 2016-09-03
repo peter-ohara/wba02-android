@@ -123,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openHelp() {
-        Intent intent = new Intent(MainActivity.this, HelpActivity.class);
-        startActivity(intent);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.pascoapp.com/help"));
+        startActivity(browserIntent);
     }
 
 
