@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_store:
+                openStore();
+                break;
             case R.id.action_logout:
                 logout();
                 break;
@@ -95,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.bottomBar)
+    public void openStore() {
+        Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
     }
 
     private void logout() {

@@ -6,7 +6,8 @@
     <item
         android:icon="@drawable/ic_cart_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="Store" />
+        android:title="Store"
+        android:id="@+id/action_store" />
 
     <item
         android:id="@+id/action_logout"
