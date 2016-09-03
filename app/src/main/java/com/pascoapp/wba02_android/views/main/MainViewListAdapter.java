@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
@@ -92,9 +93,7 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 Course course = mItems.get(position).getCourse();
                 ((CourseViewHolder) holder).courseCode.setText(course.getCode());
                 ((CourseViewHolder) holder).moreButton.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, CourseActivity.class);
-                    intent.putExtra(CourseActivity.EXTRA_COURSE_KEY, course.getKey());
-                    context.startActivity(intent);
+                    Toast.makeText(context, "More tests coming soon!", Toast.LENGTH_SHORT).show();
                 });
                 break;
             }
