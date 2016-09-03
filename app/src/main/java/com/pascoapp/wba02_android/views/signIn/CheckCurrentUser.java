@@ -42,9 +42,7 @@ public class CheckCurrentUser extends Activity {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setProviders(
-                                    AuthUI.EMAIL_PROVIDER,
-                                    AuthUI.FACEBOOK_PROVIDER,
-                                    AuthUI.GOOGLE_PROVIDER)
+                                    AuthUI.EMAIL_PROVIDER)
                             .setTheme(R.style.AppTheme)
                             .build(),
                     RC_SIGN_IN);
