@@ -89,10 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 logout();
                 break;
             case R.id.action_feedback:
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", "feedback@pascoapp.com", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                openMailClientForFeedback();
                 break;
             case R.id.action_help:
                 Intent intent = new Intent(MainActivity.this, HelpActivity.class);
@@ -118,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void openMailClientForFeedback() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "feedback@pascoapp.com", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
 
     private void refreshData() {
         loadingIndicator.setVisibility(View.VISIBLE);
