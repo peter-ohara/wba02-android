@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 logout();
                 break;
-            case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                break;
             case R.id.action_feedback:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto", "pascoapp.wb@gmail.com", null));
