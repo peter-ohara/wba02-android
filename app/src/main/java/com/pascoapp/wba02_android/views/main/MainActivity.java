@@ -85,9 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_feedback:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", "pascoapp.wb@gmail.com", null));
+                        "mailto", "feedback@pascoapp.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Write your feedback here");
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
                 break;
             case R.id.action_help:
