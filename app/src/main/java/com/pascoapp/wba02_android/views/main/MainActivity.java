@@ -92,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 openMailClientForFeedback();
                 break;
             case R.id.action_help:
-                Intent intent = new Intent(MainActivity.this, HelpActivity.class);
-                startActivity(intent);
+                openHelp();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -121,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
                 "mailto", "feedback@pascoapp.com", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
+    private void openHelp() {
+        Intent intent = new Intent(MainActivity.this, HelpActivity.class);
+        startActivity(intent);
     }
 
 
