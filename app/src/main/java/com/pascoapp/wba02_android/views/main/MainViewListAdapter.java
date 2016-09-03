@@ -108,7 +108,6 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         )
                 );
                 ((TestViewHolder) holder).testName.setText(Helpers.getTestName(test));
-                ((TestViewHolder) holder).lecturerName.setText("lecturer1");
 
                 int questionCount = 0;
                 if (test.getQuestionKeys() != null) {

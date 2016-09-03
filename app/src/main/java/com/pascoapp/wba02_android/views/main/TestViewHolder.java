@@ -18,8 +18,6 @@ public class TestViewHolder extends RecyclerView.ViewHolder {
     ImageView testIcon;
     @BindView(R.id.testName)
     TextView testName;
-    @BindView(R.id.lecturerName)
-    TextView lecturerName;
     @BindView(R.id.questionCount)
     TextView questionCount;
     public View itemView;

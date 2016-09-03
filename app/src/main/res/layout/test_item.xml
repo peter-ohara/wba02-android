@@ -18,14 +18,16 @@
 
         <ImageView
             android:id="@+id/testIcon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintLeft_toLeftOf="@+id/constraintLayout5"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout5"
-            tools:src="@mipmap/ic_launcher" />
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@mipmap/ic_launcher"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/testName"
@@ -38,18 +40,9 @@
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toRightOf="@+id/testIcon"
-            app:layout_constraintRight_toRightOf="@+id/constraintLayout5"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout5"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="2013 Mid Semester Exam" />
-
-        <TextView
-            android:id="@+id/lecturerName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@+id/testName"
-            app:layout_constraintRight_toRightOf="@+id/testName"
-            app:layout_constraintTop_toBottomOf="@+id/testName"
-            tools:text="Prof. Kwame Nkrumah" />
 
         <TextView
             android:id="@+id/questionCount"
@@ -57,10 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:textColor="@color/accent"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout5"
-            app:layout_constraintLeft_toLeftOf="@+id/lecturerName"
-            app:layout_constraintRight_toRightOf="@+id/lecturerName"
-            app:layout_constraintTop_toBottomOf="@+id/lecturerName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/testName"
+            app:layout_constraintRight_toRightOf="@+id/testName"
+            app:layout_constraintTop_toBottomOf="@+id/testName"
             tools:text="30 q" />
     </android.support.constraint.ConstraintLayout>
 
