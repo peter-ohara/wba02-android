@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class WebAppInterface {
     Context mContext;
+    private String sorryText = "This feature will be unlocked in a later update. Stay tuned!";
 
     WebAppInterface(Context c) {
         mContext = c;
@@ -22,19 +23,19 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void openDiscussionScreen() {
-        ((TakeTestActivity) mContext).openDiscussionActivity();
+        Toast.makeText(mContext, sorryText, Toast.LENGTH_SHORT).show();
     }
 
     @JavascriptInterface
     public void checkFillIn(String[] result) {
         List<String> answers = Arrays.asList(result);
         System.out.println(answers);
-        Toast.makeText(mContext, answers.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, sorryText, Toast.LENGTH_SHORT).show();
     }
 
     @JavascriptInterface
     public void checkMcq(String result) {
         System.out.println(result);
-        Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, sorryText, Toast.LENGTH_SHORT).show();
     }
 }

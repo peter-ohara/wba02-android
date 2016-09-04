@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pasco</string>
+    <string name="app_name">Pasco (Beta)</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_take_test">Take Test</string>
     <string name="title_activity_settings">Settings</string>
