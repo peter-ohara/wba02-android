@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
@@ -34,6 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 
 public class TestOverviewActivity extends AppCompatActivity {
 
@@ -154,9 +153,9 @@ public class TestOverviewActivity extends AppCompatActivity {
                 })
                 .flatMap(lecturer -> {
                     this.lecturer = lecturer;
-                    Query query = Programmes.PROGRAMMES_REF.limitToFirst(5);
-//                    Query query = Programmes.PROGRAMMES_REF.(5);
-                    return Programmes.fetchListOfProgrammes(query);
+                    return Observable.from(course.getProgrammeKeys().keySet())
+                            .flatMap(programmeKey -> Programmes.fetchProgramme(programmeKey))
+                            .toList();
                 })
                 .subscribe(newProgrammes -> {
                     loadingIndicator.setVisibility(View.GONE);
