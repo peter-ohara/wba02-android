@@ -19,10 +19,15 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
+import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.overflow.Inbox.MessageListActivity;
 import com.pascoapp.wba02_android.views.overflow.help.HelpActivity;
 import com.pascoapp.wba02_android.views.overflow.settings.SettingsActivity;
@@ -132,8 +137,16 @@ public class MainActivity extends AppCompatActivity {
     private void refreshData() {
         loadingIndicator.setVisibility(View.VISIBLE);
 
-        Query coursesQuery = Courses.COURSES_REF.limitToFirst(3);
-        Courses.fetchListOfCourses(coursesQuery)
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Users.fetchUser(user.getUid())
+                .concatMap(user1 -> {
+                    Object[] courseKeys = user1.getCourseKeys().keySet().toArray();
+                    return Observable.from(courseKeys)
+                            .concatMap(courseKey -> Courses.fetchCourse((String) courseKey))
+                            .toList();
+                })
                 .concatMap(courses -> Observable.from(courses))
                 .concatMap(course -> {
                     MainViewListItem mainViewListItem = new MainViewListItem(course);

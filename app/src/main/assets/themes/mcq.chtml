@@ -19,12 +19,14 @@
             <div class="mcq-answer-box">
 
                 <ul>
-                    {% loop in $choices as $key:$choice %}
+                    {% loop in $choices as $key:$choice first_last="true" %}
                     <li>
                         <span class="choice">{$key}</span>
                         <input type="radio" name="choices" value="{$choice}" id="{$key}">
                         <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
+                        {% if (!$last) %}
                         <hr>
+                        {% endif %}
                     </li>
                     {% endloop %}
                 </ul>

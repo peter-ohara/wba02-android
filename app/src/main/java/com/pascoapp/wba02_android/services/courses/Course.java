@@ -20,4 +20,5 @@ public class Course {
 
     private Map<String, Boolean> programmeKeys;
     private Map<String, Boolean> userKeys;
+    private Map<String, Boolean> testKeys;
 }

@@ -108,7 +108,7 @@ public class McqFragment extends Fragment {
         Theme theme = new Theme(loader);
         Chunk chunk = theme.makeChunk("mcq");
         chunk.set("question", question);
-        chunk.set("choices", Helpers.sortMapByValue(choices));
+        chunk.set("choices", choices);
         return chunk.toString();
     }
 }

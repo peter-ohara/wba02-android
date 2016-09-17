@@ -31,10 +31,12 @@ public class Users {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() == null) {
-                                String errorMessage = "Item doesn't exist in the database";
+                                String errorMessage = key + ": doesn't exist in the database";
                                 subscriber.onError(new FirebaseException(errorMessage));
                                 return;
                             }
+
+                            System.out.println("Hello: " + key);
 
                             User user = dataSnapshot.getValue(User.class);
                             user.setKey(dataSnapshot.getKey());
@@ -57,7 +59,7 @@ public class Users {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() == null) {
-                        String errorMessage = "Item doesn't exist in the database";
+                        String errorMessage = "Query " + query + " returned nothing from the the database";
                         subscriber.onError(new FirebaseException(errorMessage));
                         return;
                     }
