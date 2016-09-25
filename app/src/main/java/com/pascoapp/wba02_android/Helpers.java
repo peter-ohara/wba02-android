@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.services.tests.Test;
 
 import java.util.Collections;
@@ -20,6 +21,8 @@ import java.util.Map;
  */
 
 public class Helpers {
+
+    private static FirebaseDatabase mDatabase;
 
     public static String getTestName(Test test) {
         Long year = test.getYear();
@@ -72,4 +75,14 @@ public class Helpers {
         }
         return result;
     }
+
+    public static FirebaseDatabase getDatabaseInstance() {
+        if (mDatabase == null) {
+            mDatabase = FirebaseDatabase.getInstance();
+            mDatabase.setPersistenceEnabled(true);
+
+        }
+        return mDatabase;
+    }
+
 }

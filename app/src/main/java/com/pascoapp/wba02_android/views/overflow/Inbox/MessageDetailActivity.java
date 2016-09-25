@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.messages.Message;
 
@@ -51,7 +52,7 @@ public class MessageDetailActivity extends AppCompatActivity {
 
         mProgressView.setVisibility(View.VISIBLE);
 
-        mMessageRef = FirebaseDatabase.getInstance().getReference()
+        mMessageRef = Helpers.getDatabaseInstance().getReference()
                 .child("messages").child(messageKey);
 
         mMessageRef.addValueEventListener(new ValueEventListener() {

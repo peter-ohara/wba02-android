@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
     private void refreshData() {
         loadingIndicator.setVisibility(View.VISIBLE);
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         Users.fetchUser(user.getUid())

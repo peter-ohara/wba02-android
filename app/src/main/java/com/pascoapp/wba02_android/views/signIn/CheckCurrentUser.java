@@ -3,12 +3,14 @@ package com.pascoapp.wba02_android.views.signIn;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.views.main.MainActivity;
 
@@ -21,16 +23,12 @@ import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
  */
 public class CheckCurrentUser extends Activity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.branded_launch_screen);
-
-        // Online offline access of data stored in Firebase
-        // Must be done in the entry point of the app.
-        // Which happens to be here
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -64,12 +62,14 @@ public class CheckCurrentUser extends Activity {
             } else {
                 // userKey is not signed in. Maybe just wait for the userKey to press
                 // "sign in" again, or show a message
+                Toast.makeText(this, "Error signing in. Please try again.", Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }
 
     private void writeNewUser(String userId, String name, String email) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference database = Helpers.getDatabaseInstance().getReference();
 
         database.child("users").child(userId).child("email").setValue(email);
         database.child("users").child(userId).child("username").setValue(name);

@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.pascoapp.wba02_android.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Programmes {
 
     public static final String PROGRAMMES_KEY = "programmes";
     public static final DatabaseReference PROGRAMMES_REF
-            = FirebaseDatabase.getInstance().getReference().child(PROGRAMMES_KEY);
+            = Helpers.getDatabaseInstance().getReference().child(PROGRAMMES_KEY);
 
 
     public static Observable<Programme> fetchProgramme(String key) {
