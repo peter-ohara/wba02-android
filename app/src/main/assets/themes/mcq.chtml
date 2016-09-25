@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$questionNumber}</title>
+    <meta name="viewport" content="userKey-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    {% include css %}
+</head>
+<body>
+
+<div class="page">
+    <div class="row">
+        <div class="mcq-question"> 
+            <span>{$question}</span>
+        </div>
+    </div>
+    <div class="row">
+        <form id="options">
+            <div class="mcq-answer-box">
+
+                <ul>
+                    {% loop in $choices as $key:$choice first_last="true" %}
+                    <li>
+                        <span class="choice">{$key}</span>
+                        <input type="radio" name="choices" value="{$choice}" id="{$key}">
+                        <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
+                        {% if (!$last) %}
+                        <hr>
+                        {% endif %}
+                    </li>
+                    {% endloop %}
+                </ul>
+
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="button-div">
+            <div class="col-xs-6 pull-left">
+                <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+            </div>
+            <div class="col-xs-6 pull-right">
+                <button type="button" id="checkButton" class="btn btn-info" onClick="checkMcq()">Check</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% include android_interface %}
+{% include math_scripts %}
+</body>
+</html>

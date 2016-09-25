@@ -1,12 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.pascoapp.wba02_android"
-        minSdkVersion 10
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -17,11 +19,67 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+repositories {
+    maven { url = "https://jitpack.io" }
+    mavenCentral()
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
+
+    compile 'com.android.support:appcompat-v7:24.1.0'
+    compile 'com.android.support:design:24.1.0'
+
+    compile 'com.android.support:support-v4:24.1.0'
+    compile 'com.android.support:recyclerview-v7:24.1.0'
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile 'com.android.support:cardview-v7:24.1.0'
+
+    compile 'com.android.support:preference-v7:24.1.0'
+
+    // Firebase Core
+    compile 'com.google.firebase:firebase-core:9.4.0'
+
+    // Firebase Realtime Database
+    compile 'com.google.firebase:firebase-database:9.4.0'
+
+    // Firebase Notifications
+    compile 'com.google.firebase:firebase-messaging:9.4.0'
+
+    // Firebase Crash Reporting
+    compile 'com.google.firebase:firebase-crash:9.4.0'
+
+    // FirebaseUI Auth
+    compile 'com.firebaseui:firebase-ui-auth:0.4.4'
+
+    // FirebaseUI Database
+    compile 'com.firebaseui:firebase-ui-database:0.4.4'
+
+    // Library for colored Square Icons with letter inside like in gmail
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+
+    // RxAndroid and RxJava
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+
+    // Butterknife
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    // Lombok
+    provided "org.projectlombok:lombok:1.16.10"
+
+    // Chunk Templating Engine
+    compile "com.x5dev:chunk-templates:3.2.3"
 }
+
+apply plugin: 'com.google.gms.google-services'
