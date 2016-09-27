@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1061661507163",
+    "firebase_url": "https://project-9175645934086190686.firebaseio.com",
+    "project_id": "project-9175645934086190686",
+    "storage_bucket": "project-9175645934086190686.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061661507163:android:1af54937beb44c1a",
+        "android_client_info": {
+          "package_name": "com.pascoapp.wba02_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061661507163-itnvq92uvp8p9kre3pbmcqp14p2j4jj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pascoapp.wba02_android",
+            "certificate_hash": "FEC5246DBDB6B1C3970F3949A284453FBA97D093"
+          }
+        },
+        {
+          "client_id": "1061661507163-fvn7mu3ufu0p9jok1ed4e6bkjlp62ieg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pascoapp.wba02_android",
+            "certificate_hash": "D572D9A74EFF43B13B8606D299FE5A8C091E093E"
+          }
+        },
+        {
+          "client_id": "1061661507163-m0u62ikb3bpe0683illq189qd4jurs23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKwPbE4QE81IMNeJkB8lelIxkJft3Vaj8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061661507163-m0u62ikb3bpe0683illq189qd4jurs23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

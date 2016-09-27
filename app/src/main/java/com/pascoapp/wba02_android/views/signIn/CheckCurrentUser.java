@@ -30,7 +30,10 @@ public class CheckCurrentUser extends Activity {
         super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.branded_launch_screen);
+    }
 
+    @Override
+    protected void onResume() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
@@ -41,12 +44,14 @@ public class CheckCurrentUser extends Activity {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setProviders(
-                                    AuthUI.EMAIL_PROVIDER)
+                                    AuthUI.EMAIL_PROVIDER,
+                                    AuthUI.GOOGLE_PROVIDER)
                             .setTheme(R.style.AppTheme)
                             .build(),
                     RC_SIGN_IN);
         }
 
+        super.onResume();
     }
 
     @Override
