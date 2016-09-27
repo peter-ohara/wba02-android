@@ -47,22 +47,22 @@ dependencies {
     compile 'com.android.support:preference-v7:24.1.0'
 
     // Firebase Core
-    compile 'com.google.firebase:firebase-core:9.4.0'
+    compile 'com.google.firebase:firebase-core:9.6.1'
 
     // Firebase Realtime Database
-    compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.google.firebase:firebase-database:9.6.1'
 
     // Firebase Notifications
-    compile 'com.google.firebase:firebase-messaging:9.4.0'
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
 
     // Firebase Crash Reporting
-    compile 'com.google.firebase:firebase-crash:9.4.0'
+    compile 'com.google.firebase:firebase-crash:9.6.1'
 
     // FirebaseUI Auth
-    compile 'com.firebaseui:firebase-ui-auth:0.4.4'
+    compile 'com.firebaseui:firebase-ui-auth:0.6.0'
 
     // FirebaseUI Database
-    compile 'com.firebaseui:firebase-ui-database:0.4.4'
+    compile 'com.firebaseui:firebase-ui-database:0.6.0'
 
     // Library for colored Square Icons with letter inside like in gmail
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
