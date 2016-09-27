@@ -181,7 +181,6 @@ public class TakeTestActivity extends AppCompatActivity {
                     enableAndUnHideButton(nextButton);
                 }, firebaseException -> {
                     loadingIndicator.setVisibility(View.GONE);
-                    System.out.println("TestOverviewActivity: " + firebaseException);
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(testKey))
                             .show();

@@ -37,8 +37,6 @@ public class Schools {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             School school = dataSnapshot.getValue(School.class);
                             school.setKey(dataSnapshot.getKey());
                             subscriber.onNext(school);

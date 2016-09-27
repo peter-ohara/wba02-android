@@ -37,21 +37,6 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mItems = mItems;
     }
 
-    public void add(MainViewListItem mainViewListItem) {
-        mItems.add(mainViewListItem);
-        notifyDataSetChanged();
-    }
-
-    public void clear() {
-        mItems.clear();
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<MainViewListItem> items) {
-        mItems.addAll(items);
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemViewType(int position) {
         MainViewListItem item = mItems.get(position);

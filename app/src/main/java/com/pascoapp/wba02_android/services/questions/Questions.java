@@ -37,8 +37,6 @@ public class Questions {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Question question = dataSnapshot.getValue(Question.class);
                             question.setKey(dataSnapshot.getKey());
                             subscriber.onNext(question);

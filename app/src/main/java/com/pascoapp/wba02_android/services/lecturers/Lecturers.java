@@ -37,8 +37,6 @@ public class Lecturers {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
                             lecturer.setKey(dataSnapshot.getKey());
                             subscriber.onNext(lecturer);

@@ -5,8 +5,11 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.services.tests.Test;
+import com.pascoapp.wba02_android.services.users.Users;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -81,6 +84,8 @@ public class Helpers {
             mDatabase = FirebaseDatabase.getInstance();
             mDatabase.setPersistenceEnabled(true);
 
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            mDatabase.getReference().child("users").child(user.getUid()).keepSynced(true);
         }
         return mDatabase;
     }

@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.services.programmes;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Programme {
+    @Exclude
     private String key;
 
     private String name;

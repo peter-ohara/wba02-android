@@ -37,8 +37,6 @@ public class Programmes {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Programme programme = dataSnapshot.getValue(Programme.class);
                             programme.setKey(dataSnapshot.getKey());
                             subscriber.onNext(programme);

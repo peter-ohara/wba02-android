@@ -10,6 +10,11 @@
         android:id="@+id/action_store" />
 
     <item
+        android:id="@+id/action_refresh"
+        app:showAsAction="never"
+        android:title="@string/menu_refresh"/>
+
+    <item
         android:id="@+id/action_logout"
         app:showAsAction="never"
         android:title="Log Out" />

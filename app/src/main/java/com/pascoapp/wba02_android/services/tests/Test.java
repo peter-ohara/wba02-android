@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.services.tests;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import lombok.ToString;
 @ToString(exclude={"instructions"})
 @NoArgsConstructor
 public class Test {
+    @Exclude
     private String key;
 
     private String type;

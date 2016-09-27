@@ -37,8 +37,6 @@ public class Tests {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Test test = dataSnapshot.getValue(Test.class);
                             test.setKey(dataSnapshot.getKey());
                             subscriber.onNext(test);

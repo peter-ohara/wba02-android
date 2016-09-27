@@ -37,8 +37,6 @@ public class Messages {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Message message = dataSnapshot.getValue(Message.class);
                             message.setKey(dataSnapshot.getKey());
                             subscriber.onNext(message);

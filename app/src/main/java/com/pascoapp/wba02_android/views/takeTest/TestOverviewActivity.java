@@ -185,7 +185,6 @@ public class TestOverviewActivity extends AppCompatActivity {
 
                 }, firebaseException -> {
                     loadingIndicator.setVisibility(View.GONE);
-                    System.out.println("TestOverviewActivity: " + firebaseException.getMessage());
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(testKey))
                             .show();

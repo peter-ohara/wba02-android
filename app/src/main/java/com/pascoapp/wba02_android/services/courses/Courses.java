@@ -37,8 +37,6 @@ public class Courses {
                                 return;
                             }
 
-                            System.out.println("Hello: " + key);
-
                             Course course = dataSnapshot.getValue(Course.class);
                             course.setKey(dataSnapshot.getKey());
                             subscriber.onNext(course);
