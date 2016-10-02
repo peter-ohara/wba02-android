@@ -1,8 +1,6 @@
 package com.pascoapp.wba02_android.views;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.users.User;
 import com.pascoapp.wba02_android.services.users.Users;
 
 import java.util.HashMap;
@@ -33,10 +32,27 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     private Context mContext;
     private List<Course> mItems;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private User fetchedUser;
 
     public CourseListAdapter(Context mContext, List<Course> mItems) {
         this.mContext = mContext;
         this.mItems = mItems;
+
+        fetchUser();
+    }
+
+    private void fetchUser() {
+        Users.fetchUser(user.getUid())
+                .subscribe(fetchedUser -> {
+                    this.fetchedUser = fetchedUser;
+                    // If user has no courses initial coursekeys with an empty hashmap
+                    if (fetchedUser.getCourseKeys() == null) {
+                        fetchedUser.setCourseKeys(new HashMap<>());
+                    }
+                }, throwable -> {
+                    Toast.makeText(mContext, "Error fetching user's course list",
+                            Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override
@@ -61,40 +77,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         );
         holder.courseName.setText(course.getName());
 
-        Users.fetchUser(user.getUid())
-                .subscribe(fetchedUser -> {
-                    // If user has no courses initial coursekeys with an empty hashmap
-                    if (fetchedUser.getCourseKeys() == null) {
-                        fetchedUser.setCourseKeys(new HashMap<>());
-                    }
-
-                    if (fetchedUser.getCourseKeys().containsKey(course.getKey())) {
-                        // course is already added
-                        setCourseAsAdded(holder);
-                    } else {
-                        // course is not added
-                        setCourseAsNotAdded(holder);
-                    }
-                }, throwable -> {
-                    Toast.makeText(mContext, "Error fetching user's course list",
-                            Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void setCourseAsAdded(CourseViewHolder holder) {
-        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_marked_outline_grey600_24dp);
-        holder.itemView.setOnClickListener(view -> {
-            // ask user if they want to remove it
-            showRemoveCourseDialog(holder);
-        });
-    }
-
-    private void setCourseAsNotAdded(CourseViewHolder holder) {
-        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        holder.itemView.setOnClickListener(view -> {
-            // ask user if they want to add it
-            showAddCourseDialog(holder);
-        });
+        if (fetchedUser.getCourseKeys().containsKey(course.getKey())) {
+            // course is already added
+            setCourseAsAdded(holder);
+        } else {
+            // course is not added
+            setCourseAsNotAdded(holder);
+        }
     }
 
     @Override
@@ -102,66 +91,38 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         return mItems.size();
     }
 
-
-    private void showRemoveCourseDialog(CourseViewHolder holder) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Do you want to remove this course?");
-        builder.setPositiveButton("Yes", (dialog, id) -> {
-            // User clicked OK button
-            Users.fetchUser(user.getUid())
-                    .subscribe(fetchedUser -> {
-                        // If user has no courses initial coursekeys with an empty hashmap
-                        if (fetchedUser.getCourseKeys() == null) {
-                            fetchedUser.setCourseKeys(new HashMap<>());
-                        }
-
-                        fetchedUser.getCourseKeys().remove(holder.course.getKey());
-                        setCourseAsNotAdded(holder);
-
-                        // Update the user
-                        Users.put(fetchedUser);
-                    }, throwable -> {
-                        Toast.makeText(mContext, "Error removing course from user's list",
-                                Toast.LENGTH_SHORT).show();
-                    });
+    private void setCourseAsAdded(CourseViewHolder holder) {
+        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_marked_outline_grey600_24dp);
+        holder.itemView.setOnClickListener(view -> {
+            // ask user if they want to remove it
+            removeTheCourse(holder);
         });
-        builder.setNegativeButton("Cancel", (dialog, id) -> {
-            // User cancelled the dialog
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
-    private void showAddCourseDialog(CourseViewHolder holder) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Do you want to add this course?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                Users.fetchUser(user.getUid())
-                        .subscribe(fetchedUser -> {
-                            // If user has no courses initial coursekeys with an empty hashmap
-                            if (fetchedUser.getCourseKeys() == null) {
-                                fetchedUser.setCourseKeys(new HashMap<>());
-                            }
-
-                            fetchedUser.getCourseKeys().put(holder.course.getKey(), true);
-                            setCourseAsAdded(holder);
-
-                            // Update the user
-                            Users.put(fetchedUser);
-                        }, throwable -> {
-                            Toast.makeText(mContext, "Error adding course to user's list",
-                                    Toast.LENGTH_SHORT).show();
-                        });
-            }
+    private void setCourseAsNotAdded(CourseViewHolder holder) {
+        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_blank_outline_grey600_24dp);
+        holder.itemView.setOnClickListener(view -> {
+            // ask user if they want to add it
+            addTheCourse(holder);
         });
-        builder.setNegativeButton("Cancel", (dialog, id) -> {
-            // User cancelled the dialog
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
+
+    private void removeTheCourse(CourseViewHolder holder) {
+        fetchedUser.getCourseKeys().remove(holder.course.getKey());
+        setCourseAsNotAdded(holder);
+
+        // Update the user
+        Users.put(fetchedUser);
+    }
+
+    private void addTheCourse(CourseViewHolder holder) {
+        fetchedUser.getCourseKeys().put(holder.course.getKey(), true);
+        setCourseAsAdded(holder);
+
+        // Update the user
+        Users.put(fetchedUser);
+    }
+
 
 
     public class CourseViewHolder extends RecyclerView.ViewHolder {
