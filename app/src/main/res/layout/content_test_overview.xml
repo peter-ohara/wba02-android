@@ -36,42 +36,17 @@
         app:layout_constraintTop_toBottomOf="@+id/instructionsTextView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <ImageView
-        android:id="@+id/lecturerIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructionsList"
-        tools:src="@mipmap/ic_launcher"
-        android:layout_marginTop="32dp" />
-
-    <TextView
-        android:id="@+id/lecturerName"
-        android:layout_width="296dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="24sp"
-        tools:text="Prof. Isaac Gob3"
-        app:layout_constraintLeft_toRightOf="@+id/lecturerIcon"
-        app:layout_constraintTop_toTopOf="@+id/lecturerIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/lecturerIcon"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp" />
-
     <TextView
         android:id="@+id/programmesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Programmes"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lecturerIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/instructionsList" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/programmesList"

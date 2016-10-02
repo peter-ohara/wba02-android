@@ -19,8 +19,6 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.lecturers.Lecturer;
-import com.pascoapp.wba02_android.services.lecturers.Lecturers;
 import com.pascoapp.wba02_android.services.programmes.Programme;
 import com.pascoapp.wba02_android.services.programmes.Programmes;
 import com.pascoapp.wba02_android.services.tests.Test;
@@ -53,10 +51,6 @@ public class TestOverviewActivity extends AppCompatActivity {
     TextView testName;
     @BindView(R.id.testDuration)
     TextView testDuration;
-    @BindView(R.id.lecturerName)
-    TextView lecturerName;
-    @BindView(R.id.lecturerIcon)
-    ImageView lecturerIcon;
     @BindView(R.id.programmesList)
     RecyclerView programmesRecyclerView;
     @BindView(R.id.instructionsList)
@@ -66,7 +60,6 @@ public class TestOverviewActivity extends AppCompatActivity {
 
     private String testKey;
     private Test test;
-    private Lecturer lecturer;
     private Course course;
     private List<Programme> programmes = new ArrayList<>();
     private List<String> instructions = new ArrayList<>();
@@ -148,11 +141,6 @@ public class TestOverviewActivity extends AppCompatActivity {
                 })
                 .flatMap(course -> {
                     this.course = course;
-                    Object[] lecturerKeys = test.getLecturerKeys().keySet().toArray();
-                    return Lecturers.fetchLecturer((String) lecturerKeys[0]);
-                })
-                .flatMap(lecturer -> {
-                    this.lecturer = lecturer;
                     return Observable.from(course.getProgrammeKeys().keySet())
                             .flatMap(programmeKey -> Programmes.fetchProgramme(programmeKey))
                             .toList();
@@ -166,14 +154,6 @@ public class TestOverviewActivity extends AppCompatActivity {
 
                     courseCode.setText(course.getCode());
                     courseName.setText(course.getName());
-
-                    lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
-                    lecturerIcon.setImageDrawable(
-                            Helpers.getIcon(
-                                    lecturer.getKey(),
-                                    lecturer.getFirstName().substring(0, 1), 24
-                            )
-                    );
 
                     programmes.clear();
                     programmes.addAll(newProgrammes);
