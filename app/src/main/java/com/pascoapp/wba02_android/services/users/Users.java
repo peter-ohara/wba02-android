@@ -4,12 +4,13 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.pascoapp.wba02_android.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 
@@ -21,7 +22,7 @@ public class Users {
 
     public static final String USERS_KEY = "users";
     public static final DatabaseReference USERS_REF
-            = FirebaseDatabase.getInstance().getReference().child(USERS_KEY);
+            = Helpers.getDatabaseInstance().getReference().child(USERS_KEY);
 
 
     public static Observable<User> fetchUser(String key) {
@@ -35,8 +36,6 @@ public class Users {
                                 subscriber.onError(new FirebaseException(errorMessage));
                                 return;
                             }
-
-                            System.out.println("Hello: " + key);
 
                             User user = dataSnapshot.getValue(User.class);
                             user.setKey(dataSnapshot.getKey());
@@ -82,4 +81,11 @@ public class Users {
         });
     }
 
+    public static void put(User user) {
+        USERS_REF.child(user.getKey()).setValue(user);
+    }
+
+    public static void put(String key, Map<String, String> user) {
+        USERS_REF.child(key).setValue(user);
+    }
 }

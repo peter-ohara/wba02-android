@@ -19,6 +19,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.messages.Message;
 
@@ -68,7 +69,7 @@ public class MessageListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(MessageListActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+        mMessagesRef = Helpers.getDatabaseInstance().getReference().child("messages");
         // TODO: Filter query by this users information;
         // TODO: Order by date
 

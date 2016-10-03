@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.services.questions;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Map;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @ToString(exclude = {"question", "choices", "answer", "explanation", "content"})
 @NoArgsConstructor
 public class Question {
+    @Exclude
     private String key;
 
     private String type;

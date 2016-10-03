@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -100,7 +99,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
         </activity>
-        <activity android:name=".views.main.CourseActivity"></activity>
+        <activity android:name=".views.main.CourseActivity" />
+        <activity
+            android:name=".StoreActivity"
+            android:label="@string/title_activity_store"
+            android:parentActivityName=".views.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

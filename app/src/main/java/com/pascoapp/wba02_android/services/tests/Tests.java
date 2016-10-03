@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.pascoapp.wba02_android.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Tests {
 
     public static final String TESTS_KEY = "tests";
     public static final DatabaseReference TESTS_REF
-            = FirebaseDatabase.getInstance().getReference().child(TESTS_KEY);
+            = Helpers.getDatabaseInstance().getReference().child(TESTS_KEY);
 
 
     public static Observable<Test> fetchTest(String key) {
@@ -35,8 +36,6 @@ public class Tests {
                                 subscriber.onError(new FirebaseException(errorMessage));
                                 return;
                             }
-
-                            System.out.println("Hello: " + key);
 
                             Test test = dataSnapshot.getValue(Test.class);
                             test.setKey(dataSnapshot.getKey());

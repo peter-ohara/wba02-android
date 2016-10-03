@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.services.messages;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Message {
+    @Exclude
     private String key;
 
     private String title;

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,24 +22,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.StoreActivity;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
-import com.pascoapp.wba02_android.views.overflow.Inbox.MessageListActivity;
-import com.pascoapp.wba02_android.views.overflow.help.HelpActivity;
-import com.pascoapp.wba02_android.views.overflow.settings.SettingsActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.Subscription;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,14 +45,18 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.snackbarPosition)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.loading_indicator)
-    ProgressBar loadingIndicator;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout mySwipeRefreshLayout;
     @BindView(R.id.coursesList)
     RecyclerView coursesRecyclerView;
     @BindView(R.id.bottomBar)
     View bottomBar;
 
+    public static final int BUY_COURSES_REQUEST = 1;
+
     private MainViewListAdapter mainViewListAdapter;
+    private List<MainViewListItem> mItems = new ArrayList<>();
+
 
 
     @Override
@@ -71,8 +74,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mainViewListAdapter = new MainViewListAdapter(this, new ArrayList<>());
+        mainViewListAdapter = new MainViewListAdapter(this, mItems);
         coursesRecyclerView.setAdapter(mainViewListAdapter);
+
+        mySwipeRefreshLayout.setOnRefreshListener(() -> {
+            refreshData();
+        });
 
         refreshData();
     }
@@ -89,23 +96,37 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_store:
                 openStore();
-                break;
+                return true;
+            case R.id.action_refresh:
+                refreshData();
+                return true;
             case R.id.action_logout:
                 logout();
-                break;
+                return true;
             case R.id.action_feedback:
                 openMailClientForFeedback();
-                break;
+                return true;
             case R.id.action_help:
                 openHelp();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.bottomBar)
     public void openStore() {
-        Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, StoreActivity.class);
+        startActivityForResult(intent, BUY_COURSES_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == BUY_COURSES_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // User may have bought new courses refresh course list
+                refreshData();
+            }
+        }
     }
 
     private void logout() {
@@ -135,14 +156,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void refreshData() {
-        loadingIndicator.setVisibility(View.VISIBLE);
+        mySwipeRefreshLayout.setRefreshing(true);
+        mItems.clear();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         Users.fetchUser(user.getUid())
-                .concatMap(user1 -> {
-                    Object[] courseKeys = user1.getCourseKeys().keySet().toArray();
+                .concatMap(fetchedUser -> {
+                    if (fetchedUser.getCourseKeys() == null) {
+                        // End Stream
+                        openStore();
+                    }
+
+                    Object[] courseKeys = fetchedUser.getCourseKeys().keySet().toArray();
+
                     return Observable.from(courseKeys)
                             .concatMap(courseKey -> Courses.fetchCourse((String) courseKey))
                             .toList();
@@ -150,18 +176,21 @@ public class MainActivity extends AppCompatActivity {
                 .concatMap(courses -> Observable.from(courses))
                 .concatMap(course -> {
                     MainViewListItem mainViewListItem = new MainViewListItem(course);
-                    mainViewListAdapter.add(mainViewListItem);
+                    mItems.add(mainViewListItem);
 
                     Query testsQuery = Tests.TESTS_REF.orderByChild("courseKey").equalTo(course.getKey());
                     return Tests.fetchListOfTests(testsQuery);
                 })
                 .concatMap(tests -> Observable.from(tests))
                 .subscribe(test -> {
-                    loadingIndicator.setVisibility(View.GONE);
+                    mySwipeRefreshLayout.setRefreshing(false);
+
                     MainViewListItem mainViewListItem = new MainViewListItem(test);
-                    mainViewListAdapter.add(mainViewListItem);
+                    mItems.add(mainViewListItem);
+                    mainViewListAdapter.notifyDataSetChanged();
+
                 }, firebaseException -> {
-                    loadingIndicator.setVisibility(View.GONE);
+                    mySwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData())
                             .show();
