@@ -14,8 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
-import rx.Subscription;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 logout();
                 return true;
             case R.id.action_feedback:
-                openMailClientForFeedback();
+                openFeedbackForm();
                 return true;
             case R.id.action_help:
                 openHelp();
@@ -141,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void openMailClientForFeedback() {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "feedback@pascoapp.com", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Pasco Android App");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    private void openFeedbackForm() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://docs.google.com/forms/d/e/" +
+                        "1FAIpQLSckq4J5Jf32rK_LSKI4Gq1k0gWthyEj82B_UlySMJxr9ib22A/viewform"));
+        startActivity(browserIntent);
     }
 
     private void openHelp() {
