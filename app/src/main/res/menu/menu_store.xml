@@ -2,13 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".views.main.MainActivity">
-
-    <item
-        android:icon="@drawable/ic_cart_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="Store"
-        android:id="@+id/action_store" />
+    tools:context=".views.store.StoreActivity">
 
     <item
         android:id="@+id/action_refresh"
