@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.views.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,12 +23,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.views.WebviewActivity;
-import com.pascoapp.wba02_android.views.store.StoreActivity;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
+import com.pascoapp.wba02_android.views.WebviewActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
+import com.pascoapp.wba02_android.views.store.StoreActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.snackbarPosition)
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        handleAnyNotificationData();
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.mipmap.ic_action_logo);
         setTitle("");
@@ -82,6 +86,26 @@ public class MainActivity extends AppCompatActivity {
         refreshData();
     }
 
+    private void handleAnyNotificationData() {
+        // If a notification message is tapped, any data accompanying the notification
+        // message is available in the intent extras. In this sample the launcher
+        // intent is fired when the notification is tapped, so any accompanying data would
+        // be handled here. If you want a different intent fired, set the click_action
+        // field of the notification message to the desired intent. The launcher intent
+        // is used when no click_action is specified.
+        //
+        // Handle possible data accompanying notification message.
+        // [START handle_data_extras]
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Toast.makeText(this, "Key: " + key + " Value: " + value, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Key: " + key + " Value: " + value);
+            }
+        }
+        // [END handle_data_extras]
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_refresh:
                 refreshData();
+                return true;
+            case R.id.action_upload_pasco:
+                openPascoUploadScreen();
                 return true;
             case R.id.action_logout:
                 logout();
@@ -125,6 +152,14 @@ public class MainActivity extends AppCompatActivity {
                 refreshData();
             }
         }
+    }
+
+    private void openPascoUploadScreen() {
+        Intent browserIntent = new Intent(MainActivity.this, WebviewActivity.class);
+        String url = "http://www.pascoapp.com/give-us-pasco";
+        browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
+        browserIntent.putExtra(WebviewActivity.EXTRA_TITLE, getString(R.string.action_upload_pasco));
+        startActivity(browserIntent);
     }
 
     private void logout() {

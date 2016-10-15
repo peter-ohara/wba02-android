@@ -7,19 +7,23 @@
     <item
         android:icon="@drawable/ic_cart_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="Store"
+        android:title="@string/action_store"
         android:id="@+id/action_store" />
 
     <item
         android:id="@+id/action_refresh"
         app:showAsAction="never"
-        android:title="@string/menu_refresh"/>
+        android:title="@string/action_refresh"/>
 
     <item
         android:id="@+id/action_logout"
         app:showAsAction="never"
-        android:title="Log Out" />
+        android:title="@string/action_log_out" />
 
+    <item
+        android:id="@+id/action_upload_pasco"
+        app:showAsAction="never"
+        android:title="@string/action_upload_pasco"/>
     <item
         android:id="@+id/action_feedback"
         android:orderInCategory="101"
