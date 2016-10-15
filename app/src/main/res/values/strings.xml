@@ -183,6 +183,7 @@
     <string name="title_activity_test_end">TestEndActivity</string>
     <string name="title_activity_store">Add Courses</string>
     <string name="menu_refresh">Refresh</string>
+    <string name="title_activity_webview">WebviewActivity</string>
 
 
 </resources>

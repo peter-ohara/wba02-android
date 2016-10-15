@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.views.store;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -9,18 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
+import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.CourseListAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;

@@ -22,7 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.StoreActivity;
+import com.pascoapp.wba02_android.views.WebviewActivity;
+import com.pascoapp.wba02_android.views.store.StoreActivity;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
@@ -139,15 +140,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openFeedbackForm() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://docs.google.com/forms/d/e/" +
-                        "1FAIpQLSckq4J5Jf32rK_LSKI4Gq1k0gWthyEj82B_UlySMJxr9ib22A/viewform"));
+        Intent browserIntent = new Intent(MainActivity.this, WebviewActivity.class);
+        String url = "https://docs.google.com/forms/d/e/" +
+                "1FAIpQLSckq4J5Jf32rK_LSKI4Gq1k0gWthyEj82B_UlySMJxr9ib22A/viewform";
+        browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
+        browserIntent.putExtra(WebviewActivity.EXTRA_TITLE, getString(R.string.action_feedback));
         startActivity(browserIntent);
     }
 
     private void openHelp() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.pascoapp.com/help"));
+        Intent browserIntent = new Intent(MainActivity.this, WebviewActivity.class);
+        String url = "http://www.pascoapp.com/help";
+        browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
+        browserIntent.putExtra(WebviewActivity.EXTRA_TITLE, getString(R.string.action_help));
         startActivity(browserIntent);
     }
 
