@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class WebAppInterface {
     Context mContext;
-    private String sorryText = "This feature will be unlocked in a later put. Stay tuned!";
+    private String sorryText = "This feature will be unlocked in a later update. Stay tuned!";
 
     WebAppInterface(Context c) {
         mContext = c;
