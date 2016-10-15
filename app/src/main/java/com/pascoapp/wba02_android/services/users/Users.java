@@ -80,12 +80,4 @@ public class Users {
             });
         });
     }
-
-    public static void put(User user) {
-        USERS_REF.child(user.getKey()).setValue(user);
-    }
-
-    public static void put(String key, Map<String, String> user) {
-        USERS_REF.child(key).setValue(user);
-    }
 }

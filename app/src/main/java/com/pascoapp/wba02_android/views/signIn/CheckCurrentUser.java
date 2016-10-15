@@ -8,7 +8,10 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.main.MainActivity;
 
@@ -24,6 +27,9 @@ import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
  */
 public class CheckCurrentUser extends Activity {
 
+
+    public static final String EMAIL = "email";
+    public static final String USERNAME = "username";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +69,13 @@ public class CheckCurrentUser extends Activity {
                 // userKey is signed in!
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                Map newUser = new HashMap<String, String>();
-                newUser.put("email", user.getEmail());
-                newUser.put("username", user.getDisplayName());
-
-                Users.put(user.getUid(), newUser);
+                // create or update email and username for user in the real-time database atomically
+                Map<String, Object> childUpdates = new HashMap<>();
+                String emailPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), EMAIL);
+                String usernamePath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), USERNAME);
+                childUpdates.put(emailPath, user.getEmail());
+                childUpdates.put(usernamePath, user.getDisplayName());
+                Helpers.getDatabaseInstance().getReference().updateChildren(childUpdates);
 
                 startMainActivity();
             } else {

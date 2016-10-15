@@ -90,4 +90,12 @@ public class Helpers {
         return mDatabase;
     }
 
+    public static String createFirebasePath(String... paths) {
+        String newPath = "";
+        for (String path : paths) {
+            newPath += "/" + path;
+        }
+        return newPath;
+    }
+
 }

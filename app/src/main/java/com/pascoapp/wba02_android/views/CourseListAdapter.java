@@ -11,14 +11,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
+import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.users.User;
 import com.pascoapp.wba02_android.services.users.Users;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +32,13 @@ import butterknife.ButterKnife;
 
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
 
+    public static final String USER_KEYS = "userKeys";
+    public static final String COURSE_KEYS = "courseKeys";
     private Context mContext;
     private List<Course> mItems;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference mDatabaseRef = Helpers.getDatabaseInstance().getReference();
+
     private User fetchedUser;
 
     public CourseListAdapter(Context mContext, List<Course> mItems) {
@@ -112,7 +119,16 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         setCourseAsNotAdded(holder);
 
         // Update the user
-        Users.put(fetchedUser);
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String userUpdatePath = Helpers.createFirebasePath(Users.USERS_KEY, fetchedUser.getKey(),
+                COURSE_KEYS, holder.course.getKey());
+        String courseUpdatePath = Helpers.createFirebasePath(Courses.COURSES_KEY, holder.course.getKey(),
+                USER_KEYS, fetchedUser.getKey());
+
+        childUpdates.put(userUpdatePath, null);
+        childUpdates.put(courseUpdatePath, null);
+        mDatabaseRef.updateChildren(childUpdates);
     }
 
     private void addTheCourse(CourseViewHolder holder) {
@@ -120,10 +136,17 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         setCourseAsAdded(holder);
 
         // Update the user
-        Users.put(fetchedUser);
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String userUpdatePath = Helpers.createFirebasePath(Users.USERS_KEY, fetchedUser.getKey(),
+                COURSE_KEYS, holder.course.getKey());
+        String courseUpdatePath = Helpers.createFirebasePath(Courses.COURSES_KEY, holder.course.getKey(),
+                USER_KEYS, fetchedUser.getKey());
+
+        childUpdates.put(userUpdatePath, true);
+        childUpdates.put(courseUpdatePath, true);
+        mDatabaseRef.updateChildren(childUpdates);
     }
-
-
 
     public class CourseViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.courseIcon) ImageView courseIcon;
