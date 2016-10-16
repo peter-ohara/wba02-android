@@ -22,6 +22,7 @@ import com.pascoapp.wba02_android.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class WebviewActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class WebviewActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+    RingProgressBar progressBar;
     @BindView(R.id.activity_webview)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.webview)
@@ -80,6 +81,7 @@ public class WebviewActivity extends AppCompatActivity {
             super.onPageStarted(view, url, favicon);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(10);
+            view.setVisibility(View.INVISIBLE);
             if (title == null) setTitle(url);
         }
 
@@ -88,6 +90,7 @@ public class WebviewActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
             progressBar.setProgress(100);
+            view.setVisibility(View.VISIBLE);
         }
 
         @Override

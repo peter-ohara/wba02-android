@@ -80,6 +80,9 @@ dependencies {
 
     // Chunk Templating Engine
     compile "com.x5dev:chunk-templates:3.2.3"
+
+    // RingProgressBar
+    compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
