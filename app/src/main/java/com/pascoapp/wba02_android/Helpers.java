@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.services.users.Users;
 
 import java.util.Collections;
 import java.util.Comparator;

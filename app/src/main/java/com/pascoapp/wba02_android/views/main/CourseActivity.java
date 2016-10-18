@@ -1,7 +1,7 @@
 package com.pascoapp.wba02_android.views.main;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.pascoapp.wba02_android.R;
 

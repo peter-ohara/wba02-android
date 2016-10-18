@@ -10,7 +10,6 @@ import com.pascoapp.wba02_android.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 

@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.views.main;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -155,10 +156,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPascoUploadScreen() {
-        Intent browserIntent = new Intent(MainActivity.this, WebviewActivity.class);
-        String url = "http://www.pascoapp.com/give-us-pasco";
-        browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
-        browserIntent.putExtra(WebviewActivity.EXTRA_TITLE, getString(R.string.action_upload_pasco));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.pascoapp.com/give-us-pasco"));
         startActivity(browserIntent);
     }
 

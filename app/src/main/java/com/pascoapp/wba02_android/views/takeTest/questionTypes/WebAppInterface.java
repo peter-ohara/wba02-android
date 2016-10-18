@@ -4,9 +4,6 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
-import com.pascoapp.wba02_android.views.takeTest.TakeTestActivity;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 

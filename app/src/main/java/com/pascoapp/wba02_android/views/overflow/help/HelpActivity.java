@@ -8,12 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.views.takeTest.questionTypes.WebAppInterface;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

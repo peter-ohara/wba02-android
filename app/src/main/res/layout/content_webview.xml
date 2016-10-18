@@ -13,20 +13,14 @@
         android:layout_height="match_parent"
         android:id="@+id/webview"/>
 
-    <io.netopen.hotbitmapgg.library.view.RingProgressBar
-        android:id="@+id/progressBar"
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loadingIndicatorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:progress="50"
-        app:max="100"
-        app:ringColor="@android:color/darker_gray"
-        app:ringProgressColor="@color/primary"
-        app:ringWidth="3dp"
-        app:style="STROKE"
-        app:textColor="@color/primary"
-        app:textIsShow="true"
-        app:textSize="16sp"/>
+        style="@style/AVLoadingIndicatorView.Small"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="@color/grey_400"/>
 
 
 </RelativeLayout>

@@ -13,8 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +23,6 @@ import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.views.CourseListAdapter;
 import com.pascoapp.wba02_android.views.WebviewActivity;
-import com.pascoapp.wba02_android.views.main.MainActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import java.util.ArrayList;

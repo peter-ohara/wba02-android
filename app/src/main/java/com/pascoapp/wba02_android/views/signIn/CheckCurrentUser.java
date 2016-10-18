@@ -8,10 +8,8 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.main.MainActivity;
 

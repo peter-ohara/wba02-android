@@ -12,5 +12,7 @@
     <color name="gray_headings">#4D4D4D</color>
     <color name="gray_small_text">#E6E6E6</color>
     <color name="white">#ffffff</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_600">#757575</color>
 
 </resources>

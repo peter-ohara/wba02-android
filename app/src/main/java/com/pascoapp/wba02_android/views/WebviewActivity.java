@@ -10,19 +10,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
 import com.pascoapp.wba02_android.R;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class WebviewActivity extends AppCompatActivity {
 
@@ -31,8 +29,8 @@ public class WebviewActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.progressBar)
-    RingProgressBar progressBar;
+    @BindView(R.id.loadingIndicatorView)
+    AVLoadingIndicatorView loadingIndicatorView;
     @BindView(R.id.activity_webview)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.webview)
@@ -79,19 +77,17 @@ public class WebviewActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            progressBar.setVisibility(View.VISIBLE);
-            progressBar.setProgress(10);
-            view.setVisibility(View.INVISIBLE);
+            loadingIndicatorView.show();
             if (title == null) setTitle(url);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            progressBar.setVisibility(View.GONE);
-            progressBar.setProgress(100);
-            view.setVisibility(View.VISIBLE);
+            loadingIndicatorView.hide();
         }
+
+
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -108,10 +104,6 @@ public class WebviewActivity extends AppCompatActivity {
     }
 
     private class PascoWebChromeClient extends WebChromeClient {
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            progressBar.setProgress(newProgress);
-        }
 
         @Override
         public void onReceivedTitle(WebView view, String title) {
