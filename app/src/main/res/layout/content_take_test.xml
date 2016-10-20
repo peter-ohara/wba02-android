@@ -8,13 +8,15 @@
     tools:context=".views.takeTest.TakeTestActivity"
     tools:showIn="@layout/activity_take_test">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/loading_indicator"
         android:layout_gravity="center"
-        android:visibility="visible"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        style="@style/AVLoadingIndicatorView"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="@color/grey_400"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

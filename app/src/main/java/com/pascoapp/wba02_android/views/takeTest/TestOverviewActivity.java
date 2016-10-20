@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pascoapp.wba02_android.Helpers;
@@ -20,6 +19,7 @@ import com.pascoapp.wba02_android.services.courses.Course;
 import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.services.tests.Tests;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class TestOverviewActivity extends AppCompatActivity {
     @BindView(R.id.snackbarPosition)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.loading_indicator)
-    ProgressBar loadingIndicator;
+    AVLoadingIndicatorView loadingIndicator;
     @BindView(R.id.courseCode)
     TextView courseCode;
     @BindView(R.id.courseName)
@@ -113,7 +113,7 @@ public class TestOverviewActivity extends AppCompatActivity {
     }
 
     private void refreshData(String testKey) {
-        loadingIndicator.setVisibility(View.VISIBLE);
+        loadingIndicator.show();
         lowerContent.setVisibility(View.GONE);
         Tests.fetchTest(testKey)
                 .flatMap(test -> {
@@ -123,7 +123,7 @@ public class TestOverviewActivity extends AppCompatActivity {
                 .subscribe(course -> {
                     this.course = course;
 
-                    loadingIndicator.setVisibility(View.GONE);
+                    loadingIndicator.hide();
                     lowerContent.setVisibility(View.VISIBLE);
 
                     testName.setText(Helpers.getTestName(test));
@@ -137,7 +137,7 @@ public class TestOverviewActivity extends AppCompatActivity {
                     instructionsAdapter.notifyDataSetChanged();
 
                 }, firebaseException -> {
-                    loadingIndicator.setVisibility(View.GONE);
+                    loadingIndicator.hide();
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(testKey))
                             .show();

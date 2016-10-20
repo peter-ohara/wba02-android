@@ -11,7 +11,6 @@ import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -21,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.messages.Message;
+import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * An activity representing a list of messages. This activity
@@ -38,7 +38,7 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private View coordinatorLayoutView;
-    private ProgressBar loadingIndicator;
+    private AVLoadingIndicatorView loadingIndicator;
     private LinearLayoutManager mLayoutManager;
     private FirebaseRecyclerAdapter<Message, MessageHolder> mAdapter;
     private DatabaseReference mMessagesRef;
@@ -57,7 +57,7 @@ public class MessageListActivity extends AppCompatActivity {
         generator = ColorGenerator.MATERIAL;
 
         coordinatorLayoutView = findViewById(R.id.message_list);
-        loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
 
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.message_list);
@@ -72,7 +72,7 @@ public class MessageListActivity extends AppCompatActivity {
         // TODO: Filter query by this users information;
         // TODO: Order by date
 
-        loadingIndicator.setVisibility(View.VISIBLE);
+        loadingIndicator.show();
         mAdapter = new FirebaseRecyclerAdapter<Message, MessageHolder>(Message.class, R.layout.message_list_content, MessageHolder.class, mMessagesRef) {
             @Override
             public void populateViewHolder(final MessageHolder messageViewHolder, final Message message, final int position) {
@@ -100,7 +100,7 @@ public class MessageListActivity extends AppCompatActivity {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                loadingIndicator.setVisibility(View.GONE);
+                loadingIndicator.hide();
             }
         });
 
