@@ -38,7 +38,7 @@ public class QuestionHelpers {
         //get the root comments first (comments with no parent)
         for(int i = 0; i < comments.size(); i++){
             Comment c = comments.get(i);
-            if(c.getCommentParent() == null){
+            if(c.getParent() == null){
                 c.setCommentDepth(0); //A property of Comment to hold its depth
                 c.setChildCount(0); //A property of Comment to hold its child count
                 threaded.add(c);
@@ -61,7 +61,7 @@ public class QuestionHelpers {
                 //check root comments for match
                 for(int i = 0; i < threaded.size(); i++){
                     Comment parent = threaded.get(i);
-                    if(parent.getKey() == child.getCommentParent()){
+                    if(parent.getKey().equals(child.getParent())){
                         parent.setChildCount(parent.getChildCount()+1);
                         child.setCommentDepth(depth+parent.getCommentDepth());
                         threaded.add(i+parent.getChildCount(),child);

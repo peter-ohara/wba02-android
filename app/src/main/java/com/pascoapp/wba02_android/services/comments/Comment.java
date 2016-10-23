@@ -9,14 +9,14 @@ import lombok.ToString;
 
 @IgnoreExtraProperties
 @Data
-@ToString(exclude = {"commentParent", "commentDepth", "childCount", "commentId"})
+@ToString(exclude = {"commentDepth", "childCount", "commentId"})
 @NoArgsConstructor
 public class Comment {
     @Exclude
     private String key;
 
-    @Exclude
-    private String commentParent;
+    private String parent;
+
     @Exclude
     private int commentDepth;
     @Exclude
@@ -25,6 +25,6 @@ public class Comment {
     private String author;
     private String message;
     private Boolean flagged;
-    private Double timestamp;
+    private Long timestamp;
 
 }

@@ -1,6 +1,7 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,9 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
+import com.pascoapp.wba02_android.views.WebviewActivity;
+import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
+import com.pascoapp.wba02_android.views.main.MainActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
@@ -157,6 +161,9 @@ public class McqFragment extends Fragment {
         @JavascriptInterface
         public void openDiscussionScreen() {
             Toast.makeText(mContext, sorryText, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), DiscussionActivity.class);
+            intent.putExtra(DiscussionActivity.EXTRA_QUESTION_KEY, questionKey);
+            startActivity(intent);
         }
 
         @JavascriptInterface
