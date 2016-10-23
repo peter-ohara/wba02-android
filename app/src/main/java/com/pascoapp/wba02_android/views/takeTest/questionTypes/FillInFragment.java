@@ -23,9 +23,9 @@ public class FillInFragment extends Fragment {
     public static final String QUESTION_ERROR = "Unknown Error! Please report this questionKey";
 
     // the fragment initialization parameters
-    public static final String ARG_QUESTION = "questionKey";
-    public static final String ARG_ANSWER = "answer";
-
+    private static final String ARG_QUESTION_KEY = "com.pascoapp.wba02_android.questionKey";
+    public static final String ARG_QUESTION = "com.pascoapp.wba02_android.question";
+    public static final String ARG_ANSWER = "com.pascoapp.wba02_android.answer";
 
     // the fragment state parameters
     private static final String STATE_ANSWERED = "answered";
@@ -33,6 +33,7 @@ public class FillInFragment extends Fragment {
     private static final String STATE_ANSWERED_WRONGLY = "answeredWrongly";
 
     // Member Variables related to the questionKey
+    private String questionKey;
     private String question;
     private String answer;
 
@@ -48,6 +49,7 @@ public class FillInFragment extends Fragment {
         FillInFragment fragment = new FillInFragment();
         Bundle args = new Bundle();
 
+        args.putString(ARG_QUESTION_KEY, question.getKey());
         args.putString(ARG_QUESTION, question.getQuestion());
         args.putString(ARG_ANSWER, question.getAnswer());
 
@@ -63,6 +65,7 @@ public class FillInFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            questionKey = getArguments().getString(ARG_QUESTION_KEY);
             question = getArguments().getString(ARG_QUESTION);
             answer = getArguments().getString(ARG_ANSWER);
         }
@@ -89,21 +92,8 @@ public class FillInFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
         ButterKnife.bind(this, view);
-        loadItemInWebView(getActivity(), webview, getHtml(question));
+        loadItemInWebView(getActivity(), webview, getHtml(question), questionKey);
         return view;
-    }
-
-    private void setWebviewContent(WebView webview, String question) {
-        AndroidTemplates loader = new AndroidTemplates(getContext());
-        Theme theme = new Theme(loader);
-
-        // Fetch template from this file: themes/examples/hello.chtml
-        // Inside that file there is a template "snippet" named #example_1
-        Chunk chunk = theme.makeChunk("essay");
-
-        chunk.set("question", question);
-        String html = chunk.toString();
-        loadItemInWebView(getActivity(), webview, html);
     }
 
     private String getHtml(String question) {

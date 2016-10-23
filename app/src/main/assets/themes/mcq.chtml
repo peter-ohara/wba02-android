@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>{$questionNumber}</title>
-    <meta name="viewport" content="userKey-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     {% include css %}
 </head>
@@ -22,7 +22,11 @@
                     {% loop in $choices as $key:$choice first_last="true" %}
                     <li>
                         <span class="choice">{$key}</span>
+                        {% if $key == $usersAnswer %}
+                        <input type="radio" name="choices" value="{$key}" id="{$key}" checked>
+                        {% else %}
                         <input type="radio" name="choices" value="{$key}" id="{$key}">
+                        {% endif %}
                         <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
                         {% if (!$last) %}
                         <hr>

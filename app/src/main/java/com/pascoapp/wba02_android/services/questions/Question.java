@@ -29,5 +29,5 @@ public class Question {
     private String content;
 
     private String testKey;
-    private Map<String, Boolean> userKeys;
+    private Map<String, String> submittedAnswers;
 }

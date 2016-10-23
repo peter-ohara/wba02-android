@@ -57,7 +57,7 @@ public class HeaderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_header, container, false);
         ButterKnife.bind(this, view);
-        loadItemInWebView(getActivity(), webview, getHtml(title, content));
+        loadItemInWebView(getActivity(), webview, getHtml(title, content), "");
         return view;
     }
 

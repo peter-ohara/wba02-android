@@ -90,7 +90,7 @@ public class EssayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_essay, container, false);
         ButterKnife.bind(this, view);
-        loadItemInWebView(getActivity(), webview, getHtml(question));
+        loadItemInWebView(getActivity(), webview, getHtml(question), "");
         return view;
     }
 

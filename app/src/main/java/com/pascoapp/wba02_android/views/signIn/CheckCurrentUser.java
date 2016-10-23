@@ -19,7 +19,7 @@ import java.util.Map;
 import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
 /**
- * Checks if there's a current userKey
+ * Checks if there's a current user
  * If there is start AuthenticateActivity
  * If not start RegistrationActivity
  */
@@ -64,7 +64,7 @@ public class CheckCurrentUser extends Activity {
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                // userKey is signed in!
+                // user is signed in!
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 // create or update email and username for user in the real-time database atomically
@@ -77,7 +77,7 @@ public class CheckCurrentUser extends Activity {
 
                 startMainActivity();
             } else {
-                // userKey is not signed in. Maybe just wait for the userKey to press
+                // user is not signed in. Maybe just wait for the user to press
                 // "sign in" again, or show a message
                 Toast.makeText(this, "Error signing in. Please try again.", Toast.LENGTH_SHORT)
                         .show();
