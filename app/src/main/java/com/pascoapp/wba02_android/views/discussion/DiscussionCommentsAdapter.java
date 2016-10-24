@@ -8,15 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.comments.Comment;
 import com.pascoapp.wba02_android.services.comments.Comments;
+import com.pascoapp.wba02_android.services.questions.Questions;
+import com.pascoapp.wba02_android.services.users.Users;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,11 +32,19 @@ import static com.pascoapp.wba02_android.Helpers.dip;
 public class DiscussionCommentsAdapter
         extends RecyclerView.Adapter<DiscussionCommentsAdapter.CommentsViewHolder> {
 
+    public static final String VOTES = "votes";
     private Context context;
     private List<Comment> mItems;
     private final String questionKey;
 
+    private OnReplyListener onReplyListener;
+
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+    public interface OnReplyListener {
+        void onReply(String parent);
+    }
 
 
     public DiscussionCommentsAdapter(Context context, List<Comment> mItems, String questionKey) {
@@ -54,6 +65,18 @@ public class DiscussionCommentsAdapter
     public void onBindViewHolder(CommentsViewHolder holder, int position) {
         Comment comment = mItems.get(position);
 
+        Users.fetchUser(comment.getAuthor())
+                .flatMap(user -> {
+                    holder.author.setText(user.getUsername());
+                    return Questions.fetchQuestion(questionKey);
+                })
+                .subscribe(question -> {
+                    holder.answer.setText(question.getSubmittedAnswers().get(user.getUid()));
+                }, throwable -> {
+                    Toast.makeText(context, "Error fetching comment details",
+                            Toast.LENGTH_SHORT).show();
+                });
+
         if (comment.getParent() != null) {
             // comment is a child so indent by apprioprate commentDepth
             int indent = dip(8) + dip(8 * comment.getCommentDepth());
@@ -65,19 +88,52 @@ public class DiscussionCommentsAdapter
         }
 
         holder.message.setText(comment.getMessage());
-        holder.author.setText(comment.getAuthor());
         holder.timestamp.setText(getTimeRelativeToNow(comment.getTimestamp()));
+
+
+        // sum up all the votes
+        Map<String, Integer> votes = comment.getVotes();
+        Integer sumVotes = 0;
+        if (votes != null) {
+            for (Map.Entry<String, Integer> entry: comment.getVotes().entrySet()) {
+                sumVotes += entry.getValue();
+            }
+            holder.upVoteButton.setText(String.valueOf(sumVotes));
+            holder.downvoteButton.setText(String.valueOf(sumVotes));
+        } else {
+            holder.upVoteButton.setText(String.valueOf(sumVotes));
+            holder.downvoteButton.setText(String.valueOf(sumVotes));
+        }
 
         holder.replyButton.setOnClickListener(view -> {
             // Launch new comment Activity
+            onReplyListener.onReply(comment.getKey());
+        });
 
-            Comment newComment = new Comment();
-            newComment.setAuthor(user.getUid());
-            newComment.setMessage("Some message ");
-            newComment.setParent(comment.getKey());
-            newComment.setTimestamp((new Date()).getTime());
+        holder.upVoteButton.setOnClickListener(view -> {
+            if (votes == null) {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(1);
+            } else if (votes.get(user.getUid()) == 1) {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(null);
+            } else {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(1);
+            }
+        });
 
-            Comments.COMMENTS_REF.child(questionKey).push().getRef().setValue(newComment);
+        holder.downvoteButton.setOnClickListener(view -> {
+            if (votes == null) {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(-1);
+            } else if (votes.get(user.getUid()) == -1) {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(null);
+            } else {
+                Comments.COMMENTS_REF.child(questionKey).child(comment.getKey())
+                        .child(VOTES).child(user.getUid()).setValue(-1);
+            }
         });
     }
 
@@ -85,6 +141,11 @@ public class DiscussionCommentsAdapter
     public int getItemCount() {
         return mItems.size();
     }
+
+    public void setOnReplyListener(OnReplyListener onReplyListener) {
+        this.onReplyListener = onReplyListener;
+    }
+
 
     private String getTimeRelativeToNow(Long time) {
         return (String) DateUtils.getRelativeDateTimeString(context,
@@ -103,7 +164,7 @@ public class DiscussionCommentsAdapter
     }
 
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.answerLabel)
+        @BindView(R.id.answer)
         TextView answer;
         @BindView(R.id.timeStamp)
         TextView timestamp;

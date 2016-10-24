@@ -1,33 +1,39 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.webkit.WebView;
-
 import com.pascoapp.wba02_android.services.comments.Comment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by peter on 8/19/16.
  */
 public class QuestionHelpers {
 
-    public static void loadItemInWebView(Context context, WebView w, String html, String questionKey) {
-        w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new WebAppInterface(context, questionKey), "Android");
-        w.setBackgroundColor(Color.TRANSPARENT);
-
-        String mime = "text/html";
-        String encoding = "utf-8";
-        String baseURL = "file:///android_res/raw/";
-        w.loadDataWithBaseURL(baseURL, html, mime, encoding, null);
+    public static Integer getVotes(Comment comment) {
+        Map<String, Integer> votes = comment.getVotes();
+        Integer sumVotes = 0;
+        if (votes != null) {
+            for (Map.Entry<String, Integer> entry: comment.getVotes().entrySet()) {
+                sumVotes += entry.getValue();
+            }
+        }
+        return sumVotes;
     }
 
     public static List<Comment> toThreadedComments(List<Comment> comments){
 
         //comments should be sorted by date first
+        Collections.sort(comments, new Comparator<Comment>(){
+            public int compare(Comment o1, Comment o2){
+                if(getVotes(o1) == getVotes(o2))
+                    return 0;
+                return getVotes(o1) > getVotes(o2) ? -1 : 1;
+            }
+        });
 
         //The resulting array of threaded comments
         List<Comment> threaded = new ArrayList<Comment>();

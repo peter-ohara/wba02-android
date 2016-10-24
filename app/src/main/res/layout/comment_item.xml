@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -36,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/answerLabel" />
 
         <TextView
-            android:text="12 hours ago"
+            tools:text="12 hours ago"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/timeStamp"
@@ -49,7 +50,7 @@
             android:layout_marginRight="8dp" />
 
         <TextView
-            android:text="sudo_pierre"
+            tools:text="sudo_pierre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/author"

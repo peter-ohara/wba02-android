@@ -3,40 +3,40 @@ package com.pascoapp.wba02_android.views.discussion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
-import com.pascoapp.wba02_android.Helpers;
+import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.comments.Comment;
 import com.pascoapp.wba02_android.services.comments.Comments;
-import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.services.questions.Questions;
-import com.pascoapp.wba02_android.services.tests.Tests;
-import com.pascoapp.wba02_android.views.main.MainViewListAdapter;
-import com.pascoapp.wba02_android.views.takeTest.QuestionsPagerAdapter;
 import com.pascoapp.wba02_android.views.takeTest.questionTypes.QuestionHelpers;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
+import butterknife.OnClick;
 
-public class DiscussionActivity extends AppCompatActivity {
+public class DiscussionActivity extends AppCompatActivity
+        implements DiscussionCommentsAdapter.OnReplyListener,
+        NewCommentFragment.OnFragmentInteractionListener {
 
     public static final String EXTRA_QUESTION_KEY = "com.pascoapp.wba02_android.questionKey";
-    public static final String TIMESTAMP = "timestamp";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,8 +47,13 @@ public class DiscussionActivity extends AppCompatActivity {
     @BindView(R.id.commentsList)
     RecyclerView commentsRecyclerView;
 
+    @BindView(R.id.floatingActionButton)
+    FloatingActionButton replyButton;
+
     private List<Comment> mComments = new ArrayList<>();
     private DiscussionCommentsAdapter discussionCommentsAdapter;
+
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     @Override
@@ -65,6 +70,7 @@ public class DiscussionActivity extends AppCompatActivity {
         commentsRecyclerView.setLayoutManager(linearLayoutManager);
 
         discussionCommentsAdapter = new DiscussionCommentsAdapter(this, mComments, getQuestionKey());
+        discussionCommentsAdapter.setOnReplyListener(this);
         commentsRecyclerView.setAdapter(discussionCommentsAdapter);
 
 
@@ -98,28 +104,65 @@ public class DiscussionActivity extends AppCompatActivity {
 
     public String getQuestionKey() {
         Intent intent = getIntent();
-//        return intent.getStringExtra(EXTRA_QUESTION_KEY);
-        return "KNUEE15103EAQ1";
+        return intent.getStringExtra(EXTRA_QUESTION_KEY);
     }
 
     private void refreshData(String questionKey) {
         loadingIndicator.show();
 
-        Query query = Comments.COMMENTS_REF
-                .child(questionKey).orderByChild(TIMESTAMP);
+        Query query = Comments.COMMENTS_REF.child(questionKey);
 
-        Comments.fetchListOfComments(query)
-                .map(comments -> QuestionHelpers.toThreadedComments(comments))
-                .subscribe(comments -> {
-                    loadingIndicator.hide();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loadingIndicator.hide();
+
+                if (dataSnapshot.getValue() == null) {
                     mComments.clear();
-                    mComments.addAll(comments);
-                    discussionCommentsAdapter.notifyDataSetChanged();
-                }, firebaseException -> {
-                    loadingIndicator.hide();
-                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
-                            .setAction("Retry", view -> refreshData(questionKey))
-                            .show();
-                });
+                } else {
+                    List<Comment> comments = new ArrayList<>();
+                    for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
+                        Comment comment = commentSnapshot.getValue(Comment.class);
+                        comment.setKey(commentSnapshot.getKey());
+                        comments.add(comment);
+                    }
+
+                    mComments.clear();
+                    mComments.addAll(QuestionHelpers.toThreadedComments(comments));
+                }
+                discussionCommentsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                loadingIndicator.hide();
+                Snackbar.make(coordinatorLayout, databaseError.getMessage(), Snackbar.LENGTH_LONG)
+                        .setAction("Retry", view -> refreshData(questionKey))
+                        .show();
+            }
+        });
+    }
+
+    @OnClick(R.id.floatingActionButton)
+    public void OnReplyButtonClick(View view) {
+        onReply(null);
+    }
+
+    @Override
+    public void onReply(String parent) {
+        NewCommentFragment newCommentFragment = NewCommentFragment.newInstance(parent, "");
+        newCommentFragment.show(getSupportFragmentManager(), "newCommentDialog");
+    }
+
+    @Override
+    public void onFragmentInteraction(String comment, String parent) {
+        Comment newComment = new Comment();
+
+        newComment.setAuthor(user.getUid());
+        newComment.setMessage(comment);
+        newComment.setParent(parent);
+        newComment.setTimestamp((new Date()).getTime());
+
+        Comments.COMMENTS_REF.child(getQuestionKey()).push().getRef().setValue(newComment);
     }
 }

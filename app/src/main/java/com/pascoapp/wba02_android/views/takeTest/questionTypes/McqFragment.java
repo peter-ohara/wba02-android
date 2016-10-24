@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,9 +18,7 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
-import com.pascoapp.wba02_android.views.WebviewActivity;
 import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
-import com.pascoapp.wba02_android.views.main.MainActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
@@ -41,8 +38,7 @@ public class McqFragment extends Fragment {
 
     // Member Variables related to the questionKey
     private String questionKey;
-    private Map<String, Integer> answerHash;
-
+    private Map<String, Integer> answerHash = new HashMap<>();
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -103,18 +99,19 @@ public class McqFragment extends Fragment {
 
     private void setAnswerHash(Question question) {
         // Fetch users previous answer
+        for (Map.Entry<String, String> entry : question.getChoices().entrySet())
+        {
+            answerHash.put(entry.getKey(), 0);
+        }
         if (question.getSubmittedAnswers() != null) {
-            answerHash = new HashMap<>();
             for (Map.Entry<String, String> entry : question.getSubmittedAnswers().entrySet())
             {
-//                if (entry.getKey().equals(user.getUid())) {
-//                    continue;
-//                }
+                if (entry.getKey().equals(user.getUid())) {
+                    continue;
+                }
 
                 if (answerHash.get(entry.getValue()) != null) {
                     answerHash.put(entry.getValue(), answerHash.get(entry.getValue()) + 1);
-                } else {
-                    answerHash.put(entry.getValue(), 1);
                 }
             }
         }
@@ -160,7 +157,6 @@ public class McqFragment extends Fragment {
 
         @JavascriptInterface
         public void openDiscussionScreen() {
-            Toast.makeText(mContext, sorryText, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), DiscussionActivity.class);
             intent.putExtra(DiscussionActivity.EXTRA_QUESTION_KEY, questionKey);
             startActivity(intent);
@@ -168,7 +164,6 @@ public class McqFragment extends Fragment {
 
         @JavascriptInterface
         public void checkMcq(String result) {
-            Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
 
             // create or update question's submittedAnswers with this users answer
             Helpers.getDatabaseInstance().getReference().child(Questions.QUESTIONS_KEY)

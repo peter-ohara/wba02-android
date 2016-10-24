@@ -1,5 +1,7 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,8 +17,6 @@ import com.x5.template.providers.AndroidTemplates;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.pascoapp.wba02_android.views.takeTest.questionTypes.QuestionHelpers.loadItemInWebView;
 
 public class HeaderFragment extends Fragment {
 
@@ -68,6 +68,16 @@ public class HeaderFragment extends Fragment {
         chunk.set("title", title);
         chunk.set("content", content);
         return chunk.toString();
+    }
+
+    public static void loadItemInWebView(Context context, WebView w, String html, String questionKey) {
+        w.getSettings().setJavaScriptEnabled(true);
+        w.setBackgroundColor(Color.TRANSPARENT);
+
+        String mime = "text/html";
+        String encoding = "utf-8";
+        String baseURL = "file:///android_res/raw/";
+        w.loadDataWithBaseURL(baseURL, html, mime, encoding, null);
     }
 
 }

@@ -3,6 +3,8 @@ package com.pascoapp.wba02_android.services.comments;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Map;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -26,5 +28,8 @@ public class Comment {
     private String message;
     private Boolean flagged;
     private Long timestamp;
+
+    // user, vote
+    private Map<String, Integer> votes;
 
 }
