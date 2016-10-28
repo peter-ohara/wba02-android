@@ -101,8 +101,8 @@
         </activity>
         <activity android:name=".views.main.CourseActivity" />
         <activity
-            android:name=".views.store.StoreActivity"
-            android:label="@string/title_activity_store"
+            android:name=".views.chooseCourses.chooseCoursesActivity"
+            android:label="@string/title_activity_choose_courses"
             android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
