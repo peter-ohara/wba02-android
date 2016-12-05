@@ -27,7 +27,7 @@ public class Users {
     public static Observable<User> fetchUser(String key) {
         return Observable.create(subscriber -> {
             USERS_REF.child(key)
-                    .addValueEventListener(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() == null) {
@@ -53,7 +53,7 @@ public class Users {
 
     public static Observable<List<User>> fetchListOfUsers(Query query) {
         return Observable.create(subscriber -> {
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() == null) {
