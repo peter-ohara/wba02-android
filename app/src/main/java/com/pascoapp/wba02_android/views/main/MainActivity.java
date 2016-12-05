@@ -29,7 +29,7 @@ import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.WebviewActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
-import com.pascoapp.wba02_android.views.store.StoreActivity;
+import com.pascoapp.wba02_android.views.chooseCourses.chooseCoursesActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bottomBar)
     public void openStore() {
-        Intent intent = new Intent(MainActivity.this, StoreActivity.class);
+        Intent intent = new Intent(MainActivity.this, chooseCoursesActivity.class);
         startActivityForResult(intent, BUY_COURSES_REQUEST);
     }
 

@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.store;
+package com.pascoapp.wba02_android.views.chooseCourses;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreActivity extends AppCompatActivity {
+public class chooseCoursesActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,7 +51,7 @@ public class StoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store);
+        setContentView(R.layout.activity_choose_courses);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -110,14 +110,14 @@ public class StoreActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
                         // userKey is now signed out
-                        startActivity(new Intent(StoreActivity.this, CheckCurrentUser.class));
+                        startActivity(new Intent(chooseCoursesActivity.this, CheckCurrentUser.class));
                         finish();
                     }
                 });
     }
 
     private void openFeedbackForm() {
-        Intent browserIntent = new Intent(StoreActivity.this, WebviewActivity.class);
+        Intent browserIntent = new Intent(chooseCoursesActivity.this, WebviewActivity.class);
         String url = "https://docs.google.com/forms/d/e/" +
                 "1FAIpQLSckq4J5Jf32rK_LSKI4Gq1k0gWthyEj82B_UlySMJxr9ib22A/viewform";
         browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
@@ -126,7 +126,7 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void openHelp() {
-        Intent browserIntent = new Intent(StoreActivity.this, WebviewActivity.class);
+        Intent browserIntent = new Intent(chooseCoursesActivity.this, WebviewActivity.class);
         String url = "http://www.pascoapp.com/help";
         browserIntent.putExtra(WebviewActivity.EXTRA_URL, url);
         browserIntent.putExtra(WebviewActivity.EXTRA_TITLE, getString(R.string.action_help));
