@@ -54,7 +54,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         mMessageRef = Helpers.getDatabaseInstance().getReference()
                 .child("messages").child(messageKey);
 
-        mMessageRef.addValueEventListener(new ValueEventListener() {
+        mMessageRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Message message = dataSnapshot.getValue(Message.class);
