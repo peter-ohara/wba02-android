@@ -45,4 +45,6 @@
 <script type="text/javascript" src="file:///android_asset/js/jquery-comments.js"></script>
 
 <!-- Data -->
-<script type="text/javascript" src="file:///android_asset/data/comments-data.js"></script>
+<script type="text/javascript">
+    {$commentsArray}
+</script>

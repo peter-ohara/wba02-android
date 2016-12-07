@@ -7,27 +7,25 @@ import java.util.Map;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @IgnoreExtraProperties
 @Data
-@ToString(exclude = {"commentDepth", "childCount", "commentId"})
 @NoArgsConstructor
 public class Comment {
     @Exclude
     private String key;
 
-    private String parent;
-
-    @Exclude
-    private int commentDepth;
-    @Exclude
-    private int childCount;
-
-    private String author;
-    private String message;
-    private Boolean flagged;
-    private Long timestamp;
+    private Long id;
+    private Long parent;
+    private String created;
+    private String modified;
+    private String content;
+    private String fullname;
+    private String profile_picture_url;
+    private Boolean created_by_admin;
+    private Boolean created_by_current_user;
+    private Long upvote_count;
+    private Boolean user_has_upvoted;
 
     // user, vote
     private Map<String, Integer> votes;

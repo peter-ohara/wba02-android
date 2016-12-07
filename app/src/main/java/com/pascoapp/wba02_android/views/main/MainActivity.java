@@ -28,8 +28,8 @@ import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.WebviewActivity;
-import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 import com.pascoapp.wba02_android.views.chooseCourses.chooseCoursesActivity;
+import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import java.util.ArrayList;
 import java.util.List;

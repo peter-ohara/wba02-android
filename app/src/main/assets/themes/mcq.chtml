@@ -53,7 +53,7 @@
 
 <div id="pasco-comments" class="pasco-comments-invisible">
     <div class="comments-count-box">
-        <i class="fa fa-comments-o fa-lg"></i> <span class="comments-count">120 Comments </span>
+        <i class="fa fa-comments-o fa-lg"></i> <span class="comments-count">{$commentCount} Comments </span>
         <hr class="comment-hr">
     </div>
     <div id="comments-container"></div>

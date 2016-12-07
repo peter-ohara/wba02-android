@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -9,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
-import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
@@ -121,13 +118,6 @@ public class EssayFragment extends Fragment {
         public WebAppInterface(Context mContext, String questionKey) {
             this.mContext = mContext;
             this.questionKey = questionKey;
-        }
-
-        @JavascriptInterface
-        public void openDiscussionScreen() {
-            Intent intent = new Intent(getActivity(), DiscussionActivity.class);
-            intent.putExtra(DiscussionActivity.EXTRA_QUESTION_KEY, questionKey);
-            startActivity(intent);
         }
     }
 }

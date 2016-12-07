@@ -49,15 +49,6 @@
                 android:value="com.pascoapp.wba02_android.views.takeTest.TestOverviewActivity" />
         </activity>
         <activity
-            android:name=".views.discussion.DiscussionActivity"
-            android:label="@string/title_activity_discussion"
-            android:parentActivityName=".views.takeTest.TakeTestActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.takeTest.TakeTestActivity" />
-        </activity>
-        <activity
             android:name=".views.overflow.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".views.main.MainActivity">

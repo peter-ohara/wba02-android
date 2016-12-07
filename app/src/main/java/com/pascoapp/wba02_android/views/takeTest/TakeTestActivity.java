@@ -22,7 +22,6 @@ import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
 import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.services.tests.Tests;
-import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -214,11 +213,6 @@ public class TakeTestActivity extends AppCompatActivity {
             // Show the previous question
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
-    }
-
-    public void openDiscussionActivity() {
-        Intent intent = new Intent(this, DiscussionActivity.class);
-        startActivity(intent);
     }
 
     public void quit() {

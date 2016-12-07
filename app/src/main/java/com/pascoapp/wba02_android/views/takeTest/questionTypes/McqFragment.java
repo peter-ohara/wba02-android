@@ -1,7 +1,6 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,14 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.comments.Comment;
+import com.pascoapp.wba02_android.services.comments.Comments;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
-import com.pascoapp.wba02_android.views.discussion.DiscussionActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
@@ -44,9 +49,10 @@ public class McqFragment extends Fragment {
 
     @BindView(R.id.webview)
     WebView webview;
-
     @BindView(R.id.loading_indicator)
     AVLoadingIndicatorView loadingIndicator;
+    private String someJs;
+    private long commentCount;
 
     public static McqFragment newInstance(Question question) {
         McqFragment fragment = new McqFragment();
@@ -87,14 +93,69 @@ public class McqFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedQuestion -> {
                     loadingIndicator.hide();
-                    loadItemInWebView(getActivity(), webview, fetchedQuestion);
-                    setAnswerHash(fetchedQuestion);
+                    loadComments(fetchedQuestion, questionKey);
                 }, throwable -> {
                     loadingIndicator.hide();
                     Snackbar.make(webview, throwable.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(questionKey))
                             .show();
                 });
+    }
+
+    private void loadComments(Question fetchedQuestion, String questionKey) {
+        loadingIndicator.show();
+
+        Query query = Comments.COMMENTS_REF.child(questionKey);
+        System.out.println(query.getRef());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loadingIndicator.hide();
+                String commentsArray = "var commentsArray = [  ";
+
+                if (dataSnapshot.getValue() != null) {
+                    commentCount = dataSnapshot.getChildrenCount();
+                    for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
+                        Comment comment = commentSnapshot.getValue(Comment.class);
+                        comment.setKey(commentSnapshot.getKey());
+                        System.out.println(comment);
+
+
+                        commentsArray += "{";
+
+                        commentsArray += "\"id\":" + comment.getId() + ",";
+                        commentsArray += "\"parent\":" + comment.getParent() + ",";
+                        commentsArray += "\"created\":\"" + comment.getCreated() + "\",";
+                        commentsArray += "\"modified\":\"" + comment.getModified() + "\",";
+                        commentsArray += "\"content\":\"" + comment.getContent() + "\",";
+                        commentsArray += "\"fullname\":\"" + comment.getFullname() + "\",";
+                        commentsArray += "\"profile_picture_url\":\"" + comment.getProfile_picture_url() + "\",";
+                        commentsArray += "\"created_by_admin\":" + comment.getCreated_by_admin() + ",";
+                        commentsArray += "\"created_by_current_user\":" + comment.getCreated_by_current_user() + ",";
+                        commentsArray += "\"upvote_count\":" + comment.getUpvote_count() + ",";
+                        commentsArray += "\"user_has_upvoted\":" + comment.getUser_has_upvoted();
+
+                        commentsArray += "},";
+                    }
+                    commentsArray  = commentsArray.substring(0, commentsArray.length()-1);
+                    commentsArray += "]";
+                }
+
+                System.out.println(commentsArray);
+
+                someJs = commentsArray;
+
+                loadItemInWebView(getActivity(), webview, fetchedQuestion);
+                setAnswerHash(fetchedQuestion);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                loadingIndicator.hide();
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setAnswerHash(Question question) {
@@ -130,6 +191,9 @@ public class McqFragment extends Fragment {
             chunk.set("usersAnswer", usersAnswer);
         }
 
+        chunk.set("commentsArray", someJs);
+        chunk.set("commentCount", commentCount);
+
         return chunk.toString();
     }
 
@@ -153,13 +217,6 @@ public class McqFragment extends Fragment {
         public WebAppInterface(Context mContext, String questionKey) {
             this.mContext = mContext;
             this.questionKey = questionKey;
-        }
-
-        @JavascriptInterface
-        public void openDiscussionScreen() {
-            Intent intent = new Intent(getActivity(), DiscussionActivity.class);
-            intent.putExtra(DiscussionActivity.EXTRA_QUESTION_KEY, questionKey);
-            startActivity(intent);
         }
 
         @JavascriptInterface
