@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.comments.Comment;
@@ -29,12 +27,19 @@ import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
+
+import static android.content.ContentValues.TAG;
 
 public class McqFragment extends Fragment {
 
@@ -51,8 +56,10 @@ public class McqFragment extends Fragment {
     WebView webview;
     @BindView(R.id.loading_indicator)
     AVLoadingIndicatorView loadingIndicator;
-    private String someJs;
+
+    private Question question;
     private long commentCount;
+    protected JSONArray commentsArray = new JSONArray();
 
     public static McqFragment newInstance(Question question) {
         McqFragment fragment = new McqFragment();
@@ -90,72 +97,39 @@ public class McqFragment extends Fragment {
     private void refreshData(String questionKey) {
         loadingIndicator.show();
         Questions.fetchQuestion(questionKey)
+                .concatMap(fetchedQuestion -> {
+                    question = fetchedQuestion;
+                    Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
+                    return Comments.fetchListOfComments(commentsQuery);
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(fetchedQuestion -> {
+                .subscribe(comments -> {
                     loadingIndicator.hide();
-                    loadComments(fetchedQuestion, questionKey);
+
+                    setCommentsArray(comments);
+                    commentCount = comments.size();
+
+                    loadItemInWebView(getActivity(), webview, question);
+                    setAnswerHash(question);
                 }, throwable -> {
                     loadingIndicator.hide();
+                    Log.d(TAG, "refreshData: " + throwable.getMessage());
                     Snackbar.make(webview, throwable.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(questionKey))
                             .show();
                 });
     }
 
-    private void loadComments(Question fetchedQuestion, String questionKey) {
-        loadingIndicator.show();
-
-        Query query = Comments.COMMENTS_REF.child(questionKey);
-        System.out.println(query.getRef());
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                loadingIndicator.hide();
-                String commentsArray = "var commentsArray = [  ";
-
-                if (dataSnapshot.getValue() != null) {
-                    commentCount = dataSnapshot.getChildrenCount();
-                    for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
-                        Comment comment = commentSnapshot.getValue(Comment.class);
-                        comment.setKey(commentSnapshot.getKey());
-                        System.out.println(comment);
-
-
-                        commentsArray += "{";
-
-                        commentsArray += "\"id\":" + comment.getId() + ",";
-                        commentsArray += "\"parent\":" + comment.getParent() + ",";
-                        commentsArray += "\"created\":\"" + comment.getCreated() + "\",";
-                        commentsArray += "\"modified\":\"" + comment.getModified() + "\",";
-                        commentsArray += "\"content\":\"" + comment.getContent() + "\",";
-                        commentsArray += "\"fullname\":\"" + comment.getFullname() + "\",";
-                        commentsArray += "\"profile_picture_url\":\"" + comment.getProfile_picture_url() + "\",";
-                        commentsArray += "\"created_by_admin\":" + comment.getCreated_by_admin() + ",";
-                        commentsArray += "\"created_by_current_user\":" + comment.getCreated_by_current_user() + ",";
-                        commentsArray += "\"upvote_count\":" + comment.getUpvote_count() + ",";
-                        commentsArray += "\"user_has_upvoted\":" + comment.getUser_has_upvoted();
-
-                        commentsArray += "},";
-                    }
-                    commentsArray  = commentsArray.substring(0, commentsArray.length()-1);
-                    commentsArray += "]";
-                }
-
-                System.out.println(commentsArray);
-
-                someJs = commentsArray;
-
-                loadItemInWebView(getActivity(), webview, fetchedQuestion);
-                setAnswerHash(fetchedQuestion);
+    private void setCommentsArray(List<Comment> comments) {
+        for (Comment comment : comments) {
+            try {
+                JSONObject commentJson = QuestionHelpers.convertCommentToJson(comment);
+                commentsArray.put(commentJson);
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                loadingIndicator.hide();
-                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        }
     }
 
     private void setAnswerHash(Question question) {
@@ -191,7 +165,6 @@ public class McqFragment extends Fragment {
             chunk.set("usersAnswer", usersAnswer);
         }
 
-        chunk.set("commentsArray", someJs);
         chunk.set("commentCount", commentCount);
 
         return chunk.toString();
@@ -199,7 +172,7 @@ public class McqFragment extends Fragment {
 
     public void loadItemInWebView(Context context, WebView w, Question question) {
         w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new WebAppInterface(context, question.getKey()), "Android");
+        w.addJavascriptInterface(new McqWebAppInterface(this, question.getKey()), "Android");
         w.setBackgroundColor(Color.TRANSPARENT);
 
         String mime = "text/html";
@@ -208,15 +181,11 @@ public class McqFragment extends Fragment {
         w.loadDataWithBaseURL(baseURL, getHtml(question), mime, encoding, null);
     }
 
-    public class WebAppInterface {
-        Context mContext;
-        private String sorryText = "This feature will be unlocked in a later update. Stay tuned!";
 
-        private String questionKey;
+    public class McqWebAppInterface extends WebAppInterface {
 
-        public WebAppInterface(Context mContext, String questionKey) {
-            this.mContext = mContext;
-            this.questionKey = questionKey;
+        public McqWebAppInterface(McqFragment questionFragment, String questionKey) {
+            super(questionFragment, questionKey);
         }
 
         @JavascriptInterface

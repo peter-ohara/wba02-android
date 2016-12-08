@@ -6,33 +6,35 @@
             roundProfilePictures: true,
             textareaRows: 1,
             enableAttachments: true,
+
             getComments: function(success, error) {
-                setTimeout(function() {
-                    success(commentsArray);
-                }, 500);
+                var comments = Android.getComments();
+                comments = JSON.parse(comments);
+                success(comments);
             },
             postComment: function(data, success, error) {
-                setTimeout(function() {
-                    success(data);
-                }, 500);
+                var returnedCommentData = Android.postComment(JSON.stringify(data));
+                success(data);
             },
             putComment: function(data, success, error) {
-                setTimeout(function() {
-                    success(data);
-                }, 500);
+                var returnedCommentData = Android.putComment(JSON.stringify(data));
+                success(data);
             },
             deleteComment: function(data, success, error) {
-                setTimeout(function() {
-                    success();
-                }, 500);
+                Android.deleteComment(JSON.stringify(data));
+                success();
             },
             upvoteComment: function(data, success, error) {
+                console.log("Something wicked this way comes");
+                console.log(JSON.stringify(data));
                 setTimeout(function() {
                     success(data);
                 }, 500);
             },
 
             uploadAttachments: function(dataArray, success, error) {
+                console.log("Something wicked this way comes");
+                console.log(JSON.stringify(dataArray));
                 setTimeout(function() {
                     success(dataArray);
                 }, 500);
@@ -45,6 +47,4 @@
 <script type="text/javascript" src="file:///android_asset/js/jquery-comments.js"></script>
 
 <!-- Data -->
-<script type="text/javascript">
-    {$commentsArray}
-</script>
+

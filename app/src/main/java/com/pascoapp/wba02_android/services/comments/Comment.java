@@ -15,8 +15,8 @@ public class Comment {
     @Exclude
     private String key;
 
-    private Long id;
-    private Long parent;
+    private String id;
+    private String parent;
     private String created;
     private String modified;
     private String content;
