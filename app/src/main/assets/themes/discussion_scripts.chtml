@@ -1,50 +1,46 @@
-<!-- Init jquery-comments -->
-<script type="text/javascript">
-    $(function() {
-        $('#comments-container').comments({
-            profilePictureURL: 'file:///android_asset/images/sesi.jpeg',
-            roundProfilePictures: true,
-            textareaRows: 1,
-            enableAttachments: true,
-
-            getComments: function(success, error) {
-                var comments = Android.getComments();
-                comments = JSON.parse(comments);
-                success(comments);
-            },
-            postComment: function(data, success, error) {
-                var returnedCommentData = Android.postComment(JSON.stringify(data));
-                success(data);
-            },
-            putComment: function(data, success, error) {
-                var returnedCommentData = Android.putComment(JSON.stringify(data));
-                success(data);
-            },
-            deleteComment: function(data, success, error) {
-                Android.deleteComment(JSON.stringify(data));
-                success();
-            },
-            upvoteComment: function(data, success, error) {
-                console.log("Something wicked this way comes");
-                console.log(JSON.stringify(data));
-                setTimeout(function() {
-                    success(data);
-                }, 500);
-            },
-
-            uploadAttachments: function(dataArray, success, error) {
-                console.log("Something wicked this way comes");
-                console.log(JSON.stringify(dataArray));
-                setTimeout(function() {
-                    success(dataArray);
-                }, 500);
-            },
-        });
-    });
-</script>
-
 <script src="file:///android_asset/js/custom-script.js"></script>
 <script type="text/javascript" src="file:///android_asset/js/jquery-comments.js"></script>
 
 <!-- Data -->
 
+
+<!-- Init jquery-comments -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#comments-container').comments({
+			profilePictureURL: 'file:///android_asset/images/sesi.jpeg',
+			roundProfilePictures: true,
+			textareaRows: 1,
+			enableAttachments: true,
+
+			getComments: function(success, error) {
+				var comments = Android.getComments();
+				comments = JSON.parse(comments);
+				success(comments);
+			},
+			postComment: function(data, success, error) {
+				var returnedCommentData = Android.postComment(JSON.stringify(data));
+				success(data);
+			},
+			putComment: function(data, success, error) {
+				var returnedCommentData = Android.putComment(JSON.stringify(data));
+				success(data);
+			},
+			deleteComment: function(data, success, error) {
+				Android.deleteComment(JSON.stringify(data));
+				success();
+			},
+			upvoteComment: function(data, success, error) {
+				setTimeout(function() {
+					success(data);
+				}, 500);
+			},
+
+			uploadAttachments: function(dataArray, success, error) {
+				setTimeout(function() {
+					success(dataArray);
+				}, 500);
+			},
+		});
+	});
+</script>

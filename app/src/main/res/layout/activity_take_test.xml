@@ -25,40 +25,5 @@
 
     <include layout="@layout/content_take_test" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottomBar"
-        android:layout_gravity="bottom"
-        android:background="@color/primary">
-
-        <Button
-            style="?android:attr/borderlessButtonStyle"
-            android:text="PREV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/previousButton"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-            android:drawableLeft="@drawable/ic_arrow_left_white_24dp"
-            android:textColor="@color/white" />
-
-        <Button
-            style="?android:attr/borderlessButtonStyle"
-            android:text="NEXT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/nextButton"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-            android:drawableRight="@drawable/ic_arrow_right_white_24dp"
-            android:textColor="@color/white" />
-
-    </RelativeLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

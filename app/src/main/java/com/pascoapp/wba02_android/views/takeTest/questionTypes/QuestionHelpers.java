@@ -37,7 +37,9 @@ public class QuestionHelpers {
         comment.setUpvote_count(commentValues.getLong("upvote_count"));
 
         if (commentValues.has("parent"))
-            comment.setParent(commentValues.getString("parent"));
+            if (!commentValues.getString("parent").equals("null")) {
+                comment.setParent(commentValues.getString("parent"));
+            }
         if (commentValues.has("created_by_admin"))
             comment.setCreated_by_admin(commentValues.getBoolean("created_by_admin"));
         if (commentValues.has("created_by_current_user"))

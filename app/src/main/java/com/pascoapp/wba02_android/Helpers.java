@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -81,7 +82,13 @@ public class Helpers {
     public static FirebaseDatabase getDatabaseInstance() {
         if (mDatabase == null) {
             mDatabase = FirebaseDatabase.getInstance();
-            mDatabase.setPersistenceEnabled(true);
+
+            if (BuildConfig.DEBUG) {
+                // do something for a debug build
+                Log.d("Helpers", "Running in debug mode, offline persistence is disabled");
+            } else {
+                mDatabase.setPersistenceEnabled(true);
+            }
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             mDatabase.getReference().child("users").child(user.getUid()).keepSynced(true);
