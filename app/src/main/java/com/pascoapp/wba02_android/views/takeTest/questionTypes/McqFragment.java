@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +103,7 @@ public class McqFragment extends Fragment {
                     Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
                     return Comments.fetchListOfComments(commentsQuery);
                 })
+                .onErrorReturn(throwable -> new ArrayList<Comment>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
                     loadingIndicator.hide();

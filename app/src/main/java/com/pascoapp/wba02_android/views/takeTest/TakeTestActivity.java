@@ -50,10 +50,6 @@ public class TakeTestActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager mPager;
-    @BindView(R.id.previousButton)
-    Button previousButton;
-    @BindView(R.id.nextButton)
-    Button nextButton;
 
     private Test test;
     private Course course;
@@ -68,9 +64,6 @@ public class TakeTestActivity extends AppCompatActivity {
         setupToolbar();
 
         setupViewPager();
-
-        disableAndHideButton(previousButton);
-        disableAndHideButton(nextButton);
 
         refreshData(getTestKey());
     }
@@ -112,17 +105,6 @@ public class TakeTestActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    disableAndHideButton(previousButton);
-                } else {
-                    enableAndUnHideButton(previousButton);
-                }
-
-                if (position == mPagerAdapter.getCount() - 1) {
-                    disableAndHideButton(nextButton);
-                } else {
-                    enableAndUnHideButton(nextButton);
-                }
             }
 
             @Override
@@ -130,17 +112,6 @@ public class TakeTestActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-
-    private void disableAndHideButton(Button button) {
-        button.setVisibility(View.INVISIBLE);
-        button.setEnabled(false);
-    }
-
-    private void enableAndUnHideButton(Button button) {
-        button.setVisibility(View.VISIBLE);
-        button.setEnabled(true);
     }
 
     public String getTestKey() {
@@ -176,33 +147,12 @@ public class TakeTestActivity extends AppCompatActivity {
                     mQuestions.clear();
                     mQuestions.addAll(questions);
                     mPagerAdapter.notifyDataSetChanged();
-                    enableAndUnHideButton(nextButton);
                 }, firebaseException -> {
                     loadingIndicator.hide();
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(testKey))
                             .show();
                 });
-    }
-
-    @OnClick(R.id.previousButton)
-    public void moveToPreviousScreen(View view) {
-        if (mPager.getCurrentItem() == 0) {
-            quit();
-        } else {
-            // Show the previous question
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }
-
-    @OnClick(R.id.nextButton)
-    public void moveToNextScreen(View view) {
-        if (mPager.getCurrentItem() == mPagerAdapter.getCount() - 1) {
-            Toast.makeText(this, "Should Quit", Toast.LENGTH_SHORT).show();
-        } else {
-            // Show the previous question
-            mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-        }
     }
 
     @Override

@@ -1,5 +1,4 @@
 <!-- Styles -->
 <link rel="stylesheet" type="text/css" href="file:///android_asset/css/jquery-comments.css">
-
-<link rel="stylesheet" type="text/css" href="file:///android_asset/css/styles.css">
 <link rel="stylesheet" href="file:///android_asset/font-awesome/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="file:///android_asset/css/styles.css">
