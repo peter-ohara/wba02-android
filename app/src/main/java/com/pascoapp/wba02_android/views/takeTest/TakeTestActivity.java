@@ -155,6 +155,24 @@ public class TakeTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void moveToPreviousScreen() {
+        if (mPager.getCurrentItem() == 0) {
+            quit();
+        } else {
+            // Show the previous question
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    public void moveToNextScreen() {
+        if (mPager.getCurrentItem() == mPagerAdapter.getCount() - 1) {
+            Toast.makeText(this, "Should Quit", Toast.LENGTH_SHORT).show();
+        } else {
+            // Show the previous question
+            mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
