@@ -9,59 +9,83 @@
 </head>
 <body>
 
-<div class="page">
-    <div class="row">
-        <div class="mcq-question"> 
-            <span>{$question}</span>
-        </div>
-    </div>
-    <div class="row">
-        <form id="options">
-            <div class="mcq-answer-box">
-
-                <ul>
-                    {% loop in $choices as $key:$choice first_last="true" %}
-                    <li>
-                        <span class="choice">{$key}</span>
-                        {% if $key == $usersAnswer %}
-                        <input type="radio" name="choices" value="{$key}" id="{$key}" checked>
-                        {% else %}
-                        <input type="radio" name="choices" value="{$key}" id="{$key}">
-                        {% endif %}
-                        <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
-                        {% if (!$last) %}
-                        <hr>
-                        {% endif %}
-                    </li>
-                    {% endloop %}
-                </ul>
-
-            </div>
-        </form>
-    </div>
-    <div class="row">
-        <div class="button-div">
-            <div class="col-xs-6 pull-left">
-                <button type="button" id="discussionButton" class="btn btn-success">Discussion</button>
-            </div>
-            <div class="col-xs-6 pull-right">
-                <button type="button" id="checkButton" class="btn btn-info" onClick="checkMcq()">Check</button>
+    <div class="page">
+        <div class="row">
+            <div class="mcq-question">
+                <span>{$question}</span>
             </div>
         </div>
+        <div class="row">
+            <form id="options">
+                <div class="mcq-answer-box">
+
+                    <ul>
+                        {% loop in $choices as $key:$choice first_last="true" %}
+                        <li>
+                            <span class="choice">{$key}</span>
+                            {% if $key == $usersAnswer %}
+                            <input type="radio" name="choices" value="{$key}" id="{$key}" checked>
+                            {% else %}
+                            <input type="radio" name="choices" value="{$key}" id="{$key}">
+                            {% endif %}
+                            <label for="{$key}"><span class="check"><span class="inside"></span></span>{$choice}</label>
+                            {% if (!$last) %}
+                            <hr>
+                            {% endif %}
+                        </li>
+                        {% endloop %}
+                    </ul>
+
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="button-div">
+                <div class="col-xs-6 pull-left">
+                    <button type="button" id="discussionButton" class="btn btn-success">Discussion</button>
+                </div>
+                <div class="col-xs-6 pull-right">
+                    <button type="button" id="checkButton" class="btn btn-info" onClick="checkMcq()">Check</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="pasco-comments" class="pasco-comments-invisible">
-    <div class="comments-count-box">
-        <i class="fa fa-comments-o fa-lg"></i> <span class="comments-count">{$commentCount} Comments </span>
-        <hr class="comment-hr">
+    <div id="pasco-comments" class="pasco-comments-invisible">
+        <div class="comments-count-box">
+            <i class="fa fa-comments-o fa-lg"></i>
+            <span class="comments-count">
+                <span id="num-comments">0</span>
+                Comments
+            </span>
+            <hr class="comment-hr">
+        </div>
+        <div id="comments-container"></div>
     </div>
-    <div id="comments-container"></div>
-</div>
 
-{% include android_interface %}
-{% include math_scripts %}
-{% include discussion_scripts %}
+    <script type="text/javascript">
+        function checkMcq() {
+            var val = getRadioVal(document.getElementById('options'), 'choices');
+            McqAndroid.checkMcq(val);
+        }
 
+        function getRadioVal(form, name) {
+            var val;
+            // get list of radio buttons with specified name
+            var radios = form.elements[name];
+
+            // loop through list of radio buttons
+            for (var i=0, len=radios.length; i<len; i++) {
+                if ( radios[i].checked ) { // radio checked?
+                    val = radios[i].value; // if so, hold its value in val
+                    break; // and break out of for loop
+                }
+            }
+            return val; // return value of checked radio or undefined if none checked
+        }
+    </script>
+
+    {% include math_scripts %}
+    {% include discussion_scripts %}
 </body>
 </html>

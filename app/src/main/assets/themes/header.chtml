@@ -16,7 +16,7 @@
     </div>
 </div>
 
-{% include android_interface %}
 {% include math_scripts %}
+{% include discussion_scripts %}
 </body>
 </html>

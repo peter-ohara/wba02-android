@@ -16,8 +16,12 @@ public class User {
     @Exclude
     private String key;
 
+    private String displayName;
+    private String uid;
     private String email;
-    private String username;
+    private String photoUrl;
+
+    private String providerId;
 
     private Map<String, Boolean> courseKeys;
     private Map<String, Boolean> questionKeys;

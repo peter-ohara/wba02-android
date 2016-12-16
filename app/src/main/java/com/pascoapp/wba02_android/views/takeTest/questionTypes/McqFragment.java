@@ -1,7 +1,9 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -11,14 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
+import android.webkit.WebViewClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.services.comments.Comment;
 import com.pascoapp.wba02_android.services.comments.Comments;
 import com.pascoapp.wba02_android.services.questions.Question;
 import com.pascoapp.wba02_android.services.questions.Questions;
@@ -27,22 +29,16 @@ import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
 
-import static android.content.ContentValues.TAG;
 
 public class McqFragment extends Fragment {
+
+    private static final String TAG = McqFragment.class.getSimpleName();
 
     // the fragment initialization parameters
     private static final String ARG_QUESTION_KEY = "com.pascoapp.wba02_android.questionKey";
@@ -59,8 +55,6 @@ public class McqFragment extends Fragment {
     AVLoadingIndicatorView loadingIndicator;
 
     private Question question;
-    private long commentCount;
-    protected JSONArray commentsArray = new JSONArray();
 
     public static McqFragment newInstance(Question question) {
         McqFragment fragment = new McqFragment();
@@ -98,40 +92,31 @@ public class McqFragment extends Fragment {
     private void refreshData(String questionKey) {
         loadingIndicator.show();
         Questions.fetchQuestion(questionKey)
-                .concatMap(fetchedQuestion -> {
-                    question = fetchedQuestion;
-                    Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
-                    return Comments.fetchListOfComments(commentsQuery);
-                })
-                .onErrorReturn(throwable -> new ArrayList<Comment>())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(comments -> {
+                .subscribe(fetchedQuestion -> {
                     loadingIndicator.hide();
-
-                    setCommentsArray(comments);
-                    commentCount = comments.size();
-
+                    question = fetchedQuestion;
                     loadItemInWebView(getActivity(), webview, question);
                     setAnswerHash(question);
                 }, throwable -> {
                     loadingIndicator.hide();
                     Log.d(TAG, "refreshData: " + throwable.getMessage());
+
+                    // TODO: Show error message with retry button inside R.layout.fragment_mcq
+                    // rather than with a Snackbar cos the snackbar makes it hard to find which
+                    // question produced the error
                     Snackbar.make(webview, throwable.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(questionKey))
                             .show();
                 });
     }
 
-    private void setCommentsArray(List<Comment> comments) {
-        for (Comment comment : comments) {
-            try {
-                JSONObject commentJson = QuestionHelpers.convertCommentToJson(comment);
-                commentsArray.put(commentJson);
-            } catch (JSONException e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-        }
+    private void setUpCommentListener(DiscussionInterfaceToWebview discussionInterfaceToWebview) {
+        String questionKey = discussionInterfaceToWebview.getQuestionKey();
+        Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
+        ChildEventListener commentEventListener
+                = Comments.createCommentEventListener(getContext(), webview,
+                    discussionInterfaceToWebview, user);
+        commentsQuery.addChildEventListener(commentEventListener);
     }
 
     private void setAnswerHash(Question question) {
@@ -167,15 +152,39 @@ public class McqFragment extends Fragment {
             chunk.set("usersAnswer", usersAnswer);
         }
 
-        chunk.set("commentCount", commentCount);
+
+        if (user.getPhotoUrl() != null) {
+            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
+        } else {
+            chunk.set("photoUrl", "null");
+        }
 
         return chunk.toString();
     }
 
     public void loadItemInWebView(Context context, WebView w, Question question) {
         w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new McqWebAppInterface(this, question.getKey()), "Android");
         w.setBackgroundColor(Color.TRANSPARENT);
+
+        DiscussionInterfaceToWebview discussionInterfaceToWebview
+                = new DiscussionInterfaceToWebview(McqFragment.this, question.getKey());
+        w.addJavascriptInterface(new McqWebAppInterface(), "McqAndroid");
+        w.addJavascriptInterface(discussionInterfaceToWebview, "Android");
+
+        w.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                setUpCommentListener(discussionInterfaceToWebview);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return true;
+            }
+        });
 
         String mime = "text/html";
         String encoding = "utf-8";
@@ -184,11 +193,7 @@ public class McqFragment extends Fragment {
     }
 
 
-    public class McqWebAppInterface extends WebAppInterface {
-
-        public McqWebAppInterface(McqFragment questionFragment, String questionKey) {
-            super(questionFragment, questionKey);
-        }
+    private class McqWebAppInterface {
 
         @JavascriptInterface
         public void checkMcq(String result) {

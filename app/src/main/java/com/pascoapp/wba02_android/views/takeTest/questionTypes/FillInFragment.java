@@ -99,7 +99,9 @@ public class FillInFragment extends Fragment {
 
     public void loadItemInWebView(Context context, WebView w, Question question) {
         w.getSettings().setJavaScriptEnabled(true);
-        w.addJavascriptInterface(new WebAppInterface(context, question.getKey()), "Android");
+        FillInWebAppInterface fillInWebAppInterface
+                = new FillInWebAppInterface(context, question.getKey());
+        w.addJavascriptInterface(fillInWebAppInterface, "FillInAndroid");
         w.setBackgroundColor(Color.TRANSPARENT);
 
         String mime = "text/html";
@@ -120,12 +122,12 @@ public class FillInFragment extends Fragment {
     }
 
 
-    public class WebAppInterface {
+    private class FillInWebAppInterface {
         Context mContext;
 
         private String questionKey;
 
-        public WebAppInterface(Context mContext, String questionKey) {
+        public FillInWebAppInterface(Context mContext, String questionKey) {
             this.mContext = mContext;
             this.questionKey = questionKey;
         }

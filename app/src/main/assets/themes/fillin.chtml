@@ -8,27 +8,38 @@
 </head>
 <body>
 
-<div class="questionKey-page">
-    <div class="questionKey-container">
-        <p>
-            {$question}
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="button-div">
-        <div class="col-xs-6 pull-left">
-            <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
-        </div>
-        <div class="col-xs-6 pull-right">
-            <button type="button" class="btn btn-info" onClick="checkFillIn()">Submit</button>
+    <div class="questionKey-page">
+        <div class="questionKey-container">
+            <p>
+                {$question}
+            </p>
         </div>
     </div>
-</div>
 
-{% include android_interface %}
-{% include math_scripts %}
+    <div class="row">
+        <div class="button-div">
+            <div class="col-xs-6 pull-left">
+                <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+            </div>
+            <div class="col-xs-6 pull-right">
+                <button type="button" class="btn btn-info" onClick="checkFillIn()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function checkFillIn() {
+            var inputs = document.getElementsByClassName( 'cloze' ),
+            names  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
+            FillInAndroid.checkFillIn(names);
+        }
+    </script>
+
+    {% include math_scripts %}
+    {% include discussion_scripts %}
 </body>
 </html>
 

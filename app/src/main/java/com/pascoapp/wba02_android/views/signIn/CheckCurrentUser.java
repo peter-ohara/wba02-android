@@ -3,6 +3,7 @@ package com.pascoapp.wba02_android.views.signIn;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -25,9 +26,11 @@ import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
  */
 public class CheckCurrentUser extends Activity {
 
-
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String UID = "uid";
     public static final String EMAIL = "email";
-    public static final String USERNAME = "username";
+    public static final String PHOTO_URL = "photoUrl";
+    public static final String PROVIDER_ID = "providerId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +69,7 @@ public class CheckCurrentUser extends Activity {
             if (resultCode == RESULT_OK) {
                 // user is signed in!
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                // create or update email and username for user in the real-time database atomically
-                Map<String, Object> childUpdates = new HashMap<>();
-                String emailPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), EMAIL);
-                String usernamePath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), USERNAME);
-                childUpdates.put(emailPath, user.getEmail());
-                childUpdates.put(usernamePath, user.getDisplayName());
-                Helpers.getDatabaseInstance().getReference().updateChildren(childUpdates);
+                updateUserInformationInDatabase(user);
 
                 startMainActivity();
             } else {
@@ -83,6 +79,30 @@ public class CheckCurrentUser extends Activity {
                         .show();
             }
         }
+    }
+
+    public static void updateUserInformationInDatabase(FirebaseUser user) {
+        // create or update email and username for user in the real-time database atomically
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String displayNamePath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), DISPLAY_NAME);
+        String uidPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), UID);
+        String emailPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), EMAIL);
+        String photoUrlPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid().toString(), PHOTO_URL);
+        String providerIdPath = Helpers.createFirebasePath(Users.USERS_KEY, user.getUid(), PROVIDER_ID);
+
+
+        childUpdates.put(displayNamePath, user.getDisplayName());
+        childUpdates.put(uidPath, user.getUid());
+        childUpdates.put(emailPath, user.getEmail());
+        childUpdates.put(providerIdPath, user.getProviderId());
+        if (user.getPhotoUrl() != null) {
+            childUpdates.put(photoUrlPath, user.getPhotoUrl().toString());
+        }
+
+        Log.d("CheckCurrentUser", "onActivityResult: " + childUpdates);
+
+        Helpers.getDatabaseInstance().getReference().updateChildren(childUpdates);
     }
 
     private void startMainActivity() {
