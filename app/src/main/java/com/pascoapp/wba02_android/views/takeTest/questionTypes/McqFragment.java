@@ -34,6 +34,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
 
 
 public class McqFragment extends Fragment {
@@ -92,6 +93,7 @@ public class McqFragment extends Fragment {
     private void refreshData(String questionKey) {
         loadingIndicator.show();
         Questions.fetchQuestion(questionKey)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedQuestion -> {
                     loadingIndicator.hide();
                     question = fetchedQuestion;

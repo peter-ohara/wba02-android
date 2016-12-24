@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.views.takeTest.questionTypes;
 
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -18,13 +19,13 @@ import static android.content.ContentValues.TAG;
  * Created by peter on 12/8/16.
  */
 public class DiscussionInterfaceToWebview {
-    private McqFragment questionFragment;
+    private Fragment questionFragment;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private String questionKey;
 
-    public DiscussionInterfaceToWebview(McqFragment questionFragment, String questionKey) {
+    public DiscussionInterfaceToWebview(Fragment questionFragment, String questionKey) {
         this.questionFragment = questionFragment;
         this.questionKey = questionKey;
     }
