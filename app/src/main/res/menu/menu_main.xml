@@ -6,10 +6,14 @@
 
     <item
         android:icon="@drawable/ic_cart_white_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/action_choose_courses"
         android:id="@+id/action_store" />
-
+    <item
+        android:icon="@drawable/ic_share_variant_white_24dp"
+        app:showAsAction="always"
+        android:title="@string/action_invite"
+        android:id="@+id/action_invite" />
     <item
         android:id="@+id/action_refresh"
         app:showAsAction="never"
