@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ import rx.Observable;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int REQUEST_INVITE = 100 ;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.snackbarPosition)
@@ -120,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_store:
                 openStore();
                 return true;
+            case R.id.action_invite:
+                openInvite();
+                return true;
             case R.id.action_refresh:
                 refreshData();
                 return true;
@@ -139,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void openInvite() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                //.setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                .setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+                .setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+    }
+
     @OnClick(R.id.bottomBar)
     public void openStore() {
         Intent intent = new Intent(MainActivity.this, chooseCoursesActivity.class);
@@ -147,12 +162,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+
         if (requestCode == BUY_COURSES_REQUEST) {
             if (resultCode == RESULT_OK) {
                 // User may have bought new courses refresh course list
                 refreshData();
             }
         }
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Your invitations have been sent", Toast.LENGTH_SHORT).show();
+                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+                for (String id : ids) {
+                    Log.d(TAG, "onActivityResult: sent invitation " + id);
+                }
+            } else {
+                Toast.makeText(this, "Error sending invitations. Please check your credit or data", Toast.LENGTH_SHORT).show();
+                // ...
+            }
+
+        }
+
+
     }
 
     private void openPascoUploadScreen() {
