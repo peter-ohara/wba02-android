@@ -5,6 +5,7 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     {% include css %}
+    {% include discussion_css %}
 </head>
 <body>
 
@@ -17,10 +18,22 @@
         <div class="row">
             <div class="button-div">
                 <div class="col-xs-6 pull-left">
-                    <button type="button" class="btn btn-success" onClick="openDiscussionScreen()">Discussion</button>
+                    <button type="button" id="discussionButton" class="btn btn-success">Discussion</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="pasco-comments" class="pasco-comments-invisible">
+        <div class="comments-count-box">
+            <i class="fa fa-comments-o fa-lg"></i>
+            <span class="comments-count">
+                <span id="num-comments">0</span>
+                Comments
+            </span>
+            <hr class="comment-hr">
+        </div>
+        <div id="comments-container"></div>
     </div>
 
     {% include math_scripts %}
