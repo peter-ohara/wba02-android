@@ -17,7 +17,6 @@ import com.pascoapp.wba02_android.views.main.MainActivity;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
 /**
  * Checks if there's a current user
@@ -31,6 +30,7 @@ public class CheckCurrentUser extends Activity {
     public static final String EMAIL = "email";
     public static final String PHOTO_URL = "photoUrl";
     public static final String PROVIDER_ID = "providerId";
+    private static final int RC_SIGN_IN = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
