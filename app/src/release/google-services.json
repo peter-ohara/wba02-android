@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1061661507163-pnq5qn17o9vjcaclf8ffhksu8o29745h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pascoapp.wba02_android",
+            "certificate_hash": "6F89235D37CD3C37A387C9B20F17F1BE67142B3F"
+          }
+        },
+        {
           "client_id": "1061661507163-itnvq92uvp8p9kre3pbmcqp14p2j4jj8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
