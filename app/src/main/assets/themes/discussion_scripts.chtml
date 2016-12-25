@@ -1,5 +1,5 @@
 <script src="file:///android_asset/js/custom-script.js"></script>
-<script type="text/javascript" src="file:///android_asset/js/jquery-comments.js"></script>
+<script type="text/javascript" src="file:///android_asset/js/jquery-comments.min.js"></script>
 
 <!-- Data -->
 
