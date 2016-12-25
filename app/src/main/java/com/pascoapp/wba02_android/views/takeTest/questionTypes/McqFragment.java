@@ -31,6 +31,8 @@ import com.x5.template.providers.AndroidTemplates;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +47,7 @@ public class McqFragment extends Fragment {
 
     // Member Variables related to the questionKey
     private String questionKey;
-    private Map<String, Integer> answerHash = new HashMap<>();
+    private SortedMap<String, Integer> answerHash = new TreeMap<>();
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
