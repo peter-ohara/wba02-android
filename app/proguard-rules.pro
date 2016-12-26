@@ -15,10 +15,10 @@
 -keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.DiscussionInterfaceToWebview {
    public *;
 }
--keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.McqFragment.McqWebAppInterface {
+-keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.McqWebAppInterface {
    public *;
 }
--keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.FillInFragment.FillInWebAppInterface {
+-keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.FillInWebAppInterface {
    public *;
 }
 

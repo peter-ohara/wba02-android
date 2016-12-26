@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.Query;
-import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.comments.Comments;
 import com.pascoapp.wba02_android.services.questions.Question;
@@ -28,10 +26,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +43,7 @@ public class FillInFragment extends Fragment {
     // Member Variables related to the questionKey
     private String questionKey;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    protected FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     @BindView(R.id.webview)
@@ -117,7 +111,7 @@ public class FillInFragment extends Fragment {
 
         DiscussionInterfaceToWebview discussionInterfaceToWebview
                 = new DiscussionInterfaceToWebview(FillInFragment.this, question.getKey());
-        w.addJavascriptInterface(new FillInWebAppInterface(), "FillInAndroid");
+        w.addJavascriptInterface(new FillInWebAppInterface(this), "FillInAndroid");
         w.addJavascriptInterface(discussionInterfaceToWebview, "Android");
 
         w.setWebViewClient(new WebViewClient() {
@@ -169,29 +163,4 @@ public class FillInFragment extends Fragment {
     }
 
 
-    private class FillInWebAppInterface {
-        Context mContext;
-
-        private String questionKey;
-
-        @JavascriptInterface
-        public void checkFillIn(String[] result) {
-            List<String> resultList = new ArrayList<>(Arrays.asList(result));
-
-            String answers = "[";
-            answers += "\"" + resultList.get(0) + "\"";
-            resultList.remove(0);
-
-            for (String answer: resultList) {
-                answers += ", \"" + answer + "\"";
-            }
-            answers += "]";
-
-            System.out.println(questionKey + " : " + user.getUid() + " : " + answers);
-
-            Helpers.getDatabaseInstance().getReference().child(Questions.QUESTIONS_KEY)
-                    .child(questionKey).child("submittedAnswers").child(user.getUid())
-                    .setValue(answers);
-        }
-    }
 }

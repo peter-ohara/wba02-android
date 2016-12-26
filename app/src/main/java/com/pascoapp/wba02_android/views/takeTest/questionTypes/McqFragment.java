@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.Query;
-import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.comments.Comments;
 import com.pascoapp.wba02_android.services.questions.Question;
@@ -29,7 +27,6 @@ import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -47,10 +44,10 @@ public class McqFragment extends Fragment {
     private static final String ARG_QUESTION_KEY = "com.pascoapp.wba02_android.questionKey";
 
     // Member Variables related to the questionKey
-    private String questionKey;
-    private SortedMap<String, Integer> answerHash = new TreeMap<>();
+    protected String questionKey;
+    protected SortedMap<String, Integer> answerHash = new TreeMap<>();
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    protected FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @BindView(R.id.webview)
     WebView webview;
@@ -172,7 +169,7 @@ public class McqFragment extends Fragment {
 
         DiscussionInterfaceToWebview discussionInterfaceToWebview
                 = new DiscussionInterfaceToWebview(McqFragment.this, question.getKey());
-        w.addJavascriptInterface(new McqWebAppInterface(), "McqAndroid");
+        w.addJavascriptInterface(new McqWebAppInterface(this), "McqAndroid");
         w.addJavascriptInterface(discussionInterfaceToWebview, "Android");
 
         w.setWebViewClient(new WebViewClient() {
@@ -196,21 +193,5 @@ public class McqFragment extends Fragment {
         w.loadDataWithBaseURL(baseURL, getHtml(question), mime, encoding, null);
     }
 
-
-    private class McqWebAppInterface {
-
-        @JavascriptInterface
-        public void checkMcq(String result) {
-
-            // create or update question's submittedAnswers with this users answer
-            Helpers.getDatabaseInstance().getReference().child(Questions.QUESTIONS_KEY)
-                    .child(questionKey).child("submittedAnswers").child(user.getUid())
-                    .setValue(result);
-
-            CheckAnswerDialogFragment checkAnswerDialogFragment
-                    = CheckAnswerDialogFragment.newInstance("Answers", answerHash);
-            checkAnswerDialogFragment.show(getChildFragmentManager(), "CheckAnswerDialog");
-        }
-    }
 
 }
