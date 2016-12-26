@@ -12,9 +12,17 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
+-keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.DiscussionInterfaceToWebview {
    public *;
 }
+-keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.McqFragment.McqWebAppInterface {
+   public *;
+}
+-keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.FillInFragment.FillInWebAppInterface {
+   public *;
+}
+
+
 
 # Retrolambda
 -dontwarn java.lang.invoke.*
@@ -23,6 +31,3 @@
 -dontwarn com.x5.**
 -keep class com.x5.template.** { *; }
 -keep class com.x5.util.* { *; }
-
-# RxJava
--keep class rx.** { * ; }
