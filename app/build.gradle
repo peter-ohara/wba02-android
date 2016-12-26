@@ -28,6 +28,7 @@ android {
 
 repositories {
     maven { url = "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
 }
 
@@ -47,22 +48,25 @@ dependencies {
     compile 'com.android.support:preference-v7:24.1.0'
 
     // Firebase Core
-    compile 'com.google.firebase:firebase-core:9.6.1'
+    compile 'com.google.firebase:firebase-core:10.0.1'
 
     // Firebase Realtime Database
-    compile 'com.google.firebase:firebase-database:9.6.1'
+    compile 'com.google.firebase:firebase-database:10.0.1'
 
     // Firebase Notifications
-    compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
 
     // Firebase Crash Reporting
-    compile 'com.google.firebase:firebase-crash:9.6.1'
+    compile 'com.google.firebase:firebase-crash:10.0.1'
 
     // FirebaseUI Auth
-    compile 'com.firebaseui:firebase-ui-auth:0.6.0'
+    compile 'com.firebaseui:firebase-ui-auth:1.0.1'
 
     // FirebaseUI Database
-    compile 'com.firebaseui:firebase-ui-database:0.6.0'
+    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+
+    //Firebase Invites
+    compile 'com.google.firebase:firebase-invites:10.0.1'
 
     // Library for colored Square Icons with letter inside like in gmail
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
