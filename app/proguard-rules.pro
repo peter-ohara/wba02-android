@@ -23,6 +23,16 @@
 }
 
 
+# Firebase Database and Firebase Authentication
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# This rule will properly ProGuard all the model classes in
+# the package com.pascoapp.wba02_android.services.
+-keepclassmembers class com.pascoapp.wba02_android.services.** {
+  *;
+}
+
 
 # Retrolambda
 -dontwarn java.lang.invoke.*
