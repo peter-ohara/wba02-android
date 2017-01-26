@@ -1,30 +1,26 @@
 package com.pascoapp.wba02_android.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
+import com.pascoapp.wba02_android.CourseDetailsActivity;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.users.User;
-import com.pascoapp.wba02_android.services.users.Users;
+import com.pascoapp.wba02_android.views.chooseCourses.ChooseCoursesActivity;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.pascoapp.wba02_android.views.main.CourseActivity.EXTRA_COURSE_KEY;
 
 /**
  * Created by peter on 9/25/16.
@@ -32,34 +28,12 @@ import butterknife.ButterKnife;
 
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
 
-    public static final String USER_KEYS = "userKeys";
-    public static final String COURSE_KEYS = "courseKeys";
     private Context mContext;
     private List<Course> mItems;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private DatabaseReference mDatabaseRef = Helpers.getDatabaseInstance().getReference();
-
-    private User fetchedUser;
 
     public CourseListAdapter(Context mContext, List<Course> mItems) {
         this.mContext = mContext;
         this.mItems = mItems;
-
-        fetchUser();
-    }
-
-    private void fetchUser() {
-        Users.fetchUser(user.getUid())
-                .subscribe(fetchedUser -> {
-                    this.fetchedUser = fetchedUser;
-                    // If user has no courses initial coursekeys with an empty hashmap
-                    if (fetchedUser.getCourseKeys() == null) {
-                        fetchedUser.setCourseKeys(new HashMap<>());
-                    }
-                }, throwable -> {
-                    Toast.makeText(mContext, "Error fetching user's course list",
-                            Toast.LENGTH_SHORT).show();
-                });
     }
 
     @Override
@@ -84,13 +58,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         );
         holder.courseName.setText(course.getName());
 
-        if (fetchedUser.getCourseKeys().containsKey(course.getKey())) {
-            // course is already added
-            setCourseAsAdded(holder);
-        } else {
-            // course is not added
-            setCourseAsNotAdded(holder);
-        }
+        holder.itemView.setOnClickListener(v -> {
+            ChooseCoursesActivity chooseCoursesActivity = (ChooseCoursesActivity) mContext;
+            Intent intent = new Intent(chooseCoursesActivity, CourseDetailsActivity.class);
+            intent.putExtra(EXTRA_COURSE_KEY, course.getKey());
+            mContext.startActivity(intent);
+        });
     }
 
     @Override
@@ -98,60 +71,9 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         return mItems.size();
     }
 
-    private void setCourseAsAdded(CourseViewHolder holder) {
-        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_marked_outline_grey600_24dp);
-        holder.itemView.setOnClickListener(view -> {
-            // ask user if they want to remove it
-            removeTheCourse(holder);
-        });
-    }
-
-    private void setCourseAsNotAdded(CourseViewHolder holder) {
-        holder.addedStateIcon.setImageResource(R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        holder.itemView.setOnClickListener(view -> {
-            // ask user if they want to add it
-            addTheCourse(holder);
-        });
-    }
-
-    private void removeTheCourse(CourseViewHolder holder) {
-        fetchedUser.getCourseKeys().remove(holder.course.getKey());
-        setCourseAsNotAdded(holder);
-
-        // Update the user
-        Map<String, Object> childUpdates = new HashMap<>();
-
-        String userUpdatePath = Helpers.createFirebasePath(Users.USERS_KEY, fetchedUser.getKey(),
-                COURSE_KEYS, holder.course.getKey());
-        String courseUpdatePath = Helpers.createFirebasePath(Courses.COURSES_KEY, holder.course.getKey(),
-                USER_KEYS, fetchedUser.getKey());
-
-        childUpdates.put(userUpdatePath, null);
-        childUpdates.put(courseUpdatePath, null);
-        mDatabaseRef.updateChildren(childUpdates);
-    }
-
-    private void addTheCourse(CourseViewHolder holder) {
-        fetchedUser.getCourseKeys().put(holder.course.getKey(), true);
-        setCourseAsAdded(holder);
-
-        // Update the user
-        Map<String, Object> childUpdates = new HashMap<>();
-
-        String userUpdatePath = Helpers.createFirebasePath(Users.USERS_KEY, fetchedUser.getKey(),
-                COURSE_KEYS, holder.course.getKey());
-        String courseUpdatePath = Helpers.createFirebasePath(Courses.COURSES_KEY, holder.course.getKey(),
-                USER_KEYS, fetchedUser.getKey());
-
-        childUpdates.put(userUpdatePath, true);
-        childUpdates.put(courseUpdatePath, true);
-        mDatabaseRef.updateChildren(childUpdates);
-    }
-
     public class CourseViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.courseIcon) ImageView courseIcon;
         @BindView(R.id.courseName) TextView courseName;
-        @BindView(R.id.addedStateIcon) ImageView addedStateIcon;
 
         public Course course;
 

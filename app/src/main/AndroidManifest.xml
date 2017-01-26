@@ -92,7 +92,7 @@
         </activity>
         <activity android:name=".views.main.CourseActivity" />
         <activity
-            android:name=".views.chooseCourses.chooseCoursesActivity"
+            android:name=".views.chooseCourses.ChooseCoursesActivity"
             android:label="@string/title_activity_choose_courses"
             android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -111,21 +111,28 @@
         </activity>
 
         <!-- [START firebase_service] -->
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
+        <activity
+            android:name=".CourseDetailsActivity"
+            android:label="@string/title_activity_course_details"
+            android:parentActivityName=".views.chooseCourses.ChooseCoursesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.views.chooseCourses.ChooseCoursesActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -29,7 +29,7 @@ import com.pascoapp.wba02_android.services.courses.Courses;
 import com.pascoapp.wba02_android.services.tests.Tests;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.WebviewActivity;
-import com.pascoapp.wba02_android.views.chooseCourses.chooseCoursesActivity;
+import com.pascoapp.wba02_android.views.chooseCourses.ChooseCoursesActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ import rx.Observable;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
     private static final int REQUEST_INVITE = 100 ;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bottomBar)
     public void openStore() {
-        Intent intent = new Intent(MainActivity.this, chooseCoursesActivity.class);
+        Intent intent = new Intent(MainActivity.this, ChooseCoursesActivity.class);
         startActivityForResult(intent, BUY_COURSES_REQUEST);
     }
 
@@ -262,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }, firebaseException -> {
                     mySwipeRefreshLayout.setRefreshing(false);
+                    Log.d(TAG, "refreshData: " + firebaseException.getMessage());
                     Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData())
                             .show();
