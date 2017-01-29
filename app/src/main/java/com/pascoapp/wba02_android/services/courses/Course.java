@@ -1,26 +1,86 @@
-package com.pascoapp.wba02_android.services.courses;
+package com.pascoapp.wba02_android.services.courses; ;
 
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@IgnoreExtraProperties
-@Data
-@NoArgsConstructor
 public class Course {
-    @Exclude
-    private String key;
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("code")
+    @Expose
     private String code;
-    private Long level;
+    @SerializedName("name")
+    @Expose
     private String name;
-    private Long semester;
+    @SerializedName("level")
+    @Expose
+    private Integer level;
+    @SerializedName("semester")
+    @Expose
+    private Integer semester;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
 
-    private Map<String, Boolean> programmeKeys;
-    private Map<String, Boolean> userKeys;
-    private Map<String, Boolean> testKeys;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Integer semester) {
+        this.semester = semester;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

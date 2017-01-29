@@ -104,6 +104,13 @@ dependencies {
     // EazeGraph charting library
     compile 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     compile 'com.nineoldandroids:library:2.4.0'
+
+    // Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
+    // JSON Parsing
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
