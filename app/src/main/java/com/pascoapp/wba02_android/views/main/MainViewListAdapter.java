@@ -9,17 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.services.tests.Test;
 import com.pascoapp.wba02_android.views.takeTest.TestOverviewActivity;
 
 import java.util.List;
 
-/**
- * Created by peter on 8/7/16.
- */
 
 public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -28,19 +24,21 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static final int TYPE_TEST = 1;
     public static final int TYPE_COURSE = 2;
 
-    private List<MainViewListItem> mItems;
+    private List<JsonObject> mItems;
 
     private Context context;
 
-    public MainViewListAdapter(Context context, List<MainViewListItem> mItems) {
+    public MainViewListAdapter(Context context, List<JsonObject> mItems) {
         this.context = context;
         this.mItems = mItems;
     }
 
     @Override
     public int getItemViewType(int position) {
-        MainViewListItem item = mItems.get(position);
-        if (item.getCourse() != null) {
+        JsonObject item = mItems.get(position);
+
+        if (item.has("type")
+                && item.get("type").getAsString().equals("header")) {
             return TYPE_COURSE;
         } else {
             return TYPE_TEST;
@@ -75,42 +73,39 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_COURSE: {
-                Course course = mItems.get(position).getCourse();
-                ((CourseViewHolder) holder).courseCode.setText(course.getCode());
+                JsonObject header = mItems.get(position);
+                String title = header.get("title").getAsString();
+                ((CourseViewHolder) holder).courseCode.setText(title);
                 ((CourseViewHolder) holder).moreButton.setOnClickListener(view -> {
                     Toast.makeText(context, "More tests coming soon!", Toast.LENGTH_SHORT).show();
                 });
                 break;
             }
             case TYPE_TEST: {
-                Test test = mItems.get(position).getTest();
+                JsonObject test =  mItems.get(position);
+
+                Integer testId = test.get("id").getAsInt();
+                String courseCode = test.get("course_code").getAsString();
+                String testName = test.get("name").getAsString();
+                String questionCount = test.get("question_count").getAsString();
 
                 ((TestViewHolder) holder).testIcon.setImageDrawable(
                         Helpers.getIcon(
-                                test.getKey(),
-                                test.getCourseKey(),
+                                testId.toString(),
+                                courseCode,
                                 14 // fontSize in sp
                         )
                 );
-                ((TestViewHolder) holder).testName.setText(Helpers.getTestName(test));
-
-                int questionCount = 0;
-                if (test.getQuestionKeys() != null) {
-                    questionCount = test.getQuestionKeys().size();
-                }
-                ((TestViewHolder) holder).questionCount.setText(questionCount + " q");
+                ((TestViewHolder) holder).testName.setText(testName);
+                ((TestViewHolder) holder).questionCount.setText(questionCount);
 
                 ((TestViewHolder) holder).itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(context, TestOverviewActivity.class);
-                    intent.putExtra(TestOverviewActivity.EXTRA_TEST_KEY, test.getKey());
+                    intent.putExtra(TestOverviewActivity.EXTRA_TEST_ID, testId);
                     context.startActivity(intent);
                 });
-
                 break;
             }
-            default:
-                Log.e(LOG_TAG, "onCreateViewHolder: Wrong viewType encountered");
-                break;
         }
     }
 

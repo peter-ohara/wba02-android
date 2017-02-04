@@ -10,34 +10,33 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.APIUtils;
 import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.services.questions.Questions;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.services.tests.Tests;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class TakeTestActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TEST_KEY = "com.pascoapp.wba02_android.testKey";
+    public static final String EXTRA_TEST_ID = "com.pascoapp.wba02_android.testKey";
+    public static final String TAG = TakeTestActivity.class.getSimpleName();
 
     public static String POSITION = "POSITION";
 
-    private ArrayList<Question> mQuestions = new ArrayList<>();
+    private ArrayList<Map<String, Object>> testContents = new ArrayList<>();
     private PagerAdapter mPagerAdapter;
 
     @BindView(R.id.toolbar)
@@ -54,6 +53,7 @@ public class TakeTestActivity extends AppCompatActivity {
     private Test test;
     private Course course;
 
+    private Map<String, Object> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
         setupViewPager();
 
-        refreshData(getTestKey());
+        refreshData(getTestId());
     }
 
     @Override
@@ -93,7 +93,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         mPager.setOffscreenPageLimit(10);
-        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), mQuestions);
+        mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), testContents);
         mPager.setAdapter(mPagerAdapter);
         // Give the TabLayout the ViewPager
         tabLayout.setupWithViewPager(mPager);
@@ -114,44 +114,44 @@ public class TakeTestActivity extends AppCompatActivity {
         });
     }
 
-    public String getTestKey() {
+    public Integer getTestId() {
         Intent intent = getIntent();
-        return intent.getStringExtra(EXTRA_TEST_KEY);
+        return intent.getIntExtra(EXTRA_TEST_ID, 0);
     }
 
-
-    private void refreshData(String testKey) {
+    private void refreshData(Integer testId) {
         loadingIndicator.show();
-        Tests.fetchTest(testKey)
-                .concatMap(test -> {
-                    this.test = test;
-                    return Courses.fetchCourse(test.getCourseKey());
-                })
-                .concatMap(course -> {
-                    this.course = course;
-                    return Observable.from(
-                            Helpers.sortMapByValue(test.getQuestionKeys()).keySet()
+
+        Log.d(TAG, "fetchData: testId = " + testId);
+
+        APIUtils.getTakeTestService().getData(testId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fetchedData -> {
+                    loadingIndicator.hide();
+
+                    this.data = fetchedData;
+
+                    setTitle((String) Helpers.getOrDefault(data, "title", ""));
+                    testContents.addAll(
+                            (List<Map<String, Object>>) Helpers.getOrDefault(data,
+                                    "test_contents",
+                                    new ArrayList<Map<String, Object>>())
                     );
-                })
-                .concatMap(questionKey -> Questions.fetchQuestion(questionKey) )
-                .toList()
-                .subscribe(questions -> {
-                    loadingIndicator.hide();
-                    setTitle(course.getCode() + " " + Helpers.getTestName(test));
+                    Map<String, Object> endPageData = new HashMap<String, Object>();
+                    endPageData.put("title", "END");
+                    endPageData.put("content", "You have reached the end of this test");
+                    endPageData.put("type", "end_page");
+                    endPageData.put("comments", new ArrayList<>());
+                    testContents.add(endPageData);
 
-                    Question endPageQuestion = new Question();
-                    endPageQuestion.setType(QuestionsPagerAdapter.TYPE_END_PAGE);
-                    endPageQuestion.setTitle("END");
-                    questions.add(endPageQuestion);
-
-                    mQuestions.clear();
-                    mQuestions.addAll(questions);
                     mPagerAdapter.notifyDataSetChanged();
-                }, firebaseException -> {
+                }, throwable -> {
                     loadingIndicator.hide();
-                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
-                            .setAction("Retry", view -> refreshData(testKey))
+                    Snackbar.make(coordinatorLayout, throwable.getMessage(), Snackbar.LENGTH_LONG)
+                            .setAction("Retry", view -> refreshData(testId))
                             .show();
+                    Helpers.logTheError(TAG, throwable);
                 });
     }
 

@@ -1,11 +1,9 @@
-package com.pascoapp.wba02_android;
+package com.pascoapp.wba02_android.views.store;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,30 +14,27 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.Query;
+import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.APIUtils;
 import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.services.courses.Courses;
+import com.pascoapp.wba02_android.services.courses.CourseService;
 import com.pascoapp.wba02_android.services.testOwnerships.TestOwnership;
 import com.pascoapp.wba02_android.services.testOwnerships.TestOwnerships;
 import com.pascoapp.wba02_android.services.tests.Test;
-import com.pascoapp.wba02_android.services.tests.Tests;
-import com.pascoapp.wba02_android.services.users.Users;
-import com.pascoapp.wba02_android.views.CourseListAdapter;
-import com.pascoapp.wba02_android.views.TestListAdapter;
+import com.pascoapp.wba02_android.services.tests.TestService;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.pascoapp.wba02_android.views.main.CourseActivity.EXTRA_COURSE_KEY;
 
@@ -67,12 +62,13 @@ public class CourseDetailsActivity extends AppCompatActivity {
     @BindView(R.id.doneButton)
     View doneButton;
 
-    private String courseKey;
+    private Integer courseKey;
 
     private TestListAdapter testListAdapter;
     private List<Test> tests = new ArrayList<>();
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private Course course;
 
 
     @Override
@@ -81,7 +77,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {
-            courseKey = savedInstanceState.getString(EXTRA_COURSE_KEY);
+            courseKey = savedInstanceState.getInt(EXTRA_COURSE_KEY);
         } else {
             setCourseKeyFromIntentExtras();
         }
@@ -107,29 +103,36 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     private void setCourseKeyFromIntentExtras() {
         Intent intent = getIntent();
-        courseKey = intent.getStringExtra(EXTRA_COURSE_KEY);
+        courseKey = intent.getIntExtra(EXTRA_COURSE_KEY, 0);
     }
 
-    private void refreshData(String courseKey) {
+    private void refreshData(Integer courseKey) {
         loadingIndicator.show();
 
-        Courses.fetchCourse(courseKey)
-                .concatMap(course -> {
+        CourseService courseService = APIUtils.getCourseService();
+        TestService testService = APIUtils.getTestService();
+
+        Log.d(TAG, "fetchData: courseKey = " + courseKey);
+        courseService.getCourse(courseKey)
+                .subscribeOn(Schedulers.io())
+                .concatMap(fetchedCourse -> {
+                    this.course = fetchedCourse;
+                    return testService.getTests(course.getId());
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fetchedTests -> {
+                    loadingIndicator.hide();
+                    Log.d(TAG, "fetchData: " + fetchedTests);
                     courseCode.setText(course.getCode());
                     courseName.setText(course.getName());
 
-                    Query testsQuery = Tests.TESTS_REF.orderByChild("courseKey").equalTo(course.getKey());
-                    return Tests.fetchListOfTests(testsQuery);
-                })
-                .subscribe(fetchedTests -> {
-                    loadingIndicator.hide();
-                    Log.d(TAG, "refreshData: " + fetchedTests);
                     tests.clear();
                     tests.addAll(fetchedTests);
                     testListAdapter.notifyDataSetChanged();
-                }, firebaseException -> {
+                }, throwable -> {
                     loadingIndicator.hide();
-                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
+                    Log.d(TAG, "errorOnRefresh: " + throwable.getMessage());
+                    Snackbar.make(coordinatorLayout, throwable.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData(courseKey))
                             .show();
                 });
@@ -145,8 +148,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
             String key = TestOwnerships.TestOwnershipS_REF.push().getKey();
 
             TestOwnership testOwnership = new TestOwnership();
-            testOwnership.setUserKey(user.getUid());
-            testOwnership.setTestKey(test.getKey());
+            testOwnership.setUserId(user.getUid());
+            testOwnership.setTestId(test.getId());
             testOwnership.setTransactionDate(today.getTime());
             testOwnership.setExpiryDate(today.getTime()); //TODO: Fix this
             testOwnershipMap.put(key, testOwnership);

@@ -14,7 +14,6 @@ import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.services.users.User;
 import com.pascoapp.wba02_android.services.users.Users;
 import com.pascoapp.wba02_android.views.takeTest.questionTypes.DiscussionInterfaceToWebview;
-import com.pascoapp.wba02_android.views.takeTest.questionTypes.McqFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

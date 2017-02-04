@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,32 +15,30 @@ import android.webkit.WebViewClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.Query;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.services.comments.Comments;
-import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.services.questions.Questions;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class FillInFragment extends Fragment {
 
-    public static final String QUESTION_ERROR = "Unknown Error! Please report this questionKey";
+    public static final String QUESTION_ERROR = "Unknown Error! Please report this testContent";
 
     private static final String TAG = FillInFragment.class.getSimpleName();
 
     // the fragment initialization parameters
-    private static final String ARG_QUESTION_KEY = "com.pascoapp.wba02_android.questionKey";
+    private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.testContent";
 
-    // Member Variables related to the questionKey
-    private String questionKey;
+    // Member Variables related to the testContent
+    private Map<String, Object> testContent;
 
     protected FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -52,12 +49,12 @@ public class FillInFragment extends Fragment {
     @BindView(R.id.loading_indicator)
     AVLoadingIndicatorView loadingIndicator;
 
-    public static FillInFragment newInstance(Question question) {
+    public static FillInFragment newInstance(Map<String, Object> testContent) {
         FillInFragment fragment = new FillInFragment();
         Bundle args = new Bundle();
 
-        args.putString(ARG_QUESTION_KEY, question.getKey());
-
+        args.putSerializable(ARG_TEST_CONTENT, (Serializable) testContent);
+        Log.d(TAG, "newInstance: " + testContent);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +66,9 @@ public class FillInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: " + testContent);
         if (getArguments() != null) {
-            questionKey = getArguments().getString(ARG_QUESTION_KEY);
+            testContent = (Map<String, Object>) getArguments().getSerializable(ARG_TEST_CONTENT);
         }
     }
 
@@ -79,39 +77,21 @@ public class FillInFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
         ButterKnife.bind(this, view);
+        loadingIndicator.hide();
 
-        refreshData(questionKey);
+        Log.d(TAG, "onCreateView: " + testContent);
+        loadItemInWebView(getContext(), webview, testContent);
 
         return view;
     }
 
-    private void refreshData(String questionKey) {
-        loadingIndicator.show();
-        Questions.fetchQuestion(questionKey)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(question -> {
-                    loadingIndicator.hide();
-                    loadItemInWebView(getActivity(), webview, question);
-                }, throwable -> {
-                    loadingIndicator.hide();
-                    Log.d(TAG, "refreshData: " + throwable.getMessage());
-
-                    // TODO: Show error message with retry button inside R.layout.fragment_fill_in
-                    // rather than with a Snackbar cos the snackbar makes it hard to find which
-                    // question produced the error
-                    Snackbar.make(webview, throwable.getMessage(), Snackbar.LENGTH_LONG)
-                            .setAction("Retry", view -> refreshData(questionKey))
-                            .show();
-                });
-    }
-
-    public void loadItemInWebView(Context context, WebView w, Question question) {
+    public void loadItemInWebView(Context context, WebView w, Map<String, Object> testContent) {
         w.getSettings().setJavaScriptEnabled(true);
         w.setBackgroundColor(Color.TRANSPARENT);
 
         DiscussionInterfaceToWebview discussionInterfaceToWebview
-                = new DiscussionInterfaceToWebview(FillInFragment.this, question.getKey());
-        w.addJavascriptInterface(new FillInWebAppInterface(this), "FillInAndroid");
+                = new DiscussionInterfaceToWebview(FillInFragment.this, (String) testContent.get("id"));
+//        w.addJavascriptInterface(new FillInWebAppInterface(this), "FillInAndroid");
         w.addJavascriptInterface(discussionInterfaceToWebview, "Android");
 
         w.setWebViewClient(new WebViewClient() {
@@ -132,23 +112,23 @@ public class FillInFragment extends Fragment {
         String mime = "text/html";
         String encoding = "utf-8";
         String baseURL = "file:///android_res/raw/";
-        w.loadDataWithBaseURL(baseURL, getHtml(question), mime, encoding, null);
+        w.loadDataWithBaseURL(baseURL, getHtml(testContent), mime, encoding, null);
     }
 
     private void setUpCommentListener(DiscussionInterfaceToWebview discussionInterfaceToWebview) {
-        String questionKey = discussionInterfaceToWebview.getQuestionKey();
-        Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
-        ChildEventListener commentEventListener
-                = Comments.createCommentEventListener(getContext(), webview,
-                discussionInterfaceToWebview, user);
-        commentsQuery.addChildEventListener(commentEventListener);
+//        String questionKey = discussionInterfaceToWebview.getQuestionKey();
+//        Query commentsQuery = Comments.COMMENTS_REF.child(questionKey);
+//        ChildEventListener commentEventListener
+//                = Comments.createCommentEventListener(getContext(), webview,
+//                discussionInterfaceToWebview, user);
+//        commentsQuery.addChildEventListener(commentEventListener);
     }
 
-    private String getHtml(Question question) {
+    private String getHtml(Map<String, Object> testContent) {
         AndroidTemplates loader = new AndroidTemplates(getContext());
         Theme theme = new Theme(loader);
         Chunk chunk = theme.makeChunk("fillin");
-        chunk.set("question", question.getQuestion());
+        chunk.set("question", Helpers.getOrDefault(testContent, "content", "N/A"));
 
         Chunk inputField = theme.makeChunk("fillin#input_field");
         chunk.set("a", inputField.toString());

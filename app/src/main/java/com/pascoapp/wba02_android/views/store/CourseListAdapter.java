@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views;
+package com.pascoapp.wba02_android.views.store;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pascoapp.wba02_android.CourseDetailsActivity;
 import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.views.chooseCourses.ChooseCoursesActivity;
 
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         holder.course = course;
         holder.courseIcon.setImageDrawable(
                 Helpers.getIcon(
-                        course.getKey(),
+                        course.getId().toString(),
                         course.getCode(),
                         10 // fontSize in sp
                 )
@@ -61,7 +59,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         holder.itemView.setOnClickListener(v -> {
             ChooseCoursesActivity chooseCoursesActivity = (ChooseCoursesActivity) mContext;
             Intent intent = new Intent(chooseCoursesActivity, CourseDetailsActivity.class);
-            intent.putExtra(EXTRA_COURSE_KEY, course.getKey());
+            intent.putExtra(EXTRA_COURSE_KEY, course.getId());
             mContext.startActivity(intent);
         });
     }

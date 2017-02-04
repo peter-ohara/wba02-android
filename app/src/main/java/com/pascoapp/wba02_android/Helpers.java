@@ -2,6 +2,7 @@ package com.pascoapp.wba02_android;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -17,6 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
+
 
 /**
  * Created by peter on 8/4/16.
@@ -27,20 +31,8 @@ public class Helpers {
     private static FirebaseDatabase mDatabase;
 
     public static String getTestName(Test test) {
-        Long year = test.getYear();
-        String type;
-        if (test.getType().equalsIgnoreCase("endOfSem")) {
-            type = "End of Semester Exam";
-        } else if (test.getType().equalsIgnoreCase("midSem")) {
-            type = "Mid-Semester Exam";
-        } else if (test.getType().equalsIgnoreCase("classTest")) {
-            type = "Class Test";
-        } else if (test.getType().equalsIgnoreCase("assignment")) {
-            type = "Assignment";
-        } else {
-            type = "Unknown";
-        }
-        return year + " " + type;
+        Integer year = test.getYear();
+        return year + " " + test.getTestType();
     }
 
     public static Drawable getIcon(String colorKey, String text, int textSize) {
@@ -97,4 +89,25 @@ public class Helpers {
         return newPath;
     }
 
+    public static <V> V getOrDefault(Map<String, V> map, String key, V defaultValue) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public static void logTheError(String TAG, Throwable throwable) {
+        if (throwable instanceof HttpException) {
+            HttpException exception = (HttpException) throwable;
+            Response response = exception.response();
+            Log.d(TAG, "exception.getMessage(): " + exception.getMessage());
+            Log.d(TAG, "response.body(): " + response.body());
+//                        Converter<ResponseBody, MyError> converter = new GsonConverterFactory()
+//                                .responseBodyConverter(MyError.class, Annotation[0]);
+//                        MyError error = converter.convert(response.errorBody());
+        } else {
+            Log.d(TAG, throwable.getMessage());
+        }
+    }
 }

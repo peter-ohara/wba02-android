@@ -18,7 +18,6 @@
         <div class="row">
             <form id="options">
                 <div class="mcq-answer-box">
-
                     <ul>
                         {% loop in $choices as $key:$choice first_last="true" %}
                         <li>

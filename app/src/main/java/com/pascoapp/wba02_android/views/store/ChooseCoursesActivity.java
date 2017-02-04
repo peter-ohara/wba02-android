@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.views.chooseCourses;
+package com.pascoapp.wba02_android.views.store;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +18,9 @@ import android.view.View;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.Query;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.services.APIUtils;
 import com.pascoapp.wba02_android.services.courses.Course;
-import com.pascoapp.wba02_android.services.courses.Courses;
-import com.pascoapp.wba02_android.views.CourseListAdapter;
 import com.pascoapp.wba02_android.views.WebviewActivity;
 import com.pascoapp.wba02_android.views.signIn.CheckCurrentUser;
 
@@ -31,9 +30,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ChooseCoursesActivity extends AppCompatActivity {
 
+    public static final String TAG = ChooseCoursesActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.snackbarPosition)
@@ -137,17 +139,18 @@ public class ChooseCoursesActivity extends AppCompatActivity {
     private void refreshData() {
         mySwipeRefreshLayout.setRefreshing(true);
 
-        Query coursesQuery = Courses.COURSES_REF;
-        Courses.fetchListOfCourses(coursesQuery)
+        APIUtils.getCourseService().getCourses()
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedCourses -> {
                     mySwipeRefreshLayout.setRefreshing(false);
 
                     courses.clear();
                     courses.addAll(fetchedCourses);
                     courseListAdapter.notifyDataSetChanged();
-                }, firebaseException -> {
+                }, throwable -> {
                     mySwipeRefreshLayout.setRefreshing(false);
-                    Snackbar.make(coordinatorLayout, firebaseException.getMessage(), Snackbar.LENGTH_LONG)
+                    Log.d(TAG, "fetchData: " + throwable.getMessage());
+                    Snackbar.make(coordinatorLayout, throwable.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction("Retry", view -> refreshData())
                             .show();
                 });

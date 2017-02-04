@@ -15,8 +15,8 @@ public class TestOwnership {
     @Exclude
     private String key;
 
-    private String userKey;
-    private String testKey;
+    private String userId;
+    private Integer testId;
 
     private Long transactionDate;
     private Long expiryDate;

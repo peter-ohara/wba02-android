@@ -3,58 +3,47 @@ package com.pascoapp.wba02_android.views.takeTest;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
-import com.pascoapp.wba02_android.services.questions.Question;
-import com.pascoapp.wba02_android.views.takeTest.questionTypes.EssayFragment;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.pascoapp.wba02_android.Helpers;
 import com.pascoapp.wba02_android.views.takeTest.questionTypes.FillInFragment;
-import com.pascoapp.wba02_android.views.takeTest.questionTypes.HeaderFragment;
-import com.pascoapp.wba02_android.views.takeTest.questionTypes.McqFragment;
 import com.pascoapp.wba02_android.views.takeTest.questionTypes.TestEndFragment;
 
 import java.util.List;
+import java.util.Map;
 
 public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    public static final String TYPE_END_PAGE = "com.pascoapp.wba02_android.endPageKey";
-    private List<Question> mQuestions;
+    public static final String TYPE_END_PAGE = "end_page";
+    private static final String TAG = QuestionsPagerAdapter.class.getSimpleName();
+    private List<Map<String, Object>> testContents;
 
-    public QuestionsPagerAdapter(FragmentManager fm, List<Question> questions) {
+    public QuestionsPagerAdapter(FragmentManager fm, List<Map<String, Object>> testContents) {
         super(fm);
-        mQuestions = questions;
+        this.testContents = testContents;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Question currentQuestion = mQuestions.get(position);
-        if (currentQuestion.getType().equalsIgnoreCase("mcq")) {
-            return McqFragment.newInstance(currentQuestion);
-        } else if (currentQuestion.getType().equalsIgnoreCase("fillIn")) {
-            return FillInFragment.newInstance(currentQuestion);
-        } else if (currentQuestion.getType().equalsIgnoreCase("essay")) {
-            return EssayFragment.newInstance(currentQuestion);
-        } else if (currentQuestion.getType().equalsIgnoreCase("header")) {
-            return HeaderFragment.newInstance(currentQuestion);
-        } else if (currentQuestion.getType().equalsIgnoreCase(TYPE_END_PAGE)) {
+        Map<String, Object> testContent = testContents.get(position);
+        Log.d(TAG, "getItem: " + testContent);
+        if (testContent.get("type").equals("end_page")) {
             return TestEndFragment.newInstance();
+        } else {
+            return FillInFragment.newInstance(testContent);
         }
-        return null;
     }
 
     @Override
     public int getCount() {
-        return mQuestions.size();
+        return testContents.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        Question currentQuestion = mQuestions.get(position);
-        if (currentQuestion.getType().equalsIgnoreCase("header")) {
-            return currentQuestion.getTitle();
-        } else if (currentQuestion.getType().equalsIgnoreCase(TYPE_END_PAGE)) {
-            return currentQuestion.getTitle();
-        } else {
-            return mQuestions.get(position).getNumber();
-        }
-
+        Map<String, Object> testContent = testContents.get(position);
+        return (String) Helpers.getOrDefault(testContent, "title", "");
     }
 }

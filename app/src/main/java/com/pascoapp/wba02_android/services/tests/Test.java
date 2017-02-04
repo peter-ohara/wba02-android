@@ -3,6 +3,9 @@ package com.pascoapp.wba02_android.services.tests;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+import java.util.Map;
+
 public class Test {
 
     @SerializedName("id")
@@ -94,4 +97,15 @@ public class Test {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", instructions=" + instructions +
+                ", duration=" + duration +
+                ", testType='" + testType + '\'' +
+                ", year=" + year +
+                '}';
+    }
 }

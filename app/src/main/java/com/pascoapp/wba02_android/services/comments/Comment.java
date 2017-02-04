@@ -2,7 +2,6 @@ package com.pascoapp.wba02_android.services.comments;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.pascoapp.wba02_android.services.users.User;
 
 import java.util.Map;
 

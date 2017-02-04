@@ -3,6 +3,8 @@ package com.pascoapp.wba02_android.services.courses; ;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Map;
+
 public class Course {
 
     @SerializedName("id")
@@ -83,4 +85,16 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                ", semester=" + semester +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
+    }
 }
