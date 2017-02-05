@@ -12,13 +12,13 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.DiscussionInterfaceToWebview {
+-keepclassmembers class com.pascoapp.wba02_android.takeTest.questionTypes.DiscussionInterfaceToWebview {
    public *;
 }
--keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.McqWebAppInterface {
+-keepclassmembers class com.pascoapp.wba02_android.takeTest.questionTypes.McqWebAppInterface {
    public *;
 }
--keepclassmembers class com.pascoapp.wba02_android.views.takeTest.questionTypes.FillInWebAppInterface {
+-keepclassmembers class com.pascoapp.wba02_android.takeTest.questionTypes.FillInWebAppInterface {
    public *;
 }
 

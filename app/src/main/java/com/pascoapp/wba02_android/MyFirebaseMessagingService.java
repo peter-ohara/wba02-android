@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.pascoapp.wba02_android.views.main.MainActivity;
+import com.pascoapp.wba02_android.mainScreen.MainActivity;
 
 /**
  * Created by peter on 10/15/16.

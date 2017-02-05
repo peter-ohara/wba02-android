@@ -15,7 +15,7 @@
 
         <!-- Start here -->
         <activity
-            android:name=".views.signIn.CheckCurrentUser"
+            android:name=".signInScreen.CheckCurrentUser"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,45 +25,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.main.MainActivity"
+            android:name=".mainScreen.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.takeTest.TestOverviewActivity"
+            android:name=".testOverviewScreen.TestOverviewActivity"
             android:label="@string/title_activity_test_overview"
             android:launchMode="singleTop"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".mainScreen.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
         <activity
-            android:name=".views.takeTest.TakeTestActivity"
+            android:name=".takeTestScreen.TakeTestActivity"
             android:label="@string/title_activity_take_test"
             android:launchMode="singleTop"
-            android:parentActivityName=".views.takeTest.TestOverviewActivity"
+            android:parentActivityName=".testOverviewScreen.TestOverviewActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.takeTest.TestOverviewActivity" />
+                android:value=".testOverviewScreen.TestOverviewActivity" />
         </activity>
         <activity
             android:name=".views.overflow.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".views.main.MainActivity">
+            android:parentActivityName=".mainScreen.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
         <activity
             android:name=".views.overflow.Inbox.MessageListActivity"
             android:label="@string/title_message_list"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".mainScreen.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
         <activity
             android:name=".views.overflow.Inbox.MessageDetailActivity"
@@ -85,29 +85,28 @@
         <activity
             android:name=".views.overflow.help.HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".views.main.MainActivity">
+            android:parentActivityName=".mainScreen.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
-        <activity android:name=".views.main.CourseActivity" />
         <activity
             android:name=".views.store.ChooseCoursesActivity"
             android:label="@string/title_activity_choose_courses"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".mainScreen.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
         <activity
-            android:name=".views.WebviewActivity"
+            android:name=".WebviewActivity"
             android:label="@string/title_activity_webview"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".mainScreen.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.views.main.MainActivity" />
+                android:value=".mainScreen.MainActivity" />
         </activity>
 
         <!-- [START firebase_service] -->

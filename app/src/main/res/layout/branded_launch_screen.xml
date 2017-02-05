@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".views.signIn.CheckCurrentUser">
+    tools:context=".signInScreen.CheckCurrentUser">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.signIn.CheckCurrentUser">
+        tools:context=".signInScreen.CheckCurrentUser">
 
         <ImageView
             android:src="@drawable/pasco_logo_transparent"

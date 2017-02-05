@@ -6,7 +6,7 @@
     android:id="@+id/activity_test_end"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pascoapp.wba02_android.views.takeTest.TakeTestActivity">
+    tools:context=".takeTestScreen.TakeTestActivity">
 
     <ImageView
         android:layout_width="24dp"
