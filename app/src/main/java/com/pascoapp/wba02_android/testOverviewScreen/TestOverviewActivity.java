@@ -35,7 +35,6 @@ import rx.schedulers.Schedulers;
 public class TestOverviewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TEST_ID = "com.pascoapp.wba02_android.testId";
-    public static final String TAG = TestOverviewActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.lowerContent) View lowerContent;

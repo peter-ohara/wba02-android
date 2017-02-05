@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.takeTestScreen.questionScreens;
+package com.pascoapp.wba02_android.takeTestScreen.testContentScreens;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,17 +22,19 @@ import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
-public class MulitpleChoiceFragment extends Fragment {
+public class TestContentFragment extends Fragment {
 
-    private static final String TAG = MulitpleChoiceFragment.class.getSimpleName();
+    public static final String MULTIPLE_CHOICE_QUESTION = "multiple_choice_question";
+    public static final String FILL_IN_QUESTION = "fill_in_question";
+    public static final String ESSAY_QUESTION = "essay_question";
+    public static final String HEADER = "header";
 
     // the fragment initialization parameters
     private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.testContent";
@@ -45,24 +47,22 @@ public class MulitpleChoiceFragment extends Fragment {
     @BindView(R.id.webview) WebView webview;
     @BindView(R.id.loading_indicator) AVLoadingIndicatorView loadingIndicator;
 
-    public static MulitpleChoiceFragment newInstance(TestContent testContent) {
-        MulitpleChoiceFragment fragment = new MulitpleChoiceFragment();
+    public static TestContentFragment newInstance(TestContent testContent) {
+        TestContentFragment fragment = new TestContentFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(ARG_TEST_CONTENT, testContent);
-        Log.d(TAG, "newInstance: " + testContent);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MulitpleChoiceFragment() {
+    public TestContentFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: " + testContent);
         if (getArguments() != null) {
             testContent = getArguments().getParcelable(ARG_TEST_CONTENT);
         }
@@ -71,11 +71,25 @@ public class MulitpleChoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mcq, container, false);
+        View view;
+        switch (testContent.type) {
+            case MULTIPLE_CHOICE_QUESTION:
+                view = inflater.inflate(R.layout.fragment_mcq, container, false);
+                break;
+            case FILL_IN_QUESTION:
+                view = inflater.inflate(R.layout.fragment_fill_in, container, false);
+                break;
+            case ESSAY_QUESTION:
+                view = inflater.inflate(R.layout.fragment_essay, container, false);
+                break;
+            default:
+                view = inflater.inflate(R.layout.fragment_header, container, false);
+                break;
+        }
+
         ButterKnife.bind(this, view);
         loadingIndicator.hide();
 
-        Log.d(TAG, "onCreateView: " + testContent);
         loadItemInWebView(getContext(), webview, testContent);
 
         return view;
@@ -106,12 +120,25 @@ public class MulitpleChoiceFragment extends Fragment {
     }
 
     private String getHtml(TestContent testContent) {
+        switch (testContent.type) {
+            case MULTIPLE_CHOICE_QUESTION:
+                return getMcqHtml(testContent);
+            case FILL_IN_QUESTION:
+                return getFillInHtml(testContent);
+            case ESSAY_QUESTION:
+                return getEssayHtml(testContent);
+            default:
+                return getHeaderHtml(testContent);
+        }
+    }
+
+    private String getMcqHtml(TestContent testContent) {
         AndroidTemplates loader = new AndroidTemplates(getContext());
         Theme theme = new Theme(loader);
         Chunk chunk = theme.makeChunk("mcq");
         chunk.set("question", testContent.content);
 
-        Log.d(TAG, "getHtml: " + testContent.choices);
+        Timber.d("getHtml: " + testContent.choices);
         SortedMap<String, String> choices = new TreeMap<>();
         char key = 'a';
         for (char i = 0; i < testContent.choices.size(); i++) {
@@ -119,7 +146,7 @@ public class MulitpleChoiceFragment extends Fragment {
             key++;
         }
 
-        Log.d(TAG, "getHtml: " + choices);
+        Timber.d("getHtml: " + choices);
 
         chunk.set("choices", choices);
 
@@ -141,5 +168,49 @@ public class MulitpleChoiceFragment extends Fragment {
         return chunk.toString();
     }
 
+    private String getFillInHtml(TestContent testContent) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+        Chunk chunk = theme.makeChunk("fillin");
+        chunk.set("question", testContent.content);
+
+        Chunk inputField = theme.makeChunk("fillin#input_field");
+        chunk.set("a", inputField.toString());
+
+        if (user.getPhotoUrl() != null) {
+            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
+        } else {
+            chunk.set("photoUrl", "null");
+        }
+
+        return chunk.toString();
+    }
+
+    private String getEssayHtml(TestContent testContent) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+        Chunk chunk = theme.makeChunk("essay");
+        chunk.set("question", testContent.content);
+
+        Chunk inputField = theme.makeChunk("fillin#input_field");
+        chunk.set("a", inputField.toString());
+
+        if (user.getPhotoUrl() != null) {
+            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
+        } else {
+            chunk.set("photoUrl", "null");
+        }
+
+        return chunk.toString();
+    }
+
+    private String getHeaderHtml(TestContent testContent) {
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+        Theme theme = new Theme(loader);
+        Chunk chunk = theme.makeChunk("header");
+        chunk.set("question", testContent.content);
+
+        return chunk.toString();
+    }
 
 }

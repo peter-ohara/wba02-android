@@ -16,13 +16,13 @@ import com.pascoapp.wba02_android.testOverviewScreen.TestOverviewActivity;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by peter on 8/7/16.
  */
 
 public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private static final String LOG_TAG = MainViewListAdapter.class.getSimpleName();
 
     public static final int TYPE_TEST = 1;
     public static final int TYPE_COURSE = 2;
@@ -65,7 +65,7 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 View v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.error_item, parent, false);
                 RecyclerView.ViewHolder vh = new TestViewHolder(v);
-                Log.e(LOG_TAG, "onCreateViewHolder: Wrong viewType encountered");
+                Timber.d("onCreateViewHolder: Wrong viewType encountered");
                 return vh;
         }
     }
@@ -105,7 +105,7 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             }
             default:
-                Log.e(LOG_TAG, "onCreateViewHolder: Wrong viewType encountered");
+                Timber.d("onCreateViewHolder: Wrong viewType encountered");
                 break;
         }
     }

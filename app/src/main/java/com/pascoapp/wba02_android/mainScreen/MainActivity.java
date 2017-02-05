@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by peter on 2/5/17.
@@ -44,10 +45,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
     private static final int REQUEST_INVITE = 100 ;
-    public static final String MAIN_SCREEN = "main_screen";
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.snackbarPosition) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
@@ -111,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     mainViewListAdapter.notifyDataSetChanged();
+
+                    fetchAllAppDataForStoragePurposes();
                 }, e -> {
                     mySwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(coordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG)
@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
                             .show();
                     e.printStackTrace();
                 });
+    }
+
+    private void fetchAllAppDataForStoragePurposes() {
+        // TODO: Fetch all the sub-screens for each test and  cache it so the app can be used offline
     }
 
     private void handleAnyNotificationData() {
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
                 Toast.makeText(this, "Key: " + key + " Value: " + value, Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Key: " + key + " Value: " + value);
+                Timber.d("Key: " + key + " Value: " + value);
             }
         }
         // [END handle_data_extras]
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+        Timber.d("onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
 
         if (requestCode == BUY_COURSES_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -208,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Your invitations have been sent", Toast.LENGTH_SHORT).show();
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
                 for (String id : ids) {
-                    Log.d(TAG, "onActivityResult: sent invitation " + id);
+                    Timber.d("onActivityResult: sent invitation " + id);
                 }
             } else {
                 Toast.makeText(this, "Error sending invitations. Please check your credit or data", Toast.LENGTH_SHORT).show();

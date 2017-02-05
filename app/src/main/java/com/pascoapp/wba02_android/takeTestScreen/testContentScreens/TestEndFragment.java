@@ -1,4 +1,4 @@
-package com.pascoapp.wba02_android.takeTestScreen.questionScreens;
+package com.pascoapp.wba02_android.takeTestScreen.testContentScreens;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

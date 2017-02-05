@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by peter on 2/5/17.
@@ -33,7 +34,6 @@ import rx.schedulers.Schedulers;
 public class TakeTestActivity extends AppCompatActivity {
 
     public static final String EXTRA_TEST_ID = "com.pascoapp.wba02_android.testKey";
-    public static final String TAG = TakeTestActivity.class.getSimpleName();
 
     public static String POSITION = "POSITION";
 
@@ -73,8 +73,8 @@ public class TakeTestActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         // TODO: Figure out why this call doesn't work and as a consequence
         // changing screen orientation does not preserve the users position
-        Log.d("TakeTestActivity", "onRestoreInstanceState: " + mPager.getCurrentItem());
-        Log.d("TakeTestActivity", "onRestoreInstanceState: " + savedInstanceState.getInt(POSITION));
+        Timber.d("onRestoreInstanceState: " + mPager.getCurrentItem());
+        Timber.d("onRestoreInstanceState: " + savedInstanceState.getInt(POSITION));
         mPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
@@ -116,7 +116,7 @@ public class TakeTestActivity extends AppCompatActivity {
     private void refreshData(Integer dataId) {
         loadingIndicator.show();
 
-        Log.d(TAG, "fetchData: testId = " + dataId);
+        Timber.d("fetchData: testId = " + dataId);
 
         APIUtils.getPascoService(com.pascoapp.wba02_android.takeTestScreen.TakeTestService.class).getData(dataId)
                 .subscribeOn(Schedulers.io())
