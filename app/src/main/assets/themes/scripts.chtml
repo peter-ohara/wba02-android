@@ -1,0 +1,5 @@
+<script src="file:///android_asset/js/jquery-3.1.0.min.js"></script>
+<script src="file:///android_asset/js/bootstrap.min.js"></script>
+
+{% include discussion_scripts %}
+{% include math_scripts %}

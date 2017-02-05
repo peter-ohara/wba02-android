@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{$questionNumber}</title>
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    {% include css %}
-    {% include discussion_css %}
-</head>
+
+{% include head %}
+
 <body>
 
     <div class="page">
-        <div class="row">
-            <div class="mcq-question">
-                <span>{$question}</span>
-            </div>
-        </div>
+
+        {% include content %}
+
         <div class="row">
             <form id="options">
                 <div class="mcq-answer-box">
@@ -38,6 +32,7 @@
                 </div>
             </form>
         </div>
+
         <div class="row">
             <div class="button-div">
                 <div class="col-xs-6 pull-left">
@@ -50,17 +45,7 @@
         </div>
     </div>
 
-    <div id="pasco-comments" class="pasco-comments-invisible">
-        <div class="comments-count-box">
-            <i class="fa fa-comments-o fa-lg"></i>
-            <span class="comments-count">
-                <span id="num-comments">0</span>
-                Comments
-            </span>
-            <hr class="comment-hr">
-        </div>
-        <div id="comments-container"></div>
-    </div>
+    {% include scripts %}
 
     <script type="text/javascript">
         function checkMcq() {
@@ -84,7 +69,5 @@
         }
     </script>
 
-    {% include math_scripts %}
-    {% include discussion_scripts %}
 </body>
 </html>

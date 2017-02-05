@@ -1,135 +1,58 @@
-<script src="file:///android_asset/js/custom-script.js"></script>
-<script type="text/javascript" src="file:///android_asset/js/jquery-comments.min.js"></script>
+<div id="pasco-comments" class="pasco-comments-invisible">
+    <div class="comments-count-box">
+        <i class="fa fa-comments-o fa-lg"></i>
+        <span class="comments-count">120 Comments</span>
+        <i class="fa fa-times"></i>
+        <hr class="comment-hr">
+    </div>
+    <div id="comments-container"></div>
+</div>
 
-<!-- Data -->
+
+<script type="text/javascript" src="file:///android_asset/js/data.js"></script>
+<script type="text/javascript" src="file:///android_asset/js/custom-script.js"></script>
+<script type="text/javascript" src="file:///android_asset/js/jquery-comments.min.js"></script>
 
 
 <!-- Init jquery-comments -->
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('#comments-container').comments({
-			profilePictureURL: {$photoUrl},
-			roundProfilePictures: true,
-			textareaRows: 1,
-			enableAttachments: true,
+    $(function() {
+        $('#comments-container').comments({
+            profilePictureURL: 'images/sesi.jpeg',
+            roundProfilePictures: true,
+            textareaRows: 1,
+            enableAttachments: true,
+            getComments: function(success, error) {
+                setTimeout(function() {
+                    success(commentsArray);
+                }, 500);
+            },
+            postComment: function(data, success, error) {
+                setTimeout(function() {
+                    success(data);
+                }, 500);
+            },
+            putComment: function(data, success, error) {
+                setTimeout(function() {
+                    success(data);
+                }, 500);
+            },
+            deleteComment: function(data, success, error) {
+                setTimeout(function() {
+                    success();
+                }, 500);
+            },
+            upvoteComment: function(data, success, error) {
+                setTimeout(function() {
+                    success(data);
+                }, 500);
+            },
 
-			getComments: function(success, error) {
-				// var comments = Android.getComments();
-				// comments = JSON.parse(comments);
-				success([]);
-			},
-			postComment: function(data, success, error) {
-			    console.log("Posting Comment: ");
-			    console.log(JSON.stringify(data));
-
-                logCommentsById("Before: ");
-
-				var returnedCommentData = Android.postComment(JSON.stringify(data));
-				returnedCommentData = JSON.parse(returnedCommentData);
-
-				console.log("Adding to commentsById: ");
-				console.log(JSON.stringify(returnedCommentData));
-
-				success(returnedCommentData);
-				renderMath();
-
-				logCommentsById("After: ");
-			},
-			putComment: function(data, success, error) {
-			    console.log("Putting Comment: ");
-			    console.log(JSON.stringify(data));
-
-                logCommentsById("Before: ");
-
-				var returnedCommentData = Android.putComment(JSON.stringify(data));
-                returnedCommentData = JSON.parse(returnedCommentData)
-
-                console.log("Adding to commentsById: ");
-                console.log(JSON.stringify(returnedCommentData));
-
-				success(returnedCommentData);
-				renderMath();
-
-				logCommentsById("After: ");
-			},
-			deleteComment: function(data, success, error) {
-				console.log("Deleting Comment: ");
-				console.log(JSON.stringify(data));
-
-                logCommentsById("Before: ");
-
-				Android.deleteComment(JSON.stringify(data));
-				success();
-
-				logCommentsById("After: ");
-			},
-			upvoteComment: function(data, success, error) {
-				setTimeout(function() {
-					success(data);
-				}, 500);
-			},
-
-			uploadAttachments: function(dataArray, success, error) {
-				setTimeout(function() {
-					success(dataArray);
-				}, 500);
-			},
-		});
-	});
-
-    function createComment(commentJSON) {
-    	console.log("Creating Comment: ");
-    	console.log(JSON.stringify(commentJSON));
-
-        logCommentsById("Before: ");
-
-        var comments = $('.jquery-comments').data('comments');
-        var commentModel = comments.createCommentModel(commentJSON);
-
-        if (comments.commentsById.hasOwnProperty(commentModel.id)) {
-            console.log("This comment has already been added");
-        } else {
-            console.log("This is a new comment");
-            comments.addCommentToDataModel(commentModel);
-            comments.addComment(commentModel);
-
-            $("#num-comments").text(Object.keys(comments.commentsById).length);
-            renderMath();
-        }
-
-        logCommentsById("After: ");
-    }
-
-    function removeComment(commentId) {
-        console.log("Removing Comment: ");
-        console.log(JSON.stringify(commentId));
-
-        logCommentsById("Before: ");
-
-        var comments = $('.jquery-comments').data('comments');
-        comments.removeComment(commentId);
-
-        $("#num-comments").text(Object.keys(comments.commentsById).length);
-
-        logCommentsById("After: ");
-    }
-
-    function logCommentsById(label) {
-        var comments = $('.jquery-comments').data('comments');
-        console.log(label);
-        console.log(JSON.stringify(comments.commentsById));
-    }
-
-    function renderMath() {
-        console.log("Here's where I render the math again");
-        renderMathInElement(
-            document.body,
-            {
-              delimiters: [
-                  {left: "`", right: "`", display: false},
-              ]
-          }
-        );
-        console.log("Finished rendering the math");
-    }
+            uploadAttachments: function(dataArray, success, error) {
+                setTimeout(function() {
+                    success(dataArray);
+                }, 500);
+            },
+        });
+    });
 </script>

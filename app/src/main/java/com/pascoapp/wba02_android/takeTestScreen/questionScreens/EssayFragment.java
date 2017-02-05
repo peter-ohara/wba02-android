@@ -25,9 +25,9 @@ import com.x5.template.providers.AndroidTemplates;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FillInFragment extends Fragment {
+public class EssayFragment extends Fragment {
 
-    private static final String TAG = FillInFragment.class.getSimpleName();
+    private static final String TAG = EssayFragment.class.getSimpleName();
 
     // the fragment initialization parameters
     private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.testContent";
@@ -40,8 +40,8 @@ public class FillInFragment extends Fragment {
     @BindView(R.id.webview) WebView webview;
     @BindView(R.id.loading_indicator) AVLoadingIndicatorView loadingIndicator;
 
-    public static FillInFragment newInstance(TestContent testContent) {
-        FillInFragment fragment = new FillInFragment();
+    public static EssayFragment newInstance(TestContent testContent) {
+        EssayFragment fragment = new EssayFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(ARG_TEST_CONTENT, testContent);
@@ -50,7 +50,7 @@ public class FillInFragment extends Fragment {
         return fragment;
     }
 
-    public FillInFragment() {
+    public EssayFragment() {
         // Required empty public constructor
     }
 
@@ -66,7 +66,7 @@ public class FillInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fill_in, container, false);
+        View view = inflater.inflate(R.layout.fragment_essay, container, false);
         ButterKnife.bind(this, view);
         loadingIndicator.hide();
 
@@ -103,7 +103,7 @@ public class FillInFragment extends Fragment {
     private String getHtml(TestContent testContent) {
         AndroidTemplates loader = new AndroidTemplates(getContext());
         Theme theme = new Theme(loader);
-        Chunk chunk = theme.makeChunk("fillin");
+        Chunk chunk = theme.makeChunk("essay");
         chunk.set("question", testContent.content);
 
         Chunk inputField = theme.makeChunk("fillin#input_field");

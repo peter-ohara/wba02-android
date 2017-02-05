@@ -1,6 +1,5 @@
 package com.pascoapp.wba02_android.takeTestScreen;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,25 +9,30 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TestContent implements Parcelable {
 
     @SerializedName("priority")
     @Expose
-    public Integer priority;
+    public Integer priority = 0;
     @SerializedName("type")
     @Expose
-    public String type;
+    public String type = "essay_type";
     @SerializedName("title")
     @Expose
-    public String title;
+    public String title = "";
     @SerializedName("content")
     @Expose
-    public String content;
+    public String content = "";
+    @SerializedName("choices")
+    @Expose
+    public List<String> choices = new ArrayList<>();
     @SerializedName("comments")
     @Expose
-    public List<Object> comments = null;
-
+    public List<Object> comments = new ArrayList<>();
     public final static Parcelable.Creator<TestContent> CREATOR = new Creator<TestContent>() {
+
+
         @SuppressWarnings({
                 "unchecked"
         })
@@ -38,6 +42,7 @@ public class TestContent implements Parcelable {
             instance.type = ((String) in.readValue((String.class.getClassLoader())));
             instance.title = ((String) in.readValue((String.class.getClassLoader())));
             instance.content = ((String) in.readValue((String.class.getClassLoader())));
+            in.readList(instance.choices, (java.lang.String.class.getClassLoader()));
             in.readList(instance.comments, (java.lang.Object.class.getClassLoader()));
             return instance;
         }
@@ -54,6 +59,7 @@ public class TestContent implements Parcelable {
         dest.writeValue(type);
         dest.writeValue(title);
         dest.writeValue(content);
+        dest.writeList(choices);
         dest.writeList(comments);
     }
 
@@ -69,4 +75,5 @@ public class TestContent implements Parcelable {
         endPageData.comments = new ArrayList<>();
         return endPageData;
     }
+
 }

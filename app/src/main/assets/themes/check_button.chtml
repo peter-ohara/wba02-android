@@ -1,0 +1,1 @@
+<button type="button" id="checkButton" class="btn btn-info" onClick="checkMcq()">Check</button>

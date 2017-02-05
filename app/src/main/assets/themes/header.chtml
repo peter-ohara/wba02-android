@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{$title}</title>
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    {% include css %}
-</head>
+
+{% include head %}
+
 <body>
 
-<div class="questionKey-page">
-    <div class="questionKey-container">
-        <p>
-            {$content}
-        </p>
-    </div>
-</div>
+    <div class="page">
 
-{% include math_scripts %}
-{% include discussion_scripts %}
+        {% include content %}
+
+        {% include discussion_button %}
+
+    </div>
+
+    {% include scripts %}
 </body>
 </html>

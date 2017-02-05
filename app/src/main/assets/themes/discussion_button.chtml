@@ -1,0 +1,7 @@
+<div class="row">
+    <div class="button-div">
+        <div class="col-xs-6 pull-left">
+            <button type="button" id="discussionButton" class="btn btn-success">Discussion</button>
+        </div>
+    </div>
+</div>

@@ -2,15 +2,9 @@ package com.pascoapp.wba02_android;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-
-import java.util.Map;
-
-import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
 
 
 /**
