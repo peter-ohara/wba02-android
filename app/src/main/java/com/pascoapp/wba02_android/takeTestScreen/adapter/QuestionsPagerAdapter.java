@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    public static final String TEST_END = "test_end";
+    public static final String TEST_END = "quiz_end";
 
     private List<TestContent> testContents;
 

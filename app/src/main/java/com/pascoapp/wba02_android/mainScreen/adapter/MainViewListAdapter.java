@@ -77,7 +77,7 @@ public class MainViewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 MainScreenHeader header = (MainScreenHeader) mItems.get(position);
                 ((CourseViewHolder) holder).courseCode.setText(header.courseCode);
                 ((CourseViewHolder) holder).moreButton.setOnClickListener(view -> {
-                    Toast.makeText(context, "More tests coming soon!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "More quizzes coming soon!", Toast.LENGTH_SHORT).show();
                 });
                 break;
             }

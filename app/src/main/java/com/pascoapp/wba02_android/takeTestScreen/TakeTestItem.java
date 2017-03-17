@@ -10,8 +10,15 @@ public class TakeTestItem {
     @SerializedName("title")
     @Expose
     public String title;
-    @SerializedName("test_contents")
+    @SerializedName("quiz_contents")
     @Expose
     public List<TestContent> testContents = null;
 
+    @Override
+    public String toString() {
+        return "TakeTestItem{" +
+                "title='" + title + '\'' +
+                ", testContents=" + testContents +
+                '}';
+    }
 }

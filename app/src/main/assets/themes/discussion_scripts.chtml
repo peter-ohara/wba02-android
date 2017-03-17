@@ -9,7 +9,10 @@
 </div>
 
 
-<script type="text/javascript" src="file:///android_asset/js/data.js"></script>
+<script>var commentsArray = {$comments};</script>
+<script>var commentableType = "{$commentableType}";</script>
+<script>var commentableId = {$commentableId};</script>
+
 <script type="text/javascript" src="file:///android_asset/js/custom-script.js"></script>
 <script type="text/javascript" src="file:///android_asset/js/jquery-comments.min.js"></script>
 
@@ -17,30 +20,52 @@
 <!-- Init jquery-comments -->
 <script type="text/javascript">
     $(function() {
+        var url = "https://wba02-server.herokuapp.com/android_v1/comments/";
+        var url = "http://192.168.43.208:3000/android_v1/comments/";
+
         $('#comments-container').comments({
             profilePictureURL: 'images/sesi.jpeg',
             roundProfilePictures: true,
             textareaRows: 1,
             enableAttachments: true,
             getComments: function(success, error) {
-                setTimeout(function() {
-                    success(commentsArray);
-                }, 500);
+                success(commentsArray)
             },
-            postComment: function(data, success, error) {
-                setTimeout(function() {
-                    success(data);
-                }, 500);
+            postComment: function(commentJSON, success, error) {
+                commentJSON.commentable_type = commentableType;
+                commentJSON.commentable_id = commentableId;
+                $.ajax({
+                    type: 'post',
+                    url: url,
+                    data: { "comment": commentJSON },
+                    success: function(comment) {
+                        success(comment)
+                    },
+                    error: function(error) {
+                        console.log(JSON.stringify(error));
+                    }
+                });
             },
-            putComment: function(data, success, error) {
-                setTimeout(function() {
-                    success(data);
-                }, 500);
+            putComment: function(commentJSON, success, error) {
+                commentJSON.commentable_type = commentableType;
+                commentJSON.commentable_id = commentableId;
+                $.ajax({
+                    type: 'put',
+                    url: url + commentJSON.id,
+                    data: { "comment": commentJSON },
+                    success: function(comment) {
+                        success(comment)
+                    },
+                    error: error
+                });
             },
-            deleteComment: function(data, success, error) {
-                setTimeout(function() {
-                    success();
-                }, 500);
+            deleteComment: function(commentJSON, success, error) {
+                $.ajax({
+                    type: 'delete',
+                    url: url + commentJSON.id,
+                    success: success,
+                    error: error
+                });
             },
             upvoteComment: function(data, success, error) {
                 setTimeout(function() {

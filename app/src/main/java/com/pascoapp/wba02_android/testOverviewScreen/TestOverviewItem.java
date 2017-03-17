@@ -13,14 +13,24 @@ public class TestOverviewItem {
     @SerializedName("course_name")
     @Expose
     public String courseName;
-    @SerializedName("test_name")
+    @SerializedName("quiz_name")
     @Expose
     public String testName;
-    @SerializedName("test_duration")
+    @SerializedName("quiz_duration")
     @Expose
     public String testDuration;
     @SerializedName("instructions")
     @Expose
     public List<String> instructions = null;
 
+    @Override
+    public String toString() {
+        return "TestOverviewItem{" +
+                "courseCode='" + courseCode + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", testName='" + testName + '\'' +
+                ", testDuration='" + testDuration + '\'' +
+                ", instructions=" + instructions +
+                '}';
+    }
 }

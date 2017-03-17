@@ -10,7 +10,7 @@ import rx.Observable;
 
 public interface TakeTestService {
 
-    @GET("take_test_screen/{id}")
+    @GET("take_quiz_screen/{id}")
     Observable<TakeTestItem> getData(@Path("id") Integer dataId);
 
 }

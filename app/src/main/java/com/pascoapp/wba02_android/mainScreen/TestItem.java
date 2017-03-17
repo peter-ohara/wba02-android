@@ -18,4 +18,13 @@ public class TestItem {
     @Expose
     public Integer questionCount;
 
+    @Override
+    public String toString() {
+        return "TestItem{" +
+                "id=" + id +
+                ", courseCode='" + courseCode + '\'' +
+                ", name='" + name + '\'' +
+                ", questionCount=" + questionCount +
+                '}';
+    }
 }

@@ -15,7 +15,10 @@ import android.webkit.WebViewClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.WebviewActivity;
 import com.pascoapp.wba02_android.takeTestScreen.TestContent;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
@@ -27,6 +30,7 @@ import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import timber.log.Timber;
 
 public class TestContentFragment extends Fragment {
@@ -37,12 +41,10 @@ public class TestContentFragment extends Fragment {
     public static final String HEADER = "header";
 
     // the fragment initialization parameters
-    private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.testContent";
+    private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.quizContent";
 
     // Member Variables related to the testContent
     private TestContent testContent;
-
-    protected FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @BindView(R.id.webview) WebView webview;
     @BindView(R.id.loading_indicator) AVLoadingIndicatorView loadingIndicator;
@@ -72,30 +74,18 @@ public class TestContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
-        switch (testContent.type) {
-            case MULTIPLE_CHOICE_QUESTION:
-                view = inflater.inflate(R.layout.fragment_mcq, container, false);
-                break;
-            case FILL_IN_QUESTION:
-                view = inflater.inflate(R.layout.fragment_fill_in, container, false);
-                break;
-            case ESSAY_QUESTION:
-                view = inflater.inflate(R.layout.fragment_essay, container, false);
-                break;
-            default:
-                view = inflater.inflate(R.layout.fragment_header, container, false);
-                break;
-        }
+
+        view = inflater.inflate(R.layout.fragment_mcq, container, false);
 
         ButterKnife.bind(this, view);
         loadingIndicator.hide();
 
         loadItemInWebView(getContext(), webview, testContent);
-
         return view;
     }
 
     public void loadItemInWebView(Context context, WebView w, TestContent testContent) {
+
         w.getSettings().setJavaScriptEnabled(true);
         w.setBackgroundColor(Color.TRANSPARENT);
 
@@ -120,41 +110,52 @@ public class TestContentFragment extends Fragment {
     }
 
     private String getHtml(TestContent testContent) {
-        switch (testContent.type) {
-            case MULTIPLE_CHOICE_QUESTION:
-                return getMcqHtml(testContent);
-            case FILL_IN_QUESTION:
-                return getFillInHtml(testContent);
-            case ESSAY_QUESTION:
-                return getEssayHtml(testContent);
-            default:
-                return getHeaderHtml(testContent);
-        }
-    }
-
-    private String getMcqHtml(TestContent testContent) {
         AndroidTemplates loader = new AndroidTemplates(getContext());
         Theme theme = new Theme(loader);
-        Chunk chunk = theme.makeChunk("mcq");
+
+        Chunk chunk = theme.makeChunk("header");
+
+        switch (testContent.type) {
+            case MULTIPLE_CHOICE_QUESTION:
+                chunk = theme.makeChunk("mcq");
+                Timber.d("getHtml: " + testContent.choices);
+                SortedMap<String, String> choices = new TreeMap<>();
+                char key = 'a';
+                for (char i = 0; i < testContent.choices.size(); i++) {
+                    choices.put(String.valueOf(key), testContent.choices.get(i));
+                    key++;
+                }
+
+                Timber.d("getHtml: " + choices);
+
+                chunk.set("choices", choices);
+                break;
+            case FILL_IN_QUESTION:
+                chunk = theme.makeChunk("fillin");
+                Chunk inputField = theme.makeChunk("fillin#input_field");
+                chunk.set("a", inputField.toString());
+                break;
+            case ESSAY_QUESTION:
+                chunk = theme.makeChunk("essay");
+                break;
+        }
+
         chunk.set("question", testContent.content);
 
-        Timber.d("getHtml: " + testContent.choices);
-        SortedMap<String, String> choices = new TreeMap<>();
-        char key = 'a';
-        for (char i = 0; i < testContent.choices.size(); i++) {
-            choices.put(String.valueOf(key), testContent.choices.get(i));
-            key++;
-        }
+        Gson gson = new GsonBuilder().create();
+        String commentsJson = gson.toJson(testContent.comments);
+        chunk.set("comments", commentsJson);
 
-        Timber.d("getHtml: " + choices);
+        Timber.d("getHtml: " + testContent.type);
+        chunk.set("commentableType", testContent.type);
+        chunk.set("commentableId", testContent.id);
 
-        chunk.set("choices", choices);
 
-        if (user.getPhotoUrl() != null) {
-            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
-        } else {
-            chunk.set("photoUrl", "null");
-        }
+//        if (user.getPhotoUrl() != null) {
+//            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
+//        } else {
+//            chunk.set("photoUrl", "null");
+//        }
 
 //        // Fetch users previous answer
 //        if (question.getSubmittedAnswers() != null) {
@@ -167,50 +168,4 @@ public class TestContentFragment extends Fragment {
 
         return chunk.toString();
     }
-
-    private String getFillInHtml(TestContent testContent) {
-        AndroidTemplates loader = new AndroidTemplates(getContext());
-        Theme theme = new Theme(loader);
-        Chunk chunk = theme.makeChunk("fillin");
-        chunk.set("question", testContent.content);
-
-        Chunk inputField = theme.makeChunk("fillin#input_field");
-        chunk.set("a", inputField.toString());
-
-        if (user.getPhotoUrl() != null) {
-            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
-        } else {
-            chunk.set("photoUrl", "null");
-        }
-
-        return chunk.toString();
-    }
-
-    private String getEssayHtml(TestContent testContent) {
-        AndroidTemplates loader = new AndroidTemplates(getContext());
-        Theme theme = new Theme(loader);
-        Chunk chunk = theme.makeChunk("essay");
-        chunk.set("question", testContent.content);
-
-        Chunk inputField = theme.makeChunk("fillin#input_field");
-        chunk.set("a", inputField.toString());
-
-        if (user.getPhotoUrl() != null) {
-            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
-        } else {
-            chunk.set("photoUrl", "null");
-        }
-
-        return chunk.toString();
-    }
-
-    private String getHeaderHtml(TestContent testContent) {
-        AndroidTemplates loader = new AndroidTemplates(getContext());
-        Theme theme = new Theme(loader);
-        Chunk chunk = theme.makeChunk("header");
-        chunk.set("question", testContent.content);
-
-        return chunk.toString();
-    }
-
 }

@@ -5,13 +5,18 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.pascoapp.wba02_android.takeTestScreen.testContentScreens.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pascoapp.wba02_android.takeTestScreen.adapter.QuestionsPagerAdapter.TEST_END;
+
 
 public class TestContent implements Parcelable {
-
+    @SerializedName("id")
+    @Expose
+    public Integer id = -1;
     @SerializedName("priority")
     @Expose
     public Integer priority = 0;
@@ -29,7 +34,10 @@ public class TestContent implements Parcelable {
     public List<String> choices = new ArrayList<>();
     @SerializedName("comments")
     @Expose
-    public List<Object> comments = new ArrayList<>();
+    public List<Comment> comments = new ArrayList<>();
+    @SerializedName("answers")
+    @Expose
+    public List<Object> answers = new ArrayList<>();
     public final static Parcelable.Creator<TestContent> CREATOR = new Creator<TestContent>() {
 
 
@@ -38,12 +46,14 @@ public class TestContent implements Parcelable {
         })
         public TestContent createFromParcel(Parcel in) {
             TestContent instance = new TestContent();
+            instance.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
             instance.priority = ((Integer) in.readValue((Integer.class.getClassLoader())));
             instance.type = ((String) in.readValue((String.class.getClassLoader())));
             instance.title = ((String) in.readValue((String.class.getClassLoader())));
             instance.content = ((String) in.readValue((String.class.getClassLoader())));
             in.readList(instance.choices, (java.lang.String.class.getClassLoader()));
-            in.readList(instance.comments, (java.lang.Object.class.getClassLoader()));
+            in.readList(instance.comments, (Comment.class.getClassLoader()));
+            in.readList(instance.answers, (java.lang.Object.class.getClassLoader()));
             return instance;
         }
 
@@ -55,12 +65,14 @@ public class TestContent implements Parcelable {
             ;
 
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
         dest.writeValue(priority);
         dest.writeValue(type);
         dest.writeValue(title);
         dest.writeValue(content);
         dest.writeList(choices);
         dest.writeList(comments);
+        dest.writeList(answers);
     }
 
     public int describeContents() {
@@ -71,9 +83,23 @@ public class TestContent implements Parcelable {
         TestContent endPageData = new TestContent();
         endPageData.title = "END";
         endPageData.content = "";
-        endPageData.type = "end_page";
+        endPageData.type = TEST_END;
         endPageData.comments = new ArrayList<>();
         return endPageData;
     }
 
+
+    @Override
+    public String toString() {
+        return "TestContent{" +
+                "id=" + id +
+                ", priority=" + priority +
+                ", type='" + type + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", choices=" + choices +
+                ", comments=" + comments +
+                ", answers=" + answers +
+                '}';
+    }
 }

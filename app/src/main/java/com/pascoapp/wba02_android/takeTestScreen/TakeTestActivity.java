@@ -33,7 +33,7 @@ import timber.log.Timber;
 
 public class TakeTestActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TEST_ID = "com.pascoapp.wba02_android.testKey";
+    public static final String EXTRA_TEST_ID = "com.pascoapp.wba02_android.quizKey";
 
     public static String POSITION = "POSITION";
 
@@ -110,13 +110,14 @@ public class TakeTestActivity extends AppCompatActivity {
 
     public Integer getTestId() {
         Intent intent = getIntent();
-        return intent.getIntExtra(EXTRA_TEST_ID, 0);
+        // return intent.getIntExtra(EXTRA_TEST_ID, 0);
+        return 1;
     }
 
     private void refreshData(Integer dataId) {
         loadingIndicator.show();
 
-        Timber.d("fetchData: testId = " + dataId);
+        Timber.d("fetchData: quizId = " + dataId);
 
         APIUtils.getPascoService(com.pascoapp.wba02_android.takeTestScreen.TakeTestService.class).getData(dataId)
                 .subscribeOn(Schedulers.io())
