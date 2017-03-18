@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.pascoapp.wba02_android.APIUtils;
 import com.pascoapp.wba02_android.R;
+import com.pascoapp.wba02_android.storeScreen.StoreActivity;
 import com.pascoapp.wba02_android.WebviewActivity;
 import com.pascoapp.wba02_android.mainScreen.adapter.MainScreenHeader;
 import com.pascoapp.wba02_android.mainScreen.adapter.MainScreenItem;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.coursesList) RecyclerView coursesRecyclerView;
     @BindView(R.id.bottomBar) View bottomBar;
 
-    public static final int BUY_COURSES_REQUEST = 1;
+    public static final int STORE_REQUEST = 1;
 
     private MainViewListAdapter mainViewListAdapter;
     private List<MainScreenItem> mItems = new ArrayList<>();
@@ -190,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bottomBar)
     public void openStore() {
-        //Intent intent = new Intent(MainActivity.this, ChooseCoursesActivity.class);
-        //startActivityForResult(intent, BUY_COURSES_REQUEST);
+        Intent intent = new Intent(MainActivity.this, StoreActivity.class);
+        startActivityForResult(intent, STORE_REQUEST);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Timber.d("onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
 
-        if (requestCode == BUY_COURSES_REQUEST) {
+        if (requestCode == STORE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 // User may have bought new courses refresh course list
                 fetchData();

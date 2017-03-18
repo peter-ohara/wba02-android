@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pascoapp.wba02_android.APIUtils;
 import com.pascoapp.wba02_android.R;
 import com.pascoapp.wba02_android.WebviewActivity;
 import com.pascoapp.wba02_android.takeTestScreen.TestContent;
@@ -147,6 +148,7 @@ public class TestContentFragment extends Fragment {
         chunk.set("comments", commentsJson);
 
         Timber.d("getHtml: " + testContent.type);
+        chunk.set("BASE_URL", APIUtils.BASE_URL);
         chunk.set("commentableType", testContent.type);
         chunk.set("commentableId", testContent.id);
 

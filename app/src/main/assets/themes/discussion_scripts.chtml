@@ -20,8 +20,7 @@
 <!-- Init jquery-comments -->
 <script type="text/javascript">
     $(function() {
-        var url = "https://wba02-server.herokuapp.com/android_v1/comments/";
-        var url = "http://192.168.43.208:3000/android_v1/comments/";
+        var url = "{$BASE_URL}comments/";
 
         $('#comments-container').comments({
             profilePictureURL: 'images/sesi.jpeg',
