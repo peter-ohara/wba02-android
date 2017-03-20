@@ -10,7 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.pascoapp.wba02_android.APIUtils;
@@ -47,6 +46,8 @@ public class TakeTestActivity extends AppCompatActivity {
     @BindView(R.id.viewpager) ViewPager mPager;
 
     private TakeTestItem data;
+    private String profilePictureURL = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +88,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         mPager.setOffscreenPageLimit(10);
+
         mPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager(), testContents);
         mPager.setAdapter(mPagerAdapter);
         // Give the TabLayout the ViewPager
@@ -119,7 +121,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
         Timber.d("fetchData: quizId = " + dataId);
 
-        APIUtils.getPascoService(com.pascoapp.wba02_android.takeTestScreen.TakeTestService.class).getData(dataId)
+        APIUtils.getPascoService(this, com.pascoapp.wba02_android.takeTestScreen.TakeTestService.class).getData(dataId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedData -> {
@@ -129,6 +131,7 @@ public class TakeTestActivity extends AppCompatActivity {
 
                     setTitle(data.title);
                     testContents.addAll(data.testContents);
+                    profilePictureURL = data.profilePictureUrl;
 
                     TestContent endPageData = TestContent.createEndPage();
                     testContents.add(endPageData);
@@ -141,6 +144,10 @@ public class TakeTestActivity extends AppCompatActivity {
                             .show();
                     e.printStackTrace();
                 });
+    }
+
+    public String getProfilePictureURL() {
+        return profilePictureURL;
     }
 
     public void moveToPreviousScreen() {

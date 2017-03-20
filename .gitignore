@@ -6,3 +6,6 @@
 .DS_Store
 /build
 /captures
+
+# Do not push keystore passwords into a public repository
+/keystore.properties

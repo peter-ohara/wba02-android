@@ -1,7 +1,7 @@
 <div id="pasco-comments" class="pasco-comments-invisible">
     <div class="comments-count-box">
         <i class="fa fa-comments-o fa-lg"></i>
-        <span class="comments-count">120 Comments</span>
+        <span class="comments-count">{$commentCount} Comments</span>
         <i class="fa fa-times"></i>
         <hr class="comment-hr">
     </div>
@@ -20,13 +20,26 @@
 <!-- Init jquery-comments -->
 <script type="text/javascript">
     $(function() {
-        var url = "{$BASE_URL}comments/";
+        var baseUrl = "{$BASE_URL}";
+        var url = baseUrl + "comments/";
+        var upvotesURL = baseUrl + "upvotes/";
+        var authToken = "{$authToken}";
+
+        var profilePictureURL = "{$profilePictureURL}";
+
+        var headers = {
+           'Authorization': "Token token=" + authToken,
+        };
 
         $('#comments-container').comments({
-            profilePictureURL: 'images/sesi.jpeg',
+            profilePictureURL: profilePictureURL,
             roundProfilePictures: true,
+            defaultNavigationSortKey: 'popularity',
             textareaRows: 1,
-            enableAttachments: true,
+            textareaRowsOnFocus: 2,
+            maxRepliesVisible: 2,
+            enableDeletingCommentWithReplies: true,
+            enableAttachments: false,
             getComments: function(success, error) {
                 success(commentsArray)
             },
@@ -36,6 +49,7 @@
                 $.ajax({
                     type: 'post',
                     url: url,
+                    headers: headers,
                     data: { "comment": commentJSON },
                     success: function(comment) {
                         success(comment)
@@ -51,6 +65,7 @@
                 $.ajax({
                     type: 'put',
                     url: url + commentJSON.id,
+                    headers: headers,
                     data: { "comment": commentJSON },
                     success: function(comment) {
                         success(comment)
@@ -62,21 +77,41 @@
                 $.ajax({
                     type: 'delete',
                     url: url + commentJSON.id,
+                    headers: headers,
                     success: success,
                     error: error
                 });
             },
-            upvoteComment: function(data, success, error) {
-                setTimeout(function() {
-                    success(data);
-                }, 500);
-            },
-
-            uploadAttachments: function(dataArray, success, error) {
-                setTimeout(function() {
-                    success(dataArray);
-                }, 500);
-            },
+            upvoteComment: function(commentJSON, success, error) {
+                if(commentJSON.user_has_upvoted) {
+                    // Create his upvote
+                    $.ajax({
+                        type: 'post',
+                        url: upvotesURL,
+                        headers: headers,
+                        data: {
+                            upvote: {
+                                comment_id: commentJSON.id
+                            }
+                        },
+                        success: function() {
+                            success(commentJSON)
+                        },
+                        error: error
+                    });
+                } else {
+                    // Delete his upvote
+                    $.ajax({
+                        type: 'delete',
+                        url: upvotesURL + commentJSON.id,
+                        headers: headers,
+                        success: function() {
+                            success(commentJSON)
+                        },
+                        error: error
+                    });
+                }
+            }
         });
     });
 </script>

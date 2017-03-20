@@ -1,7 +1,33 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
+ext {
+    supportLibraryVersion = '25.2.0'
+    retrofitVersion = '2.1.0'
+    versionName = '0.3.0'
+    firebaseVersion = '10.2.0'
+    firebaseUiVersion = '1.2.0'
+}
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -9,18 +35,40 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 4
-        versionName "0.3.0"
+        versionName '0.3.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", '"https://wba02-server.herokuapp.com/android_v1/"'
+        resValue "string", "app_name", '"Pasco (Staging)"'
+        resValue "string", "action_about", "\"Pasco (Staging) $versionName \""
     }
     buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            buildConfigField "String", "BASE_URL", '"http://10.0.2.2:3000/android_v1/"'
+            resValue "string", "app_name", '"Pasco (Debug)"'
+            resValue "string", "action_about", "\"Pasco (Debug) $versionName \""
+        }
+        staging {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationIdSuffix '.staging'
+            buildConfigField "String", "BASE_URL", '"https://wba02-server.herokuapp.com/android_v1/"'
+            resValue "string", "app_name", '"Pasco (Staging)"'
+            resValue "string", "action_about", "\"Pasco (Staging) $versionName \""
+            signingConfig signingConfigs.config
+        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationIdSuffix '.release'
+            buildConfigField "String", "BASE_URL", '"https://wba02-server-production.herokuapp.com/android_v1/"'
+            resValue "string", "app_name", '"Pasco"'
+            resValue "string", "action_about", "\"Pasco (Release) $versionName \""
+            signingConfig signingConfigs.config
         }
     }
 
@@ -34,11 +82,6 @@ repositories {
     maven { url = "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
-}
-
-ext {
-    supportLibraryVersion = '25.2.0'
-    retrofitVersion = '2.1.0'
 }
 
 dependencies {
@@ -60,29 +103,29 @@ dependencies {
     compile "com.android.support:preference-v7:$supportLibraryVersion"
 
     // Firebase Core
-    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile "com.google.firebase:firebase-core:$firebaseVersion"
 
     // Firebase Realtime Database
-    compile 'com.google.firebase:firebase-database:10.0.1'
+    compile "com.google.firebase:firebase-database:$firebaseVersion"
 
     // Firebase Notifications
-    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile "com.google.firebase:firebase-messaging:$firebaseVersion"
 
     // Firebase Crash Reporting
-    compile 'com.google.firebase:firebase-crash:10.0.1'
+    compile "com.google.firebase:firebase-crash:$firebaseVersion"
 
     // Firebase Auth
-    compile 'com.google.firebase:firebase-auth:10.0.1'
-    compile 'com.google.android.gms:play-services-auth:10.0.1'
-
-    // FirebaseUI Auth
-    compile 'com.firebaseui:firebase-ui-auth:1.0.1'
-
-    // FirebaseUI Database
-    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+    compile "com.google.firebase:firebase-auth:$firebaseVersion"
+    compile "com.google.android.gms:play-services-auth:$firebaseVersion"
 
     //Firebase Invites
-    compile 'com.google.firebase:firebase-invites:10.0.1'
+    compile "com.google.firebase:firebase-invites:$firebaseVersion"
+
+    // FirebaseUI Auth
+    compile "com.firebaseui:firebase-ui-auth:$firebaseUiVersion"
+
+    // FirebaseUI Database
+    compile "com.firebaseui:firebase-ui-database:$firebaseUiVersion"
 
     // Library for colored Square Icons with letter inside like in gmail
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'

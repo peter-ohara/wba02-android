@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.pascoapp.wba02_android.APIUtils;
 import com.pascoapp.wba02_android.R;
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         mySwipeRefreshLayout.setRefreshing(true);
         mItems.clear();
 
-        APIUtils.getPascoService(MainScreenService.class).getData()
+        APIUtils.getPascoService(this, MainScreenService.class).getData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringListMap -> {
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 openPascoUploadScreen();
                 return true;
             case R.id.action_logout:
-                logout();
+                CheckCurrentUser.logout(this);
                 return true;
             case R.id.action_feedback:
                 openFeedbackForm();
@@ -228,16 +227,6 @@ public class MainActivity extends AppCompatActivity {
         Intent browserIntent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://www.pascoapp.com/give-us-pasco"));
         startActivity(browserIntent);
-    }
-
-    private void logout() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    // user is now signed out
-                    startActivity(new Intent(MainActivity.this, CheckCurrentUser.class));
-                    finish();
-                });
     }
 
     private void openFeedbackForm() {

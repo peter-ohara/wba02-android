@@ -1,5 +1,9 @@
 package com.pascoapp.wba02_android;
 
+import android.content.Context;
+
+import com.pascoapp.wba02_android.signInScreen.CheckCurrentUser;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -28,11 +32,11 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(String baseUrl) {
+    public static Retrofit getClient(Context context, String baseUrl) {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
-                    .client(provideOkHttpClient())
+                    .client(provideOkHttpClient(context))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -40,11 +44,12 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    private static OkHttpClient provideOkHttpClient () {
+    private static OkHttpClient provideOkHttpClient (Context context) {
         return new OkHttpClient.Builder()
                 .addInterceptor( provideHttpLoggingInterceptor() )
                 .addInterceptor( provideOfflineCacheInterceptor() )
-                .addNetworkInterceptor( provideCacheInterceptor() )
+//                .addNetworkInterceptor( provideCacheInterceptor() )
+                .addNetworkInterceptor( provideTokenAuthenticationInterceptor(context) )
                 .cache( provideCache() )
                 .build();
     }
@@ -60,6 +65,23 @@ public class RetrofitClient {
         return cache;
     }
 
+    private static Interceptor provideTokenAuthenticationInterceptor (Context context) {
+        return new Interceptor() {
+            @Override
+            public Response intercept (Chain chain) throws IOException {
+                Request original = chain.request();
+
+
+
+                Request request = original.newBuilder()
+                        .header("Authorization", "Token token=" + CheckCurrentUser.getAuthToken(context))
+                        .method(original.method(), original.body())
+                        .build();
+
+                return chain.proceed(request);
+            }
+        };
+    }
 
     private static HttpLoggingInterceptor provideHttpLoggingInterceptor () {
         HttpLoggingInterceptor httpLoggingInterceptor =
@@ -73,7 +95,6 @@ public class RetrofitClient {
         httpLoggingInterceptor.setLevel( BuildConfig.DEBUG ? HEADERS : NONE );
         return httpLoggingInterceptor;
     }
-
 
     public static Interceptor provideCacheInterceptor () {
         return new Interceptor() {

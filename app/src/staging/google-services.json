@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "756998216999",
+    "firebase_url": "https://pasco-staging.firebaseio.com",
+    "project_id": "pasco-staging",
+    "storage_bucket": "pasco-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756998216999:android:8cabd618bea0e6c1",
+        "android_client_info": {
+          "package_name": "com.pascoapp.wba02_android.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756998216999-jqi9himdl69difoqdt2rvkraqa182584.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pascoapp.wba02_android.staging",
+            "certificate_hash": "e7d8a630d777d23118c9b06e5d4b0f6d0d67baa0"
+          }
+        },
+        {
+          "client_id": "756998216999-jdkf9d4cdurihuemvqijlelu69g32r5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtb2a3ENKOL38KSqc-qkWO6sa6dj8x1sU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756998216999-jdkf9d4cdurihuemvqijlelu69g32r5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

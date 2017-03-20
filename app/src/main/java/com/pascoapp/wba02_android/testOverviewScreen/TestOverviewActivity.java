@@ -92,7 +92,7 @@ public class TestOverviewActivity extends AppCompatActivity {
         loadingIndicator.show();
         lowerContent.setVisibility(View.GONE);
 
-        APIUtils.getPascoService(TestOverviewService.class).getData(dataId)
+        APIUtils.getPascoService(this, TestOverviewService.class).getData(dataId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedData -> {

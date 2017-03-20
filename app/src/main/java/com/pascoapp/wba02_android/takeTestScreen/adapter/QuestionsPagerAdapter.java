@@ -3,7 +3,6 @@ package com.pascoapp.wba02_android.takeTestScreen.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import com.pascoapp.wba02_android.takeTestScreen.TestContent;
 import com.pascoapp.wba02_android.takeTestScreen.testContentScreens.TestContentFragment;
@@ -19,7 +18,8 @@ public class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<TestContent> testContents;
 
-    public QuestionsPagerAdapter(FragmentManager fm, List<TestContent> testContents) {
+    public QuestionsPagerAdapter(FragmentManager fm,
+                                 List<TestContent> testContents) {
         super(fm);
         this.testContents = testContents;
     }

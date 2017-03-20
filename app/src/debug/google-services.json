@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:887778525276:android:1af54937beb44c1a",
+        "mobilesdk_app_id": "1:887778525276:android:a338c4ae1a5a2d50",
         "android_client_info": {
-          "package_name": "com.pascoapp.wba02_android"
+          "package_name": "com.pascoapp.wba02_android.debug"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "887778525276-6gt10s4krec303sak517rnjd966le16n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pascoapp.wba02_android.debug",
+            "certificate_hash": "e7d8a630d777d23118c9b06e5d4b0f6d0d67baa0"
+          }
+        },
         {
           "client_id": "887778525276-bvang37smil32ajf266s3qa24emge0lm.apps.googleusercontent.com",
           "client_type": 3
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887778525276-bvang37smil32ajf266s3qa24emge0lm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

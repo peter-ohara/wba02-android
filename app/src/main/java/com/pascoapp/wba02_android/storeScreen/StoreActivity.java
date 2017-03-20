@@ -1,5 +1,6 @@
 package com.pascoapp.wba02_android.storeScreen;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -55,7 +56,7 @@ public class StoreActivity extends AppCompatActivity {
     private void fetchData() {
         loadingIndicator.show();
 
-        APIUtils.getPascoService(StoreScreenService.class).getData()
+        APIUtils.getPascoService(this, StoreScreenService.class).getData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedCourses -> {

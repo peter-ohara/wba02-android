@@ -6,20 +6,18 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pascoapp.wba02_android.APIUtils;
+import com.pascoapp.wba02_android.BuildConfig;
 import com.pascoapp.wba02_android.R;
-import com.pascoapp.wba02_android.WebviewActivity;
+import com.pascoapp.wba02_android.signInScreen.CheckCurrentUser;
+import com.pascoapp.wba02_android.takeTestScreen.TakeTestActivity;
 import com.pascoapp.wba02_android.takeTestScreen.TestContent;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.x5.template.Chunk;
@@ -31,18 +29,18 @@ import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
 import timber.log.Timber;
 
 public class TestContentFragment extends Fragment {
 
-    public static final String MULTIPLE_CHOICE_QUESTION = "multiple_choice_question";
-    public static final String FILL_IN_QUESTION = "fill_in_question";
-    public static final String ESSAY_QUESTION = "essay_question";
-    public static final String HEADER = "header";
+    public static final String MULTIPLE_CHOICE_QUESTION = "MultipleChoiceQuestion";
+    public static final String FILL_IN_QUESTION = "FillInQuestion";
+    public static final String ESSAY_QUESTION = "EssayQuestion";
+    public static final String HEADER = "Header";
 
     // the fragment initialization parameters
     private static final String ARG_TEST_CONTENT = "com.pascoapp.wba02_android.quizContent";
+
 
     // Member Variables related to the testContent
     private TestContent testContent;
@@ -89,6 +87,8 @@ public class TestContentFragment extends Fragment {
 
         w.getSettings().setJavaScriptEnabled(true);
         w.setBackgroundColor(Color.TRANSPARENT);
+
+        w.addJavascriptInterface(new WebAppInterface(this, testContent.answerHistogram), "McqAndroid");
 
         w.setWebViewClient(new WebViewClient() {
             @Override
@@ -148,24 +148,15 @@ public class TestContentFragment extends Fragment {
         chunk.set("comments", commentsJson);
 
         Timber.d("getHtml: " + testContent.type);
-        chunk.set("BASE_URL", APIUtils.BASE_URL);
+
+        chunk.set("BASE_URL", BuildConfig.BASE_URL);
+        chunk.set("authToken", CheckCurrentUser.getAuthToken(getContext()));
+
         chunk.set("commentableType", testContent.type);
         chunk.set("commentableId", testContent.id);
 
+        chunk.set("profilePictureURL", ((TakeTestActivity) getActivity()).getProfilePictureURL());
 
-//        if (user.getPhotoUrl() != null) {
-//            chunk.set("photoUrl", "\"" + user.getPhotoUrl() + "\"");
-//        } else {
-//            chunk.set("photoUrl", "null");
-//        }
-
-//        // Fetch users previous answer
-//        if (question.getSubmittedAnswers() != null) {
-//            String usersAnswer = question.getSubmittedAnswers().get(user.getUid());
-//            chunk.set("usersAnswer", usersAnswer);
-//        }
-
-//        chunk.set("commentsArray", someJs);
         chunk.set("commentCount", testContent.comments.size());
 
         return chunk.toString();

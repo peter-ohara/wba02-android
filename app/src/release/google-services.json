@@ -8,34 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1061661507163:android:1af54937beb44c1a",
+        "mobilesdk_app_id": "1:1061661507163:android:a2597b6828e2ba8e",
         "android_client_info": {
-          "package_name": "com.pascoapp.wba02_android"
+          "package_name": "com.pascoapp.wba02_android.release"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1061661507163-pnq5qn17o9vjcaclf8ffhksu8o29745h.apps.googleusercontent.com",
+          "client_id": "1061661507163-1g4o1u9ug3935o2k1144cokp119l61pr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.pascoapp.wba02_android",
-            "certificate_hash": "6F89235D37CD3C37A387C9B20F17F1BE67142B3F"
-          }
-        },
-        {
-          "client_id": "1061661507163-itnvq92uvp8p9kre3pbmcqp14p2j4jj8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pascoapp.wba02_android",
-            "certificate_hash": "FEC5246DBDB6B1C3970F3949A284453FBA97D093"
-          }
-        },
-        {
-          "client_id": "1061661507163-fvn7mu3ufu0p9jok1ed4e6bkjlp62ieg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pascoapp.wba02_android",
-            "certificate_hash": "D572D9A74EFF43B13B8606D299FE5A8C091E093E"
+            "package_name": "com.pascoapp.wba02_android.release",
+            "certificate_hash": "e7d8a630d777d23118c9b06e5d4b0f6d0d67baa0"
           }
         },
         {
