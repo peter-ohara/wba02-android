@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pascoapp.wba02_android">
+          package="com.pascoapp.wba02_android">
 
-    <!-- Parse Data permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Firebase Data permissions -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".PascoApp"
@@ -15,120 +15,91 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Start here -->
-        <activity
-            android:name=".signInScreen.CheckCurrentUser"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".mainScreen.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".testOverviewScreen.TestOverviewActivity"
-            android:label="@string/title_activity_test_overview"
-            android:launchMode="singleTop"
-            android:parentActivityName=".mainScreen.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainScreen.MainActivity" />
-        </activity>
-        <activity
-            android:name=".takeTestScreen.TakeTestActivity"
-            android:label="@string/title_activity_take_test"
-            android:launchMode="singleTop"
-            android:parentActivityName=".testOverviewScreen.TestOverviewActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".testOverviewScreen.TestOverviewActivity" />
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
-            android:name=".views.overflow.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".mainScreen.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainScreen.MainActivity" />
-        </activity>
-        <activity
-            android:name=".views.overflow.Inbox.MessageListActivity"
-            android:label="@string/title_message_list"
-            android:parentActivityName=".mainScreen.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainScreen.MainActivity" />
-        </activity>
-        <activity
-            android:name=".views.overflow.Inbox.MessageDetailActivity"
-            android:label=""
-            android:parentActivityName=".views.overflow.Inbox.MessageListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.overflow.Inbox.MessageListActivity" />
-        </activity>
-        <activity
-            android:name=".views.overflow.help.CreditsActivity"
-            android:label="@string/title_activity_credits"
-            android:parentActivityName=".views.overflow.help.HelpActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.overflow.help.HelpActivity" />
-        </activity>
-        <activity
-            android:name=".views.overflow.help.HelpActivity"
-            android:label="@string/title_activity_help"
-            android:parentActivityName=".mainScreen.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainScreen.MainActivity" />
-        </activity>
-        <activity
-            android:name=".WebviewActivity"
-            android:label="@string/title_activity_webview"
-            android:parentActivityName=".mainScreen.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainScreen.MainActivity" />
-        </activity>
-
         <!-- [START firebase_service] -->
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
         <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
+
+
+        <!-- Start here -->
+        <activity android:name=".signIn.SignInActivity"
+            android:theme="@style/SignInTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".storeScreen.StoreActivity"
-            android:label="@string/title_activity_store"
-            android:parentActivityName=".mainScreen.MainActivity"
+            android:name=".main.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".testDetail.TestDetailActivity"
+            android:label="@string/title_activity_test_overview"
+            android:launchMode="singleTop"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pascoapp.wba02_android.mainScreen.MainActivity" />
+                android:value=".main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".takeTest.TakeTestActivity"
+            android:label="@string/title_activity_take_test"
+            android:launchMode="singleTop"
+            android:parentActivityName=".testDetail.TestDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".testDetail.TestDetailActivity"/>
+        </activity>
+        <activity
+            android:name=".webview.WebviewActivity"
+            android:label="@string/title_activity_webview"
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".store.StoreActivity"
+            android:label="@string/title_activity_store"
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".buyTests.BuyTestsActivity"
+            android:label="@string/title_activity_buy_test"
+            android:parentActivityName=".store.StoreActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".store.StoreActivity"/>
+        </activity>
+        <activity
+            android:name=".courseDetail.CourseDetailActivity"
+            android:label="@string/title_activity_course_detail"
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pascoapp.wba02_android.main.MainActivity"/>
         </activity>
     </application>
 

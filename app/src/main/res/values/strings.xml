@@ -99,15 +99,30 @@
     <string name="check_answer_bar_chart_description">What others chose</string>
     <string name="ok">Ok</string>
     <string name="continue_prompt">Continue</string>
+
     <string name="action_invite">Invite friends</string>
     <string name="invitation_title">Invite friends to use Pasco</string>
     <string name="invitation_message">Hey, download Pasco and get access to past questions and answers on your phone.</string>
     <string name="invitation_custom_image"><![CDATA[https://www.facebook.com/pascoapp/photos/pb.1029957057024939.-2207520000.1482630877./1223243701029606/?type=3&theater]]></string>
     <string name="invitation_cta">DOWNLOAD</string>
+
     <string name="title_activity_course_details">CourseDetailsActivity</string>
     <string name="title_activity_store">Store</string>
+    <string name="title_activity_buy_test"></string>
     <string name="preference_file_auth_token">com.pascoapp.wba02_android.preference_file_auth_token</string>
     <string name="auth_token">auth_token</string>
+
+    <string name="title_activity_inbox_details">InboxDetailsActivity</string>
+    <string name="action_open_inbox">Inbox</string>
+    <string name="vc_courses">VC Courses</string>
+    <string name="top_courses">Available Courses</string>
+    <string name="title_activity_course_detail">CourseDetailActivity</string>
+    <string name="sign_in_cancelled">Sign In Cancelled</string>
+    <string name="no_internet_connection">No internet Connection</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="unknown_sign_in_response">Uknown sign in response</string>
+    <string name="sign_in">Sign In</string>
+    <string name="the_pasco_logo">The Pasco Logo</string>
 
 
 </resources>

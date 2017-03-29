@@ -2,7 +2,7 @@ package com.pascoapp.wba02_android;
 
 import android.content.Context;
 
-import com.pascoapp.wba02_android.signInScreen.CheckCurrentUser;
+import com.pascoapp.wba02_android.signIn.SignInPresenter;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,16 +23,13 @@ import timber.log.Timber;
 import static okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS;
 import static okhttp3.logging.HttpLoggingInterceptor.Level.NONE;
 
-/**
- * Created by peter on 1/31/17.
- */
-public class RetrofitClient {
+class RetrofitClient {
 
     private static final String CACHE_CONTROL = "Cache-Control";
 
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(Context context, String baseUrl) {
+    static Retrofit getClient(Context context, String baseUrl) {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
@@ -74,7 +71,7 @@ public class RetrofitClient {
 
 
                 Request request = original.newBuilder()
-                        .header("Authorization", "Token token=" + CheckCurrentUser.getAuthToken(context))
+                        .header("Authorization", "Token token=" + SignInPresenter.getAuthToken(context))
                         .method(original.method(), original.body())
                         .build();
 
@@ -114,7 +111,7 @@ public class RetrofitClient {
         };
     }
 
-    public static Interceptor provideOfflineCacheInterceptor () {
+    private static Interceptor provideOfflineCacheInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept (Chain chain) throws IOException {

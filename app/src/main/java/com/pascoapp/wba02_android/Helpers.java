@@ -7,10 +7,6 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 
-/**
- * Created by peter on 8/4/16.
- */
-
 public class Helpers {
 
     public static Drawable getIcon(String colorKey, String text, int textSize) {
@@ -27,7 +23,7 @@ public class Helpers {
                 .buildRound(text, color);
     }
 
-    public static int dip(int pixels) {
+    private static int dip(int pixels) {
         return (int) (pixels * Resources.getSystem().getDisplayMetrics().density);
     }
 

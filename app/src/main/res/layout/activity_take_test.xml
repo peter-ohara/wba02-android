@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".takeTestScreen.TakeTestActivity">
+    tools:context=".takeTest.TakeTestActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,5 +25,14 @@
 
     <include layout="@layout/content_take_test" />
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading_indicator"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        style="@style/AVLoadingIndicatorView"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="@color/grey_400"/>
 
 </android.support.design.widget.CoordinatorLayout>

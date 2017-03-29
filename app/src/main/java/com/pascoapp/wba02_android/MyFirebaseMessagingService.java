@@ -7,17 +7,12 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.pascoapp.wba02_android.mainScreen.MainActivity;
+import com.pascoapp.wba02_android.main.MainActivity;
 
 import timber.log.Timber;
-
-/**
- * Created by peter on 10/15/16.
- */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/top_panel"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:minHeight="200dp"
+    android:background="@drawable/header_background"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    app:layout_scrollFlags="scroll|enterAlways"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    android:layout_height="180dp"
+    tools:showIn="@layout/activity_buy_tests">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        tools:text="ENGL 213"
+        android:textAlignment="center"
+        android:typeface="sans"
+        android:textSize="50sp"
+        android:textColor="@android:color/white"
+        android:id="@+id/course_code" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        tools:text="Communication Skills"
+        android:textAlignment="center"
+        android:typeface="sans"
+        android:textColor="@android:color/white"
+        android:id="@+id/course_name" />
+
+
+</LinearLayout>
+
+
+            

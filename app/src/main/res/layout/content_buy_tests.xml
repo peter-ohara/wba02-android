@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:paddingBottom="?attr/actionBarSize"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_buy_tests">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/info_panel">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/knust_logo"
+            android:background="@color/white" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="200dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingTop="4dp">
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/test_number"
+                android:textSize="36sp" />
+
+            <TextView
+                android:text="tests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/test_number"
+                android:layout_toRightOf="@+id/test_number"
+                android:layout_toEndOf="@+id/test_number"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/textView3"
+                android:textSize="24sp" />
+
+            <View
+                android:text="TextView"
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:background="#555555"
+                android:layout_below="@+id/test_number"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/textView4"
+                android:padding="4dp" />
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/textView4"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/midsems_number" />
+
+                <TextView
+                    android:text="midsems"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:paddingRight="4dp" />
+
+                <TextView
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/class_tests_number" />
+
+                <TextView
+                    android:text="class tests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:paddingLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout1">
+
+                <TextView
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/end_of_sem_number" />
+
+                <TextView
+                    android:text="end of sem"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"
+                    android:id="@+id/assignments_number" />
+
+                <TextView
+                    android:text="assignment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="10dp"
+        android:layout_below="@id/info_panel"
+        android:layout_centerHorizontal="true"
+        android:weightSum="1"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/programs_layout">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Tests"
+                android:textColor="@android:color/black"
+                android:textStyle="normal|bold" />
+
+            <View
+                android:layout_height="1dp"
+                android:background="#333333"
+                android:layout_width="40dp"
+                android:layout_marginLeft="4dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="140dp"
+            android:layout_marginStart="140dp"
+            android:minWidth="100dp">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:textColor="@color/primary"
+                android:textAlignment="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="0 PC"
+                android:id="@+id/price" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="50dp"
+                android:layout_height="24dp"
+                android:background="@color/primary"
+                android:textColor="#ffffff"
+                android:textAlignment="center"
+                android:text="BUY"
+                android:id="@+id/buy_button"
+                android:paddingBottom="5dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/test_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#E8E8E8"
+        android:dividerHeight="1dp"
+        android:paddingBottom="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/programs_layout" />
+
+</RelativeLayout>
+
+    

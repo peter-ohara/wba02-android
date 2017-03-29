@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/header_background"
     android:id="@+id/constraintLayout"
-    tools:showIn="@layout/activity_course_details">
+    tools:showIn="@layout/activity_course_detail">
 
 
     <ImageView

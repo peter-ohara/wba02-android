@@ -5,10 +5,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import timber.log.Timber;
 
-/**
- * Created by peter on 10/15/16.
- */
-
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     /**
